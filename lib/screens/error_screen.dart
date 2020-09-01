@@ -35,7 +35,7 @@ class _ErrorScreenState extends State<ErrorScreen> {
     });
     try {
       await widget.providerClass.fetchAndSetResult();
-    } on HttpException catch (error) {
+    } on HttpException catch (_) {
       Scaffold.of(context).hideCurrentSnackBar();
       Scaffold.of(context).showSnackBar(buildSnackBar(context));
     } catch (error) {
@@ -53,14 +53,6 @@ class _ErrorScreenState extends State<ErrorScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-//          Icon(
-//            CommunityMaterialIcons.cloud_off_outline,
-//            color: Colors.grey,
-//            size: 90,
-//          ),
-//          const SizedBox(
-//            height: 20,
-//          ),
           Text('При загрузке данных произошла ошибка'),
           const SizedBox(
             height: 5,
