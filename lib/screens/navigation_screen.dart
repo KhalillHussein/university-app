@@ -9,7 +9,7 @@ import '../screens/news_screen.dart';
 import '../screens/home_screen.dart';
 import '../providers/navigation_provider.dart';
 import '../widgets/theme_switch.dart';
-import '../widgets/check_auth_status.dart';
+import '../widgets/auth_status.dart';
 
 class NavigationScreen extends StatefulWidget {
   @override
@@ -28,7 +28,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     },
     {
       'title': 'Авторизация',
-      'page': CheckAuthStatus(),
+      'page': AuthStatus(),
     },
   ];
 

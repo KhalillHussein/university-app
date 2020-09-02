@@ -5,7 +5,7 @@ import '../screens/account_screen.dart';
 import '../screens/auth_screen.dart';
 import '../providers/auth.dart';
 
-class CheckAuthStatus extends StatelessWidget {
+class AuthStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Auth>(
