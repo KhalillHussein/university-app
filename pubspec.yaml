@@ -34,7 +34,6 @@ dependencies:
   flutter_statusbarcolor: ^0.2.3
 
   ## Icons
-  font_awesome_flutter: ^8.8.1
   community_material_icon: ^5.3.45
   cupertino_icons: ^0.1.3
 
