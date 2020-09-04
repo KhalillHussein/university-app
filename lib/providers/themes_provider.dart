@@ -33,7 +33,6 @@ class ThemesProvider with ChangeNotifier {
 //  }
 //
   setTheme(bool value) async {
-    print(value);
     _themeData = value ? darkTheme : lightTheme;
     var prefs = await SharedPreferences.getInstance();
     prefs.setBool('theme', value);

@@ -11,16 +11,17 @@ class NewsScreen extends StatelessWidget {
     await Provider.of<NewsProvider>(context, listen: false).fetchAndSetResult();
   }
 
-  Widget _buildFuture(BuildContext context, provider) {
+  Widget _buildFuture(provider) {
+    print('!call_reload');
     return FutureBuilder(
       future: provider.fetchAndSetResult(),
-      builder: (ctx, dataSnapshot) {
+      builder: (context, dataSnapshot) {
         if (dataSnapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: const CircularProgressIndicator(),
           );
         } else {
-          if (dataSnapshot.error != null) {
+          if (dataSnapshot.hasError) {
             print(dataSnapshot.error);
             return ErrorScreen.news(context);
           } else {
@@ -44,7 +45,7 @@ class NewsScreen extends StatelessWidget {
     print('rebuild_news');
     return Consumer<NewsProvider>(
       builder: (ctx, newsData, _) => newsData.items.isEmpty
-          ? _buildFuture(context, newsData)
+          ? _buildFuture(newsData)
           : RefreshIndicator(
               child: NewsList(),
               onRefresh: () => _refreshNews(context).catchError(

@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/http_exception.dart';
+import '../util/url.dart';
 
 class Auth with ChangeNotifier {
   String _token;
@@ -42,9 +43,8 @@ class Auth with ChangeNotifier {
     return _role;
   }
 
-  Future<void> _authenticate(
-      String email, String password, String urlSegment) async {
-    final url = 'http://80.78.248.203:3004/$urlSegment';
+  Future<void> _authenticate(String email, String password) async {
+    final url = Url.loginUrl;
     try {
       final response = await http.post(url,
           body: json.encode({
@@ -79,11 +79,11 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String email, String password) async {
-    return _authenticate(email, password, 'login');
+    return _authenticate(email, password);
   }
 
   Future<bool> _tryAutoLogin() async {
-    print('auto login process');
+    print('auto login process..');
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
       return false;

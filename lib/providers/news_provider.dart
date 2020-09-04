@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/http_exception.dart';
+import '../util/url.dart';
 import '../models/news.dart';
 
 class NewsProvider with ChangeNotifier {
@@ -23,10 +24,9 @@ class NewsProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetResult() async {
-    const String url = 'http://80.78.248.203:3004/news/all';
     try {
       final response = await http.get(
-        url,
+        Url.allNewsUrl,
 //    headers: {
 //        'Content-Type': 'application/json',
 //        'Accept': 'application/json',

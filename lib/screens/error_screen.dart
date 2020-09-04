@@ -18,9 +18,11 @@ class ErrorScreen extends StatefulWidget {
   factory ErrorScreen.news(BuildContext context) {
     return ErrorScreen(Provider.of<NewsProvider>(context, listen: false));
   }
+
   factory ErrorScreen.teacher(BuildContext context) {
     return ErrorScreen(Provider.of<TeacherProvider>(context, listen: false));
   }
+
   factory ErrorScreen.schedule(BuildContext context) {
     return ErrorScreen(Provider.of<ScheduleProvider>(context, listen: false));
   }
@@ -53,14 +55,12 @@ class _ErrorScreenState extends State<ErrorScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text('При загрузке данных произошла ошибка'),
-          const SizedBox(
-            height: 5,
-          ),
+          const Text('При загрузке данных произошла ошибка'),
+          const SizedBox(height: 5),
           if (_refresh)
             const Padding(
-              padding: const EdgeInsets.only(top: 23.0),
-              child: const SizedBox(
+              padding: EdgeInsets.only(top: 23.0),
+              child: SizedBox(
                 height: 25.0,
                 width: 25.0,
                 child: CircularProgressIndicator(strokeWidth: 3.0),

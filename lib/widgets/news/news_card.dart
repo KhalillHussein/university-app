@@ -221,12 +221,11 @@ class Title extends StatelessWidget {
   final List<dynamic> images;
 
   Title({this.title, this.images});
-
   List<Widget> _listImages() {
     List<Widget> imagesList = [];
     for (var imageUrl in images) {
       imagesList.add(
-        Images(imageUrl: 'http://80.78.248.203:3004/img/news/$imageUrl'),
+        Images(imageUrl: 'http://80.78.248.203:3064/img/news/$imageUrl'),
       );
     }
     return imagesList;
