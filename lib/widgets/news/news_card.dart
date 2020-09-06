@@ -112,6 +112,29 @@ class BodyImages extends StatelessWidget {
             Row(
               children: _listImages(),
             ),
+          if (_listImages().length == 4)
+            Column(
+              children: [
+                Row(
+                  children: [
+                    _listImages().first,
+                  ],
+                ),
+                Container(
+                  height: 110,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Row(
+                          children: _listImages().getRange(1, 4).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           if (_listImages().length > 4)
             Column(
               children: [
