@@ -119,19 +119,32 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 import '../widgets/placeholder_image.dart';
 
 class PhotoViewScreen extends StatefulWidget {
-  static const routeName = '/photo-viewer';
+  // static const routeName = '/photo-viewer';
+
+  final List<String> galleryItems;
+  final int initialIndex;
+  final PageController pageController;
+
+  PhotoViewScreen({
+    this.galleryItems,
+    this.initialIndex,
+  }) : pageController = PageController(initialPage: initialIndex);
 
   @override
   _PhotoViewScreenState createState() => _PhotoViewScreenState();
 }
 
 class _PhotoViewScreenState extends State<PhotoViewScreen> {
+  int _currentIndex;
+
   @override
   void initState() {
+    _currentIndex = widget.initialIndex;
     FlutterStatusbarcolor.setStatusBarColor(Colors.black87, animate: true);
     super.initState();
   }
@@ -142,16 +155,21 @@ class _PhotoViewScreenState extends State<PhotoViewScreen> {
     super.dispose();
   }
 
-  Widget _buildImage(String imageUrl) {
-    return Center(
-      child: PhotoView(
-        tightMode: true,
-        heroAttributes: PhotoViewHeroAttributes(tag: imageUrl),
-        filterQuality: FilterQuality.high,
-        imageProvider: CachedNetworkImageProvider(imageUrl),
-        initialScale: PhotoViewComputedScale.contained * 1.0,
-        minScale: PhotoViewComputedScale.contained * 1.0,
-        maxScale: PhotoViewComputedScale.covered * 1.2,
+  void onPageChanged(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  Widget _buildGallery(List<String> imageList) {
+    return Container(
+      child: PhotoViewGallery.builder(
+        scrollPhysics: const BouncingScrollPhysics(),
+        builder: _buildItem,
+        itemCount: imageList.length,
+        loadingBuilder: _loadingBuilder,
+        onPageChanged: onPageChanged,
+        pageController: widget.pageController,
         loadFailedChild: PlaceholderImage(
           height: 200,
           width: double.infinity,
@@ -160,9 +178,33 @@ class _PhotoViewScreenState extends State<PhotoViewScreen> {
     );
   }
 
+  Widget _loadingBuilder(BuildContext context, ImageChunkEvent event) {
+    return Center(
+      child: Container(
+        width: 20.0,
+        height: 20.0,
+        child: CircularProgressIndicator(
+          value: event == null
+              ? 0
+              : event.cumulativeBytesLoaded / event.expectedTotalBytes,
+        ),
+      ),
+    );
+  }
+
+  PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
+    final String item = widget.galleryItems[index];
+    return PhotoViewGalleryPageOptions(
+      imageProvider: CachedNetworkImageProvider(item),
+      initialScale: PhotoViewComputedScale.contained * 1.0,
+      minScale: PhotoViewComputedScale.contained * 1.0,
+      maxScale: PhotoViewComputedScale.covered * 1.2,
+      heroAttributes: PhotoViewHeroAttributes(tag: item),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Map args = ModalRoute.of(context).settings.arguments as Map;
     return Theme(
       data: ThemeData.dark(),
       child: Scaffold(
@@ -173,10 +215,51 @@ class _PhotoViewScreenState extends State<PhotoViewScreen> {
           centerTitle: true,
           backgroundColor: Colors.black54,
           elevation: 0.0,
-          title: Text('1 из 1'),
+          title: Text(
+            '${_currentIndex + 1} из ${widget.galleryItems.length}',
+          ),
         ),
-        body: _buildImage(args['imageUrl']),
+        body: _buildGallery(widget.galleryItems),
       ),
     );
   }
+
+// Widget _buildImage(String imageUrl) {
+//   return Center(
+//     child: PhotoView(
+//       tightMode: true,
+//       heroAttributes: PhotoViewHeroAttributes(tag: imageUrl),
+//       filterQuality: FilterQuality.high,
+//       imageProvider: CachedNetworkImageProvider(imageUrl),
+//       initialScale: PhotoViewComputedScale.contained * 1.0,
+//       minScale: PhotoViewComputedScale.contained * 1.0,
+//       maxScale: PhotoViewComputedScale.covered * 1.2,
+//       loadFailedChild: PlaceholderImage(
+//         height: 200,
+//         width: double.infinity,
+//       ),
+//     ),
+//   );
+// }
+
+// @override
+// Widget build(BuildContext context) {
+//   final Map args = ModalRoute.of(context).settings.arguments as Map;
+//   return Theme(
+//     data: ThemeData.dark(),
+//     child: Scaffold(
+//         backgroundColor: Colors.black,
+//         extendBody: true,
+//         extendBodyBehindAppBar: true,
+//         appBar: AppBar(
+//           centerTitle: true,
+//           backgroundColor: Colors.black54,
+//           elevation: 0.0,
+//           title: Text('$_imageIndex из ${args['imageList'].length}'),
+//         ),
+//         body:
+//             _buildGallery(args['imageList']) //_buildImage(args['imageUrl']),
+//         ),
+//   );
+// }
 }

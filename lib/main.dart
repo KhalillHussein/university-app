@@ -12,7 +12,6 @@ import './providers/themes_provider.dart';
 import './providers/navigation_provider.dart';
 import './screens/navigation_screen.dart';
 import './screens/teachers_screen.dart';
-import './screens/photo_view_screen.dart';
 import './values/themes.dart';
 
 void main() {
@@ -64,7 +63,6 @@ class MyApp extends StatelessWidget {
               routes: {
                 '/': (ctx) => NavigationScreen(),
                 TeachersScreen.routeName: (ctx) => TeachersScreen(),
-                PhotoViewScreen.routeName: (ctx) => PhotoViewScreen(),
               },
             ),
           ),

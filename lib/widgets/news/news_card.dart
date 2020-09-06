@@ -57,10 +57,7 @@ class NewsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           _buildNewsHeader(),
-          Title(
-            title: title,
-            images: images,
-          ),
+          Title(title),
           BodyImages(images),
           Body(
             id: id,
@@ -78,12 +75,26 @@ class BodyImages extends StatelessWidget {
   final List<String> images;
 
   BodyImages(this.images);
+  //
+  // List<Widget> _listImages() {
+  //   List<Widget> imagesList = [];
+  //   for (var imageUrl in images) {
+  //     imagesList.add(
+  //       Image(imageUrl: imageUrl, imageList: images),
+  //     );
+  //   }
+  //   return imagesList;
+  // }
 
   List<Widget> _listImages() {
     List<Widget> imagesList = [];
-    for (var imageUrl in images) {
+    for (int i = 0; i < images.length; i++) {
       imagesList.add(
-        Image(imageUrl: imageUrl),
+        Image(
+          imageUrl: images[i],
+          imageList: images,
+          index: i,
+        ),
       );
     }
     return imagesList;
@@ -189,8 +200,10 @@ class BodyImages extends StatelessWidget {
 //Image class
 class Image extends StatelessWidget {
   final String imageUrl;
+  final int index;
+  final List<String> imageList;
 
-  Image({this.imageUrl});
+  Image({this.imageUrl, this.imageList, this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -199,14 +212,24 @@ class Image extends StatelessWidget {
         padding: const EdgeInsets.all(2.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, PhotoViewScreen.routeName, arguments: {
-              'imageUrl': imageUrl,
-            });
+            open(context);
           },
           child: Hero(
             child: CacheImage.news(url: imageUrl),
             tag: imageUrl,
           ),
+        ),
+      ),
+    );
+  }
+
+  void open(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PhotoViewScreen(
+          galleryItems: imageList,
+          initialIndex: index,
         ),
       ),
     );
@@ -332,9 +355,8 @@ class Body extends StatelessWidget {
 //Title class
 class Title extends StatelessWidget {
   final String title;
-  final List<dynamic> images;
 
-  Title({this.title, this.images});
+  Title(this.title);
 
   @override
   Widget build(BuildContext context) {
