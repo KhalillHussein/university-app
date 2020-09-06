@@ -9,8 +9,8 @@ class CacheImage extends StatelessWidget {
 
   CacheImage(this.url, this.size);
 
-  static const Size _smallSize = Size(110.0, 80.0),
-      _bigSize = Size(double.infinity, 180.0);
+  static const Size _smallSize = Size(120, 220.0),
+      _bigSize = Size(double.infinity, 300.0);
 
   factory CacheImage.teacher({String url}) {
     return CacheImage(url, _smallSize);
@@ -23,7 +23,13 @@ class CacheImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
+      fadeInDuration: const Duration(milliseconds: 300),
+      fadeOutDuration: const Duration(milliseconds: 300),
+      height: size.height,
+      width: size.width,
       imageUrl: url,
+      fit: BoxFit.cover,
+      memCacheWidth: 512,
       placeholder: (context, url) => Container(
         height: size.height,
         width: size.width,

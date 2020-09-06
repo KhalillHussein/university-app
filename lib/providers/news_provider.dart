@@ -40,17 +40,22 @@ class NewsProvider with ChangeNotifier {
       }
       final responseResult = responseData['result'];
       responseResult.forEach((newsItem) {
+        List<String> imageUrlList = [];
+        newsItem['images'].forEach(
+          (imageName) => imageUrlList.add('${Url.newsImgUrl}$imageName'),
+        );
         loadedNews.add(
           News(
             id: newsItem['_id'],
             title: newsItem['title'],
-            images: newsItem['images'],
+            images: imageUrlList,
             introText: newsItem['introText'],
             fullText: newsItem['fullText'],
             views: newsItem['views'],
             date: DateTime.fromMillisecondsSinceEpoch(newsItem['date']),
           ),
         );
+        //  loadedNews.sort((a, b) => a.date.compareTo(b.date));
         _items = loadedNews.reversed.toList();
         notifyListeners();
       });

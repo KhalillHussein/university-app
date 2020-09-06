@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class News {
   final String id;
-  final List<dynamic> images;
+  final List<String> images;
   final String title;
   final String introText;
   final String fullText;

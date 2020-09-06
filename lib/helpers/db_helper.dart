@@ -38,6 +38,6 @@ class DBHelper {
 
   Future<void> clearTable(String table) async {
     final db = await database;
-    await db.execute('DELETE FROM $table');
+    await db.delete(table);
   }
 }

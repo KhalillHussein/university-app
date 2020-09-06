@@ -7,6 +7,7 @@ class Url {
   //News URLs
   static const newsUrl = '$baseUrl/news';
   static const allNewsUrl = '$newsUrl/all';
+  static const newsImgUrl = '$baseUrl/img/news/';
 
   //Auth URLs
   static const loginUrl = '$baseUrl/login';

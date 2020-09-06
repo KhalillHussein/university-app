@@ -9,7 +9,7 @@ import '../../screens/photo_view_screen.dart';
 import '../cache_image.dart';
 
 class NewsCard extends StatelessWidget {
-  final List<dynamic> images;
+  final List<String> images;
   final String id;
   final String title;
   final String introText;
@@ -61,6 +61,7 @@ class NewsCard extends StatelessWidget {
             title: title,
             images: images,
           ),
+          BodyImages(images),
           Body(
             id: id,
             introText: introText,
@@ -73,16 +74,106 @@ class NewsCard extends StatelessWidget {
   }
 }
 
+class BodyImages extends StatelessWidget {
+  final List<String> images;
+
+  BodyImages(this.images);
+
+  List<Widget> _listImages() {
+    List<Widget> imagesList = [];
+    for (var imageUrl in images) {
+      imagesList.add(
+        Image(imageUrl: imageUrl),
+      );
+    }
+    return imagesList;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+      child: Column(
+        children: [
+          if (_listImages().length == 3)
+            Row(
+              children: [
+                _listImages().first,
+                Container(
+                  width: 120,
+                  height: 304,
+                  child: Column(
+                    children: _listImages().getRange(1, 3).toList(),
+                  ),
+                )
+              ],
+            ),
+          if (_listImages().length < 3)
+            Row(
+              children: _listImages(),
+            ),
+          if (_listImages().length > 4)
+            Column(
+              children: [
+                Row(
+                  children: [
+                    _listImages().first,
+                  ],
+                ),
+                Container(
+                  height: 110,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Row(
+                          children: _listImages().getRange(1, 3).toList(),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: GestureDetector(
+                            child: Container(
+                              color: Colors.black54,
+                              child: Center(
+                                child: Text(
+                                  'еще \n${_listImages().length - 3} фото',
+                                  softWrap: true,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ),
+                            onTap: () {},
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 //Image class
-class Images extends StatelessWidget {
+class Image extends StatelessWidget {
   final String imageUrl;
 
-  Images({this.imageUrl});
+  Image({this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Center(
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
         child: GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, PhotoViewScreen.routeName, arguments: {
@@ -221,38 +312,20 @@ class Title extends StatelessWidget {
   final List<dynamic> images;
 
   Title({this.title, this.images});
-  List<Widget> _listImages() {
-    List<Widget> imagesList = [];
-    for (var imageUrl in images) {
-      imagesList.add(
-        Images(imageUrl: 'http://80.78.248.203:3064/img/news/$imageUrl'),
-      );
-    }
-    return imagesList;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w600,
-              color: Theme.of(context).textTheme.bodyText1.color,
-              height: 1.5,
-            ),
-            overflow: TextOverflow.fade,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15),
-            child: Row(children: _listImages()),
-          ),
-        ],
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 19,
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).textTheme.bodyText1.color,
+          height: 1.5,
+        ),
+        overflow: TextOverflow.fade,
       ),
     );
   }

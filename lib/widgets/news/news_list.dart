@@ -10,6 +10,7 @@ class NewsList extends StatelessWidget {
     return Consumer<NewsProvider>(
       builder: (ctx, newsData, _) => ListView.builder(
         addAutomaticKeepAlives: false,
+        shrinkWrap: true,
         key: PageStorageKey("NewsList"),
         itemCount: newsData.itemCount,
         itemBuilder: (ctx, index) {
