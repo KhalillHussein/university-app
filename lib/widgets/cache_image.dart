@@ -23,21 +23,22 @@ class CacheImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      fadeInDuration: const Duration(milliseconds: 300),
-      fadeOutDuration: const Duration(milliseconds: 300),
+      fadeInDuration: const Duration(milliseconds: 200),
+      fadeOutDuration: const Duration(milliseconds: 200),
       height: size.height,
       width: size.width,
       imageUrl: url,
       fit: BoxFit.cover,
-      memCacheWidth: 512,
+      memCacheWidth: 396,
       placeholder: (context, url) => Container(
         height: size.height,
         width: size.width,
-        child: Center(
+        color: Theme.of(context).canvasColor,
+        child: const Center(
           child: CircularProgressIndicator(
-            backgroundColor: Theme.of(context).canvasColor,
+            //  backgroundColor: Theme.of(context).canvasColor,
             valueColor: AlwaysStoppedAnimation(Colors.grey),
-            strokeWidth: 2.0,
+            strokeWidth: 3.0,
           ),
         ),
       ),

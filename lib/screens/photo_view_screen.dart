@@ -152,6 +152,7 @@ class _PhotoViewScreenState extends State<PhotoViewScreen> {
   @override
   void dispose() {
     FlutterStatusbarcolor.setStatusBarColor(Colors.black26, animate: true);
+    widget.pageController.dispose();
     super.dispose();
   }
 
