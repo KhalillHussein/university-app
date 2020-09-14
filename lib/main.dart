@@ -4,15 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import './providers/news_provider.dart';
-import './providers/teacher_provider.dart';
-import './providers/auth.dart';
-import './providers/schedule_provider.dart';
-import './providers/themes_provider.dart';
-import './providers/navigation_provider.dart';
-import './screens/navigation_screen.dart';
-import './screens/teachers_screen.dart';
-import './values/themes.dart';
+import 'providers/index.dart';
+import './util/routes.dart';
+import './util/style.dart';
 
 void main() {
   initializeDateFormatting();
@@ -21,13 +15,15 @@ void main() {
     bool darkModeOn = prefs.getBool('theme') ?? false;
     runApp(
       ChangeNotifierProvider<ThemesProvider>(
-        create: (_) => ThemesProvider(darkModeOn ? darkTheme : lightTheme),
+        create: (_) =>
+            ThemesProvider(darkModeOn ? Style.st.dark : Style.st.light),
         child: MyApp(),
       ),
     );
   });
 }
 
+/// Builds the necessary providers, as well as the home page.
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -36,15 +32,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => Auth(), lazy: false),
         ChangeNotifierProvider(create: (ctx) => ScheduleProvider()),
         ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
-        ChangeNotifierProvider(create: (ctx) => TeacherProvider()),
-        ChangeNotifierProxyProvider<Auth, NewsProvider>(
-          create: (ctx) => NewsProvider('', '', []),
-          update: (ctx, auth, previousNews) => NewsProvider(
-            auth.token,
-            auth.userId,
-            previousNews == null ? [] : previousNews.items,
-          ),
-        ),
+        ChangeNotifierProvider(create: (ctx) => LecturerProvider()),
+        ChangeNotifierProvider(create: (ctx) => NewsProvider()),
+        ChangeNotifierProvider(
+            create: (ctx) => NotificationsProvider(), lazy: false),
       ],
       child: Consumer<ThemesProvider>(
         builder: (ctx, themeData, _) => ThemeProvider(
@@ -53,17 +44,9 @@ class MyApp extends StatelessWidget {
             builder: (context) => MaterialApp(
               title: 'MTUSI APP',
               theme: ThemeProvider.of(context),
-              darkTheme: darkTheme,
-              onUnknownRoute: (RouteSettings routeSettings) =>
-                  MaterialPageRoute(
-                settings: routeSettings,
-                builder: (_) => NavigationScreen(),
-              ),
-              initialRoute: '/',
-              routes: {
-                '/': (ctx) => NavigationScreen(),
-                TeachersScreen.routeName: (ctx) => TeachersScreen(),
-              },
+              darkTheme: Style.st.dark,
+              onGenerateRoute: Routes.rt.generateRoute,
+              onUnknownRoute: Routes.rt.errorRoute,
             ),
           ),
         ),

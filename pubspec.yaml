@@ -18,11 +18,10 @@ dependencies:
   url_launcher: ^5.5.1
 
   ## Widgets
-  expandable: ^4.1.4
   grouped_list: ^3.3.0
   photo_view: ^0.10.2
   animated_theme_switcher: ^1.0.6
-  cached_network_image: ^2.2.0+1
+  cached_network_image: ^2.3.2+1
   flutter_markdown: ^0.4.4
 
   ## Tools
@@ -32,6 +31,8 @@ dependencies:
   intl: ^0.16.1
   path: ^1.6.4
   flutter_statusbarcolor: ^0.2.3
+  flutter_local_notifications: ^1.4.4+4
+  web_socket_channel: ^1.1.0
 
   ## Icons
   community_material_icon: ^5.3.45

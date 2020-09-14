@@ -18,4 +18,16 @@ class Schedule {
     @required this.teacher,
     @required this.room,
   });
+
+  factory Schedule.fromJson(Map<String, dynamic> json) {
+    return Schedule(
+      id: json['id'],
+      date: DateTime.parse(json['date']),
+      couple: json['couple'],
+      lesson: json['lesson'],
+      type: json['type'],
+      teacher: json['teacher'],
+      room: json['room'],
+    );
+  }
 }

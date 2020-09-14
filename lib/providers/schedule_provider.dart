@@ -46,19 +46,7 @@ class ScheduleProvider with ChangeNotifier {
 
   Future<void> fetchFromDB() async {
     final loadedSchedule = await DBHelper.db.getData('schedule');
-    _items = loadedSchedule
-        .map(
-          (item) => Schedule(
-            id: item['id'],
-            date: DateTime.parse(item['date']),
-            couple: item['couple'],
-            lesson: item['lesson'],
-            type: item['type'],
-            teacher: item['teacher'],
-            room: item['room'],
-          ),
-        )
-        .toList();
+    _items = [for (final item in loadedSchedule) Schedule.fromJson(item)];
     notifyListeners();
   }
 }

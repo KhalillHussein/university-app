@@ -1,4 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
+
+import '../util/url.dart';
 
 class News {
   final String id;
@@ -18,4 +21,18 @@ class News {
     @required this.views,
     @required this.date,
   });
+
+  factory News.fromJson(Map<String, dynamic> json) {
+    return News(
+      id: json['_id'],
+      title: json['title'],
+      images: [for (final item in json['images']) '${Url.newsImgUrl}$item'],
+      introText: json['introText'],
+      fullText: json['fullText'],
+      views: json['views'],
+      date: DateTime.fromMillisecondsSinceEpoch(json['date']),
+    );
+  }
+
+  String get getDate => DateFormat.yMMMd('Ru').format(date);
 }
