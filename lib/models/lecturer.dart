@@ -58,5 +58,7 @@ class Lecturer {
   }
 
   String get getLengthOfSpeciality =>
-      DateTime.now().difference(lengthWorkOfSpeciality).inDays.toString();
+      ((DateTime.now().difference(lengthWorkOfSpeciality).inDays) / 365)
+          .floor()
+          .toString();
 }

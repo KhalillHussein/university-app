@@ -8,32 +8,6 @@ import 'schedule_card.dart';
 import '../../models/schedule.dart';
 
 class ScheduleList extends StatelessWidget {
-//  Widget _buildSeparator(BuildContext context, dynamic date) {
-//    return Padding(
-//      padding: const EdgeInsets.all(10.0),
-//      child: Container(
-//        height: 30,
-//        child: Align(
-//          alignment: Alignment.center,
-//          child: Row(
-//            children: <Widget>[
-//              Expanded(child: Divider()),
-//              Container(
-//                padding: EdgeInsets.symmetric(horizontal: 5),
-//                child: Text(
-//                  '${toBeginningOfSentenceCase(DateFormat.EEEE('Ru').format(date))}, ${DateFormat('yyyy.MM.dd').format(date)}',
-//                  style: TextStyle(
-//                      color: Theme.of(context).iconTheme.color, fontSize: 14),
-//                ),
-//              ),
-//              Expanded(child: Divider()),
-//            ],
-//          ),
-//        ),
-//      ),
-//    );
-//  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ScheduleProvider>(
@@ -59,20 +33,6 @@ class ScheduleList extends StatelessWidget {
     );
   }
 }
-//
-
-//  @override
-//  Widget build(BuildContext context) {
-//    final scheduleData = Provider.of<ScheduleProvider>(context);
-//    return ListView.builder(
-//      itemCount: scheduleData.items.length,
-//      itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
-//        value: scheduleData.items[index],
-//        child: ScheduleItem(),
-//      ),
-//    );
-//  }
-//}
 
 Widget _buildSeparator(BuildContext context, dynamic date) {
   return Padding(
@@ -120,25 +80,3 @@ Widget _buildSeparator(BuildContext context, dynamic date) {
     ),
   );
 }
-
-//  @override
-//  Widget build(BuildContext context) {
-//    final scheduleData = Provider.of<ScheduleProvider>(context);
-//    return  GroupedListView<Schedule, DateTime>(
-//      elements: scheduleData.items,
-//      groupBy: (element) =>
-//          DateTime(element.date.year, element.date.month, element.date.day),
-//      groupSeparatorBuilder: (groupByDate) => _buildSeparator(context, groupByDate),
-//      indexedItemBuilder: (context,_, index) {
-//        return StickyHeader(
-//          header: _buildSeparator(context,scheduleData.items[index].date),
-//          content: ChangeNotifierProvider.value(
-//            value: scheduleData.items[index],
-//            child: ScheduleItem(),
-//          ),
-//        );
-//      },
-//      order: GroupedListOrder.ASC,
-//    );
-//  }
-//}

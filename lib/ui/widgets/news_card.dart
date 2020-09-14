@@ -1,74 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'expandable.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/index.dart';
 import 'cache_image.dart';
-
-class NewsCard extends StatelessWidget {
-  final List<String> images;
-  final String id;
-  final String title;
-  final String introText;
-  final String fullText;
-  final int views;
-  final DateTime date;
-  final Key key;
-
-  NewsCard(
-      {this.id,
-      @required this.images,
-      @required this.title,
-      @required this.introText,
-      @required this.fullText,
-      @required this.views,
-      @required this.date,
-      this.key})
-      : super(key: key);
-
-  Widget _buildNewsHeader() {
-    return ListTile(
-      leading: CircleAvatar(),
-      title: const Text(
-        'СКФ МТУСИ',
-        style: TextStyle(fontWeight: FontWeight.w600),
-      ),
-      subtitle: Text(
-        '${DateFormat.yMMMd('Ru').format(date)}',
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      elevation: 2,
-      margin: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _buildNewsHeader(),
-          Title(title),
-          if (images.isNotEmpty) BodyImages(images),
-          Body(
-            id: id,
-            introText: introText,
-            fullText: fullText,
-            views: views,
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class BodyImages extends StatelessWidget {
   final List<String> images;
@@ -251,7 +188,7 @@ class Body extends StatelessWidget {
     this.views,
   });
 
-  Widget buildCollapsed() {
+  Widget _buildCollapsed() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Text(
@@ -265,7 +202,7 @@ class Body extends StatelessWidget {
     );
   }
 
-  Widget buildExpanded() {
+  Widget _buildExpanded() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: MarkdownBody(
@@ -290,15 +227,14 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpandableNotifier(
-      // initialExpanded:
-      // PageStorage.of(context).readState(context, identifier: id) ?? false,
+      // initialExpanded:PageStorage.of(context).readState(context, identifier: id) ?? false,
       child: ScrollOnExpand(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ExpandablePanel(
-              collapsed: buildCollapsed(),
-              expanded: buildExpanded(),
+              collapsed: _buildCollapsed(),
+              expanded: _buildExpanded(),
             ),
             const SizedBox(
               height: 15,
@@ -356,10 +292,10 @@ class Body extends StatelessWidget {
 }
 
 //Title class
-class Title extends StatelessWidget {
+class Head extends StatelessWidget {
   final String title;
 
-  Title(this.title);
+  Head(this.title);
 
   @override
   Widget build(BuildContext context) {

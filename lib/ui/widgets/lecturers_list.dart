@@ -1,47 +1,10 @@
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-//
-// import '../../providers/lecturer_provider.dart';
-// import 'lecturer_card.dart';
-//
-// class LecturerList extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer<LecturerProvider>(
-//       builder: (ctx, lecturerData, _) => ListView.builder(
-//         itemCount: lecturerData.itemCount,
-//         itemBuilder: (ctx, index) {
-//           final lecturer = lecturerData.items[index];
-//           return LecturerCard(
-//             id: lecturer.id,
-//             fullName: lecturer.fullName,
-//             email: lecturer.email,
-//             rank: lecturer.rank,
-//             academicDegree: lecturer.academicDegree,
-//             academicRank: lecturer.academicRank,
-//             totalLengthOfService: lecturer.totalLengthOfService,
-//             lengthWorkOfSpeciality: lecturer.lengthWorkOfSpeciality,
-//             photo: lecturer.photo,
-//             disciplinesTaught: lecturer.disciplinesTaught,
-//             scientificInterests: lecturer.scientificInterests,
-//             trainings: lecturer.trainings,
-//             specialty: lecturer.specialty,
-//             qualification: lecturer.qualification,
-//             education: lecturer.education,
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
-
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/lecturer_provider.dart';
 import '../../models/lecturer.dart';
-import 'lecturer_card.dart';
+import 'custom_dialog.dart';
 import 'cache_image.dart';
 
 class LecturerList extends StatelessWidget {
@@ -88,13 +51,15 @@ class LecturerList extends StatelessWidget {
                             style: TextStyle(fontSize: 21),
                           ),
                           _buildTeacherInfo(
-                              context,
-                              CommunityMaterialIcons.account_tie,
-                              lecturer.rank),
+                            context,
+                            CommunityMaterialIcons.account_tie,
+                            lecturer.rank,
+                          ),
                           _buildTeacherInfo(
-                              context,
-                              CommunityMaterialIcons.book_open,
-                              lecturer.disciplinesTaught),
+                            context,
+                            CommunityMaterialIcons.book_open,
+                            lecturer.disciplinesTaught,
+                          ),
                         ],
                       ),
                     ),
@@ -117,11 +82,7 @@ class LecturerList extends StatelessWidget {
                         'Должность:': lecturer.academicRank,
                         'Образование:': lecturer.education,
                         'Дисциплины:': lecturer.disciplinesTaught,
-                        'Стаж:': ((DateTime.now()
-                                    .difference(lecturer.lengthWorkOfSpeciality)
-                                    .inDays) /
-                                365)
-                            .floor(),
+                        'Стаж:': lecturer.getLengthOfSpeciality,
                       },
                     ),
                   );
