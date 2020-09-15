@@ -1,60 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/news_provider.dart';
-import '../widgets/news_list.dart';
-import '../widgets/reusable_widgets.dart';
-import '../pages/error.dart';
+import '../../models/news.dart';
+import '../../repositories/news.dart';
+import '../../ui/widgets/custom_page.dart';
+import '../../ui/widgets/news_card.dart';
 
 class NewsTab extends StatelessWidget {
-  Future<void> _refreshNews(BuildContext context) async {
-    await Provider.of<NewsProvider>(context, listen: false).fetchAndSetResult();
-  }
-
-  Widget _buildFuture(provider) {
-    print('!call_reload');
-    return FutureBuilder(
-      future: provider.fetchAndSetResult(),
-      builder: (context, dataSnapshot) {
-        if (dataSnapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: const CircularProgressIndicator(),
-          );
-        } else {
-          if (dataSnapshot.hasError) {
-            print(dataSnapshot.error);
-            return ErrorPage.news(context);
-          } else {
-            return RefreshIndicator(
-              child: NewsList(),
-              onRefresh: () => _refreshNews(context).catchError(
-                (_) {
-                  Scaffold.of(context).hideCurrentSnackBar();
-                  Scaffold.of(context).showSnackBar(buildSnackBar(context));
-                },
-              ),
-            );
-          }
-        }
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     print('rebuild_news');
-    return Consumer<NewsProvider>(
-      builder: (ctx, newsData, _) => newsData.news.isEmpty
-          ? _buildFuture(newsData)
-          : RefreshIndicator(
-              child: NewsList(),
-              onRefresh: () => _refreshNews(context).catchError(
-                (_) {
-                  Scaffold.of(context).hideCurrentSnackBar();
-                  Scaffold.of(context).showSnackBar(buildSnackBar(context));
-                },
+    return Consumer<NewsRepository>(
+      builder: (ctx, model, _) => ListViewPage<NewsRepository>(
+        itemCount: model.newsCount,
+        buildFunction: _buildNewsCard,
+      ),
+    );
+  }
+
+  Widget _buildNewsHeader(String date) {
+    return ListTile(
+      leading: CircleAvatar(),
+      title: const Text(
+        'СКФ МТУСИ',
+        style: TextStyle(fontWeight: FontWeight.w600),
+      ),
+      subtitle: Text(date),
+    );
+  }
+
+  Widget _buildNewsCard(BuildContext context, int index) {
+    return Consumer<NewsRepository>(
+      builder: (ctx, model, _) {
+        final News news = model.news[index];
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+          elevation: 2,
+          margin: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              _buildNewsHeader(news.getDate),
+              Head(news.title),
+              if (news.images.isNotEmpty) BodyImages(news.images),
+              Body(
+                id: news.id,
+                introText: news.introText,
+                fullText: news.fullText,
+                views: news.views,
               ),
-            ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

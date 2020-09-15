@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../util/url.dart';
 import '../models/lecturer.dart';
+import 'base.dart';
 
-class LecturerProvider with ChangeNotifier {
+/// Repository that holds lecturers data.
+class LecturersRepository extends BaseRepository {
   List<Lecturer> _lecturers = [];
 
   List<Lecturer> get lecturers {
@@ -17,14 +18,16 @@ class LecturerProvider with ChangeNotifier {
     return _lecturers.length;
   }
 
-  Future<void> fetchAndSetResult() async {
+  @override
+  Future<void> loadData() async {
+    print('trying fetch lecturers..');
     try {
       final response = await http.get(Url.lecturersAllUrl);
       final responseData = json.decode(response.body);
       _lecturers = [for (final item in responseData) Lecturer.fromJson(item)];
-      notifyListeners();
-    } catch (error) {
-      throw error;
+      finishLoading();
+    } catch (_) {
+      receivedError();
     }
   }
 }

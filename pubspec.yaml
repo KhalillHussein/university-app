@@ -16,6 +16,7 @@ dependencies:
   ## Online
   http: ^0.12.1
   url_launcher: ^5.5.1
+  web_socket_channel: ^1.1.0
 
   ## Widgets
   grouped_list: ^3.3.0
@@ -32,7 +33,6 @@ dependencies:
   path: ^1.6.4
   flutter_statusbarcolor: ^0.2.3
   flutter_local_notifications: ^1.4.4+4
-  web_socket_channel: ^1.1.0
 
   ## Icons
   community_material_icon: ^5.3.45

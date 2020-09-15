@@ -5,8 +5,11 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'providers/index.dart';
+
 import './util/routes.dart';
 import './util/style.dart';
+
+import './repositories/index.dart';
 
 void main() {
   initializeDateFormatting();
@@ -30,10 +33,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (ctx) => Auth(), lazy: false),
-        ChangeNotifierProvider(create: (ctx) => ScheduleProvider()),
         ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
-        ChangeNotifierProvider(create: (ctx) => LecturerProvider()),
-        ChangeNotifierProvider(create: (ctx) => NewsProvider()),
+        ChangeNotifierProvider(create: (ctx) => ScheduleRepository()),
+        ChangeNotifierProvider(create: (ctx) => LecturersRepository()),
+        ChangeNotifierProvider(create: (ctx) => NewsRepository()),
         ChangeNotifierProvider(
             create: (ctx) => NotificationsProvider(), lazy: false),
       ],
