@@ -15,7 +15,7 @@ class NewsRepository extends BaseRepository {
     return [..._news];
   }
 
-  int get newsCount {
+  int get itemCount {
     return _news.length;
   }
 
@@ -29,8 +29,8 @@ class NewsRepository extends BaseRepository {
         receivedError();
       }
       final responseResult = responseData['result'];
-      _news = [for (final item in responseResult) News.fromJson(item)];
-      _news.sort((a, b) => b.date.compareTo(a.date));
+      _news = [for (final item in responseResult) News.fromJson(item)]
+        ..sort((a, b) => b.date.compareTo(a.date));
       finishLoading();
     } catch (_) {
       receivedError();

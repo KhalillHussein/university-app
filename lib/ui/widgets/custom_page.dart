@@ -157,8 +157,6 @@ class BasicPageNoScaffold<T extends BaseRepository> extends StatelessWidget {
   }
 }
 
-/// This widget is used for all tabs inside the app.
-/// Its main features are connection error handling.
 class ListViewPage<T extends BaseRepository> extends StatelessWidget {
   final String title;
   final int itemCount;

@@ -15,7 +15,7 @@ class LecturersScreen extends StatelessWidget {
       builder: (ctx, model, _) => BasicPage<LecturersRepository>(
         title: 'Преподаватели',
         body: ListView.builder(
-          itemCount: model.lecturersCount,
+          itemCount: model.itemCount,
           itemBuilder: _buildLecturerCard,
         ),
       ),

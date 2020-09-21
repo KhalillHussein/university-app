@@ -12,7 +12,7 @@ class NewsTab extends StatelessWidget {
     print('rebuild_news');
     return Consumer<NewsRepository>(
       builder: (ctx, model, _) => ListViewPage<NewsRepository>(
-        itemCount: model.newsCount,
+        itemCount: model.itemCount,
         buildFunction: _buildNewsCard,
       ),
     );

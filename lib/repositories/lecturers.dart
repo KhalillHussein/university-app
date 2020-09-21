@@ -14,7 +14,7 @@ class LecturersRepository extends BaseRepository {
     return [..._lecturers];
   }
 
-  int get lecturersCount {
+  int get itemCount {
     return _lecturers.length;
   }
 

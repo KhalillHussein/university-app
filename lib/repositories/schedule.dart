@@ -13,6 +13,10 @@ class ScheduleRepository extends BaseRepository {
     return [..._schedule];
   }
 
+  int get itemCount {
+    return _schedule.length;
+  }
+
   @override
   Future<void> loadData() async {
     final loadedSchedule = await DBHelper.db.getData('schedule');
