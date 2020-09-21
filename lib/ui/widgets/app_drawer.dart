@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import '../../providers/navigation_provider.dart';
 import 'dynamic_treeview.dart';
-import '../../ui/widgets/custom_tile.dart';
 import '../../util/routes.dart';
 import '../../util/sections.dart';
 
@@ -137,17 +136,6 @@ class _AppDrawerState extends State<AppDrawer> {
                 },
                 width: double.infinity,
               ),
-              // ListView.builder(
-              //   padding: EdgeInsets.zero,
-              //   physics: NeverScrollableScrollPhysics(),
-              //   shrinkWrap: true,
-              //   itemCount: _mainTree.length,
-              //   itemBuilder: (ctx, index) => ParentWidget(
-              //     icon: _mainTree[index]['icon'],
-              //     title: _mainTree[index]['title'],
-              //     items: _mainTree[index]['sub_tree'],
-              //   ),
-              // ),
             ],
           ),
         ),

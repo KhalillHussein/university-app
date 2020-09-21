@@ -1,4 +1,3 @@
-import 'package:boxy/flex.dart';
 import 'package:flutter/material.dart';
 import 'expandable.dart';
 import 'package:community_material_icon/community_material_icon.dart';
