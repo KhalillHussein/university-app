@@ -4,7 +4,7 @@ class CustomDialog extends StatelessWidget {
   final String title;
   final Map<String, Object> description;
 
-  CustomDialog({
+  const CustomDialog({
     @required this.title,
     @required this.description,
   });
@@ -22,7 +22,7 @@ class CustomDialog extends StatelessWidget {
               title,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             ListView.separated(
               separatorBuilder: (context, index) => Divider(
                 height: 1.0,
@@ -31,7 +31,7 @@ class CustomDialog extends StatelessWidget {
               physics: NeverScrollableScrollPhysics(),
               itemCount: description.length,
               itemBuilder: (BuildContext context, int index) {
-                String key = description.keys.elementAt(index);
+                final String key = description.keys.elementAt(index);
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Row(
@@ -40,7 +40,7 @@ class CustomDialog extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          '$key',
+                          key,
                           style: Theme.of(context).dialogTheme.contentTextStyle,
                         ),
                       ),

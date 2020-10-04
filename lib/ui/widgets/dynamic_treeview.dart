@@ -111,11 +111,10 @@ class _DynamicTreeViewOriState extends State<DynamicTreeView> {
       config: widget.config,
       children: _buildChildren(data),
       key: ObjectKey({
-        'id': '${d.getId()}',
-        'parent_id': '${d.getParentId()}',
-        'title': '${d.getTitle()}',
-        'extra': '${d.getExtraData()}',
-        'icon': '${d.getIcon()}',
+        'id': d.getId(),
+        'parent_id': d.getParentId(),
+        'title': d.getTitle(),
+        'extra': d.getExtraData(),
       }),
     );
     return p;
@@ -135,10 +134,10 @@ class _DynamicTreeViewOriState extends State<DynamicTreeView> {
         cW.add(CustomTile(
           onTap: () {
             widget?.onTap({
-              'id': '${k.getId()}',
-              'parent_id': '${k.getParentId()}',
-              'title': '${k.getTitle()}',
-              'extra': '${k.getExtraData()}'
+              'id': k.getId(),
+              'parent_id': k.getParentId(),
+              'title': k.getTitle(),
+              'extra': k.getExtraData(),
             });
           },
           contentPadding: widget.config.childrenPaddingEdgeInsets,
@@ -313,15 +312,20 @@ class _ParentWidgetState extends State<ParentWidget>
             }
           },
           icon: widget.baseData.getIcon(),
-          title: Text(widget.baseData.getTitle(),
-              style: widget.config.parentTextStyle),
+          title: Text(
+            widget.baseData.getTitle(),
+            style: widget.config.parentTextStyle,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            softWrap: true,
+          ),
           contentPadding: widget.config.parentPaddingEdgeInsets,
           trailing: widget.children.isNotEmpty
               ? RotationTransition(
                   turns: sizeAnimation,
                   child: widget.config.arrowIcon,
                 )
-              : Container(),
+              : SizedBox(),
         ),
         ChildWidget(
           children: widget.children,

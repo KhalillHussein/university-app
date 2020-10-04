@@ -5,14 +5,17 @@ import 'package:provider/provider.dart';
 
 import '../../repositories/base.dart';
 
+import 'skeleton_loading.dart';
+
 /// Centered [CircularProgressIndicator] widget.
 Widget get _loadingIndicator =>
     Center(child: const CircularProgressIndicator());
 
+Widget get _skeletonLoading => SkeletonLoading();
+
 /// Function which handles reloading [QueryModel] models.
 Future<void> _onRefresh(BuildContext context, BaseRepository repository) {
   final Completer<void> completer = Completer<void>();
-
   repository.refreshData().then((_) {
     if (repository.loadingFailed) {
       Scaffold.of(context)
@@ -174,7 +177,7 @@ class ListViewPage<T extends BaseRepository> extends StatelessWidget {
       builder: (context, model, child) => RefreshIndicator(
         onRefresh: () => _onRefresh(context, model),
         child: model.isLoading
-            ? _loadingIndicator
+            ? _skeletonLoading
             : model.loadingFailed
                 ? ChangeNotifierProvider.value(
                     value: model,

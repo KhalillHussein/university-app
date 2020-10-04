@@ -2,25 +2,16 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../util/url.dart';
 import '../models/lecturer.dart';
+import '../util/url.dart';
 import 'base.dart';
 
 /// Repository that holds lecturers data.
 class LecturersRepository extends BaseRepository {
-  List<Lecturer> _lecturers = [];
-
-  List<Lecturer> get lecturers {
-    return [..._lecturers];
-  }
-
-  int get itemCount {
-    return _lecturers.length;
-  }
+  List<Lecturer> _lecturers;
 
   @override
   Future<void> loadData() async {
-    print('trying fetch lecturers..');
     try {
       final response = await http.get(Url.lecturersAllUrl);
       final responseData = json.decode(response.body);
@@ -30,4 +21,8 @@ class LecturersRepository extends BaseRepository {
       receivedError();
     }
   }
+
+  List<Lecturer> get lecturers => _lecturers;
+
+  int get itemCount => _lecturers?.length;
 }

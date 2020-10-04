@@ -21,11 +21,12 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
         content: Text(message),
         actions: <Widget>[
           FlatButton(
-              child: const Text('ОК'),
-              textColor: Theme.of(context).accentColor,
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              }),
+            textColor: Theme.of(context).accentColor,
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: const Text('ОК'),
+          ),
         ],
       ),
     );

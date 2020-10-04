@@ -8,7 +8,7 @@ class CustomTile extends StatelessWidget {
   final EdgeInsets contentPadding;
   final Function onTap;
 
-  CustomTile({
+  const CustomTile({
     this.icon,
     this.color,
     @required this.title,
@@ -29,6 +29,7 @@ class CustomTile extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: const BorderRadius.all(Radius.circular(5)),
+        onTap: onTap,
         child: Padding(
           padding: contentPadding,
           child: Row(
@@ -52,7 +53,6 @@ class CustomTile extends StatelessWidget {
             ],
           ),
         ),
-        onTap: onTap,
       ),
     );
   }

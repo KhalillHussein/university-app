@@ -44,9 +44,9 @@ class Lecturer {
       academicDegree: json['academic_degree'],
       academicRank: json['academic_rank'],
       totalLengthOfService:
-          DateTime(int.parse(json['total_length_of_service']), 01, 01),
+          DateTime(int.parse(json['total_length_of_service'])),
       lengthWorkOfSpeciality:
-          DateTime(int.parse(json['length_work_of_speciality']), 01, 01),
+          DateTime(int.parse(json['length_work_of_speciality'])),
       photo: json['photo'],
       disciplinesTaught: json['disciplines_taught'],
       scientificInterests: json['scientific_interests'],

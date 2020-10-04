@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../ui/screens/error.dart';
 import '../ui/screens/index.dart';
 
 /// Class that holds both route names & generate methods.
 /// Used by the Flutter routing system
 class Routes {
-  Routes._();
-  static final Routes rt = Routes._();
-
   // Static route names
   static const home = '/';
   static const teachers = '/teachers';
+  static const info = '/info';
 
   /// Methods that generate all routes
-  Route<dynamic> generateRoute(RouteSettings routeSettings) {
+  static Route<dynamic> generateRoute(RouteSettings routeSettings) {
     try {
       switch (routeSettings.name) {
         case home:
@@ -26,6 +25,11 @@ class Routes {
             settings: routeSettings,
             builder: (_) => LecturersScreen(),
           );
+        case info:
+          return MaterialPageRoute(
+            settings: routeSettings,
+            builder: (_) => Info(),
+          );
         default:
           return errorRoute(routeSettings);
       }
@@ -35,10 +39,10 @@ class Routes {
   }
 
   /// Method that called the error screen when necessary
-  Route<dynamic> errorRoute(RouteSettings routeSettings) {
+  static Route<dynamic> errorRoute(RouteSettings routeSettings) {
     return MaterialPageRoute(
       settings: routeSettings,
-      builder: (_) => NavigationScreen(),
+      builder: (_) => ErrorScreen(),
     );
   }
 }

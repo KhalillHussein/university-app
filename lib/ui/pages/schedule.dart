@@ -3,15 +3,14 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/schedule.dart';
 import '../../repositories/schedule.dart';
 import '../../ui/widgets/custom_page.dart';
-import '../../models/schedule.dart';
 import '../../ui/widgets/schedule_card.dart';
 
 class SchedulePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('rebuild_schedule');
     return Consumer<ScheduleRepository>(
       builder: (ctx, model, _) => BasicPageNoScaffold<ScheduleRepository>(
         body: GroupedListView<Schedule, DateTime>(
@@ -40,10 +39,9 @@ class SchedulePage extends StatelessWidget {
   Widget _buildSeparator(BuildContext context, dynamic date) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: Container(
+      child: SizedBox(
         height: 30,
         child: Align(
-          alignment: Alignment.center,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,

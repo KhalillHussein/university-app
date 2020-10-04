@@ -161,25 +161,23 @@ class _GalleryScreenState extends State<GalleryScreen> {
   }
 
   Widget _buildGallery(List<String> imageList) {
-    return Container(
-      child: PhotoViewGallery.builder(
-        scrollPhysics: const BouncingScrollPhysics(),
-        builder: _buildItem,
-        itemCount: imageList.length,
-        loadingBuilder: _loadingBuilder,
-        onPageChanged: onPageChanged,
-        pageController: widget.pageController,
-        loadFailedChild: PlaceholderImage(
-          height: 200,
-          width: double.infinity,
-        ),
+    return PhotoViewGallery.builder(
+      scrollPhysics: const BouncingScrollPhysics(),
+      builder: _buildItem,
+      itemCount: imageList.length,
+      loadingBuilder: _loadingBuilder,
+      onPageChanged: onPageChanged,
+      pageController: widget.pageController,
+      loadFailedChild: PlaceholderImage(
+        height: 200,
+        width: double.infinity,
       ),
     );
   }
 
   Widget _loadingBuilder(BuildContext context, ImageChunkEvent event) {
     return Center(
-      child: Container(
+      child: SizedBox(
         width: 20.0,
         height: 20.0,
         child: CircularProgressIndicator(

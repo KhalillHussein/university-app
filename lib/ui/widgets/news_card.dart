@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'expandable.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/index.dart';
 import 'cache_image.dart';
+import 'expandable.dart';
 
 class BodyImages extends StatelessWidget {
   final List<String> images;
 
-  BodyImages(this.images);
+  const BodyImages(this.images);
 
   List<Widget> _listImages() {
-    List<Widget> imagesList = [];
+    final List<Widget> imagesList = [];
     for (int i = 0; i < images.length; i++) {
       imagesList.add(
         Picture(
@@ -36,7 +36,7 @@ class BodyImages extends StatelessWidget {
           Row(
             children: [
               _listImages().first,
-              Container(
+              SizedBox(
                 width: 110,
                 height: 204,
                 child: Column(
@@ -57,7 +57,7 @@ class BodyImages extends StatelessWidget {
                   _listImages().first,
                 ],
               ),
-              Container(
+              SizedBox(
                 height: 100,
                 child: Row(
                   children: [
@@ -80,7 +80,7 @@ class BodyImages extends StatelessWidget {
                   _listImages().first,
                 ],
               ),
-              Container(
+              SizedBox(
                 height: 100,
                 child: Row(
                   children: [
@@ -142,7 +142,11 @@ class Picture extends StatelessWidget {
   final List<String> imageList;
   final CacheImage imageConstructor;
 
-  Picture({this.imageUrl, this.imageList, this.index, this.imageConstructor});
+  const Picture(
+      {@required this.imageUrl,
+      @required this.imageList,
+      @required this.index,
+      this.imageConstructor});
 
   @override
   Widget build(BuildContext context) {
@@ -154,8 +158,8 @@ class Picture extends StatelessWidget {
             open(context);
           },
           child: Hero(
-            child: imageConstructor,
             tag: imageUrl,
+            child: imageConstructor,
           ),
         ),
       ),
@@ -181,10 +185,10 @@ class Body extends StatelessWidget {
   final String fullText;
   final int views;
 
-  Body({
+  const Body({
     this.id,
-    this.introText,
-    this.fullText,
+    @required this.introText,
+    @required this.fullText,
     this.views,
   });
 
@@ -227,7 +231,6 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpandableNotifier(
-      // initialExpanded:PageStorage.of(context).readState(context, identifier: id) ?? false,
       child: ScrollOnExpand(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,25 +252,20 @@ class Body extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 8.0),
                   child: Builder(
                     builder: (context) {
-                      var controller = ExpandableController.of(context);
+                      final controller = ExpandableController.of(context);
                       return FlatButton(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
+                        onPressed: introText.isEmpty
+                            ? null
+                            : () {
+                                controller.toggle();
+                              },
                         textColor:
                             Theme.of(context).accentTextTheme.button.color,
                         child: Text(
                           controller.expanded ? "СКРЫТЬ" : "ПОДРОБНЕЕ",
                           style: TextStyle(height: 1.5, letterSpacing: 0.9),
                         ),
-                        onPressed: introText.isEmpty
-                            ? null
-                            : () {
-                                controller.toggle();
-                                // PageStorage.of(context).writeState(
-                                //   context,
-                                //   controller.value,
-                                //   identifier: id,
-                                // );
-                              },
                       );
                     },
                   ),
@@ -295,7 +293,7 @@ class Body extends StatelessWidget {
 class Head extends StatelessWidget {
   final String title;
 
-  Head(this.title);
+  const Head(this.title);
 
   @override
   Widget build(BuildContext context) {

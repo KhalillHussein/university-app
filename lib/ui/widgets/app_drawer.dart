@@ -4,9 +4,8 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/navigation_provider.dart';
-import 'dynamic_treeview.dart';
-import '../../util/routes.dart';
 import '../../util/sections.dart';
+import 'dynamic_treeview.dart';
 
 class AppDrawer extends StatefulWidget {
   @override
@@ -25,9 +24,47 @@ class _AppDrawerState extends State<AppDrawer> {
     },
   ];
 
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: CupertinoScrollbar(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              _buildDrawerHeader(context),
+              const Divider(),
+              Column(
+                children: _buildDrawerContent(context),
+              ),
+              const Divider(),
+              DynamicTreeView(
+                data: getData(),
+                config: Config(
+                  parentTextStyle: Theme.of(context).textTheme.bodyText2,
+                  parentPaddingEdgeInsets:
+                      EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+                  childrenPaddingEdgeInsets:
+                      EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
+                  childrenTextStyle: Theme.of(context).textTheme.bodyText2,
+                ),
+                onTap: (m) {
+                  debugPrint("onChildTap -> $m");
+                  if (m['extra']['routeName'] != null) {
+                    Navigator.pushNamed(context, m['extra']['routeName']);
+                  }
+                },
+                width: double.infinity,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   List<Widget> _buildDrawerContent(BuildContext context) {
-    List<Widget> drawerItems = [];
-    for (var item in _items) {
+    final List<Widget> drawerItems = [];
+    for (final item in _items) {
       drawerItems.add(
         _buildDrawerItem(
           title: item['title'],
@@ -55,33 +92,34 @@ class _AppDrawerState extends State<AppDrawer> {
               : Colors.transparent,
         ),
         child: InkWell(
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(40),
-              bottomRight: Radius.circular(40),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(7.0),
-              child: Row(children: <Widget>[
-                Icon(
-                  icon,
-                  color: pageData.currentIndex == index
-                      ? Theme.of(context).focusColor
-                      : Theme.of(context).iconTheme.color,
-                  size: 28,
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.bodyText2,
-                ),
-              ]),
-            ),
-            onTap: () {
-              pageData.currentIndex = index;
-              Navigator.pop(context);
-            }),
+          borderRadius: const BorderRadius.only(
+            topRight: Radius.circular(40),
+            bottomRight: Radius.circular(40),
+          ),
+          onTap: () {
+            pageData.currentIndex = index;
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(7.0),
+            child: Row(children: <Widget>[
+              Icon(
+                icon,
+                size: 28,
+                color: pageData.currentIndex == index
+                    ? Theme.of(context).focusColor
+                    : Theme.of(context).iconTheme.color,
+              ),
+              const SizedBox(
+                width: 30,
+              ),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+            ]),
+          ),
+        ),
       ),
     );
   }
@@ -108,49 +146,14 @@ class _AppDrawerState extends State<AppDrawer> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: CupertinoScrollbar(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              _buildDrawerHeader(context),
-              const Divider(),
-              Column(
-                children: _buildDrawerContent(context),
-              ),
-              const Divider(),
-              DynamicTreeView(
-                data: getData(),
-                config: Config(
-                  parentTextStyle: Theme.of(context).textTheme.bodyText2,
-                  parentPaddingEdgeInsets:
-                      EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-                  childrenPaddingEdgeInsets:
-                      EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-                  childrenTextStyle: Theme.of(context).textTheme.bodyText2,
-                ),
-                onTap: (m) {
-                  print("onChildTap -> $m");
-                },
-                width: double.infinity,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   List<BaseData> getData() {
     return Sections.drawerSections.map((item) {
       return DataModel(
-        id: item['id'],
-        parentId: item['parentId'],
-        name: item['title'],
-        icon: item['icon'],
-      );
+          id: item['id'],
+          parentId: item['parentId'],
+          name: item['title'],
+          icon: item['icon'],
+          extras: {'routeName': item['routeName']});
     }).toList();
   }
 }
@@ -166,26 +169,26 @@ class DataModel implements BaseData {
   DataModel({this.id, this.parentId, this.name, this.extras, this.icon});
   @override
   String getId() {
-    return this.id.toString();
+    return id.toString();
   }
 
   @override
   Map<String, dynamic> getExtraData() {
-    return this.extras;
+    return extras;
   }
 
   @override
   String getParentId() {
-    return this.parentId.toString();
+    return parentId.toString();
   }
 
   @override
   String getTitle() {
-    return this.name;
+    return name;
   }
 
   @override
   IconData getIcon() {
-    return this.icon;
+    return icon;
   }
 }

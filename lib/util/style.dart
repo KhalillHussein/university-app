@@ -4,9 +4,6 @@ import 'colors.dart';
 
 /// Class that contains all the different styles of an app
 class Style {
-  Style._();
-  static final Style st = Style._();
-
   /// Custom page transitions
   static final _pageTransitionsTheme = PageTransitionsTheme(
     builders: const {
@@ -16,7 +13,7 @@ class Style {
   );
 
   /// Light style
-  final ThemeData light = ThemeData(
+  static final ThemeData light = ThemeData(
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: kLightPrimaryColor,
       selectedItemColor: kAccentColor,
@@ -70,10 +67,10 @@ class Style {
   );
 
   /// Dark style
-  final ThemeData dark = ThemeData(
+  static final ThemeData dark = ThemeData(
     brightness: Brightness.dark,
     primarySwatch: Colors.blue,
-    snackBarTheme: SnackBarThemeData(backgroundColor: Colors.grey[700]),
+    snackBarTheme: SnackBarThemeData(backgroundColor: Colors.grey[800]),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: kDarkPrimaryColor,
       selectedItemColor: kAccentColor,

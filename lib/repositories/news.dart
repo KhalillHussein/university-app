@@ -2,26 +2,17 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../util/url.dart';
 import '../models/news.dart';
+import '../util/url.dart';
 
 import 'base.dart';
 
 /// Repository that holds news data.
 class NewsRepository extends BaseRepository {
-  List<News> _news = [];
-
-  List<News> get news {
-    return [..._news];
-  }
-
-  int get itemCount {
-    return _news.length;
-  }
+  List<News> _news;
 
   @override
   Future<void> loadData() async {
-    print('trying fetch news..');
     try {
       final response = await http.get(Url.allNewsUrl);
       final responseData = json.decode(response.body);
@@ -36,4 +27,8 @@ class NewsRepository extends BaseRepository {
       receivedError();
     }
   }
+
+  List<News> get news => _news;
+
+  int get itemCount => _news?.length;
 }

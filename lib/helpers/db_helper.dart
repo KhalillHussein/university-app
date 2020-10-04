@@ -33,7 +33,7 @@ class DBHelper {
 
   Future<List<Map<String, dynamic>>> getData(String table) async {
     final db = await database;
-    return await db.query(table);
+    return db.query(table);
   }
 
   Future<void> clearTable(String table) async {

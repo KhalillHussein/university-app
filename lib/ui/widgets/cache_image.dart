@@ -8,7 +8,7 @@ class CacheImage extends StatelessWidget {
   final Size size;
   final BoxFit fit;
 
-  CacheImage(this.url, this.size, this.fit);
+  const CacheImage(this.url, this.size, this.fit);
 
   static const Size _smallSize = Size(120, 220.0),
       _bigSize = Size(double.infinity, 200.0);

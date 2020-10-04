@@ -1,3 +1,4 @@
 export 'gallery.dart';
-export 'navigation.dart';
+export 'info.dart';
 export 'lecturers.dart';
+export 'navigation.dart';

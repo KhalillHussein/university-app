@@ -11,7 +11,7 @@ class ScheduleCard extends StatelessWidget {
   final String teacher;
   final String room;
 
-  ScheduleCard({
+  const ScheduleCard({
     this.id,
     @required this.date,
     @required this.couple,
@@ -47,10 +47,11 @@ class ScheduleCard extends StatelessWidget {
   Widget _buildLeading(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(right: 12.0),
-      decoration: new BoxDecoration(
-          border: new Border(
-              right: new BorderSide(
-                  width: 1.0, color: Theme.of(context).dividerColor))),
+      decoration: BoxDecoration(
+        border: Border(
+          right: BorderSide(color: Theme.of(context).dividerColor),
+        ),
+      ),
       child: Column(
         children: <Widget>[
           Text('$couple', style: TextStyle(fontSize: 21)),

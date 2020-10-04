@@ -4,7 +4,7 @@ class PlaceholderImage extends StatelessWidget {
   final double height;
   final double width;
 
-  PlaceholderImage({
+  const PlaceholderImage({
     @required this.width,
     @required this.height,
   });

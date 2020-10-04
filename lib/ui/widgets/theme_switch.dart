@@ -19,7 +19,7 @@ class _ThemeSwitchState extends State<ThemeSwitch> {
 
   @override
   Widget build(BuildContext context) {
-    _isDarkTheme = (ThemeProvider.of(context).brightness == Brightness.dark);
+    _isDarkTheme = ThemeProvider.of(context).brightness == Brightness.dark;
     final themeData = Provider.of<ThemesProvider>(context, listen: false);
     return ThemeSwitcher(
       builder: (context) => IconButton(
@@ -42,8 +42,8 @@ class _ThemeSwitchState extends State<ThemeSwitch> {
                 ThemeSwitcher.of(context).changeTheme(
                   theme:
                       ThemeProvider.of(context).brightness == Brightness.light
-                          ? Style.st.dark
-                          : Style.st.light,
+                          ? Style.dark
+                          : Style.light,
                 );
               }
             : () {},

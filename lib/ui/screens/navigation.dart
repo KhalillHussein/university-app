@@ -3,8 +3,8 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:provider/provider.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 
-import '../tabs/index.dart';
 import '../../providers/index.dart';
+import '../tabs/index.dart';
 
 import '../widgets/app_drawer.dart';
 import '../widgets/badge.dart';
@@ -42,18 +42,18 @@ class _NavigationScreenState extends State<NavigationScreen> {
       builder: (ctx, tabsData, _) => BottomNavigationBar(
         onTap: (index) => tabsData.currentIndex = index,
         currentIndex: tabsData.currentIndex,
-        items: [
-          const BottomNavigationBarItem(
+        items: const [
+          BottomNavigationBarItem(
             icon: Icon(CommunityMaterialIcons.compass_outline),
-            title: Text('Главная'),
+            label: 'Главная',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(CommunityMaterialIcons.newspaper_variant_outline),
-            title: Text('Новости'),
+            label: 'Новости',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(CommunityMaterialIcons.account),
-            title: Text('Аккаунт'),
+            label: 'Аккаунт',
           ),
         ],
       ),
@@ -62,21 +62,21 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('rebuildbar');
     return ThemeSwitchingArea(
       child: Builder(
         builder: (context) => Scaffold(
           appBar: AppBar(
             titleSpacing: 0.0,
-            title: Container(
+            title: SizedBox(
               width: 165,
               height: 60,
               child: const Badge(
-                  child: const Text(
-                    'СКФ МТУСИ',
-                    style: TextStyle(fontWeight: FontWeight.w400),
-                  ),
-                  value: 'version 0.1'),
+                value: 'version 0.1',
+                child: Text(
+                  'СКФ МТУСИ',
+                  style: TextStyle(fontWeight: FontWeight.w400),
+                ),
+              ),
             ),
             actions: <Widget>[
               ThemeSwitch(),

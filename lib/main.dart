@@ -4,22 +4,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'providers/index.dart';
-
+import './repositories/index.dart';
 import './util/routes.dart';
 import './util/style.dart';
-
-import './repositories/index.dart';
+import 'providers/index.dart';
 
 void main() {
   initializeDateFormatting();
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.getInstance().then((prefs) {
-    bool darkModeOn = prefs.getBool('theme') ?? false;
+    final bool darkModeOn = prefs.getBool('theme') ?? false;
     runApp(
       ChangeNotifierProvider<ThemesProvider>(
-        create: (_) =>
-            ThemesProvider(darkModeOn ? Style.st.dark : Style.st.light),
+        create: (_) => ThemesProvider(darkModeOn ? Style.dark : Style.light),
         child: MyApp(),
       ),
     );
@@ -47,9 +44,9 @@ class MyApp extends StatelessWidget {
             builder: (context) => MaterialApp(
               title: 'MTUSI APP',
               theme: ThemeProvider.of(context),
-              darkTheme: Style.st.dark,
-              onGenerateRoute: Routes.rt.generateRoute,
-              onUnknownRoute: Routes.rt.errorRoute,
+              darkTheme: Style.dark,
+              onGenerateRoute: Routes.generateRoute,
+              onUnknownRoute: Routes.errorRoute,
             ),
           ),
         ),

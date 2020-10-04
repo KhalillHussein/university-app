@@ -2,11 +2,11 @@ import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../repositories/lecturers.dart';
 import '../../models/lecturer.dart';
-import '../../ui/widgets/custom_page.dart';
+import '../../repositories/lecturers.dart';
 import '../../ui/widgets/cache_image.dart';
 import '../../ui/widgets/custom_dialog.dart';
+import '../../ui/widgets/custom_page.dart';
 
 class LecturersScreen extends StatelessWidget {
   @override
@@ -34,7 +34,7 @@ class LecturersScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
+            SizedBox(
               height: 200,
               child: Padding(
                 padding: const EdgeInsets.all(15.0),

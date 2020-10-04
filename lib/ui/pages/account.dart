@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:community_material_icon/community_material_icon.dart';
 
 import '../../providers/auth_provider.dart';
-import 'schedule.dart';
 import '../widgets/badge.dart';
+import 'schedule.dart';
 
 class AccountPage extends StatelessWidget {
   @override
@@ -24,7 +24,7 @@ class AccountPage extends StatelessWidget {
 class Header extends StatelessWidget {
   final Auth userData;
 
-  Header(this.userData);
+  const Header(this.userData);
 
   void _showDialog(BuildContext context, Auth userData) {
     showDialog(
@@ -95,6 +95,7 @@ class Header extends StatelessWidget {
               ],
             ),
             Badge(
+              value: '+1',
               child: IconButton(
                 icon: Icon(
                   CommunityMaterialIcons.email,
@@ -103,7 +104,6 @@ class Header extends StatelessWidget {
                 ),
                 onPressed: () {},
               ),
-              value: '+1',
             ),
             IconButton(
               icon: Icon(
@@ -142,8 +142,8 @@ class StudentTabs extends StatelessWidget {
                         Theme.of(context).textTheme.bodyText1.color,
                     labelColor: Theme.of(context).accentColor,
                     indicatorColor: Theme.of(context).accentColor,
-                    tabs: <Widget>[
-                      const Tab(
+                    tabs: const <Widget>[
+                      Tab(
                         child: Text(
                           'РАСПИСАНИЕ ЗАНЯТИЙ',
                           maxLines: 2,
@@ -151,10 +151,10 @@ class StudentTabs extends StatelessWidget {
                           softWrap: true,
                         ),
                       ),
-                      const Tab(
+                      Tab(
                         child: Text('УСПЕВАЕМОСТЬ'),
                       ),
-                      const Tab(
+                      Tab(
                         child: Text('ПОРТФОЛИО'),
                       ),
                     ],
@@ -164,8 +164,8 @@ class StudentTabs extends StatelessWidget {
                   child: TabBarView(
                     children: <Widget>[
                       SchedulePage(),
-                      Center(child: Text('Успеваемость')),
-                      Center(child: Text('Портфолио')),
+                      const Center(child: Text('Успеваемость')),
+                      const Center(child: Text('Портфолио')),
                     ],
                   ),
                 ),
@@ -199,8 +199,8 @@ class LecturerTabs extends StatelessWidget {
                         Theme.of(context).textTheme.bodyText1.color,
                     labelColor: Theme.of(context).accentColor,
                     indicatorColor: Theme.of(context).accentColor,
-                    tabs: <Widget>[
-                      const Tab(
+                    tabs: const <Widget>[
+                      Tab(
                         child: Text(
                           'РАСПИСАНИЕ ЗАНЯТИЙ',
                           maxLines: 2,
@@ -208,7 +208,7 @@ class LecturerTabs extends StatelessWidget {
                           softWrap: true,
                         ),
                       ),
-                      const Tab(
+                      Tab(
                         child: Text('МРС'),
                       ),
                     ],

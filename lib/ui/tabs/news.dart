@@ -9,7 +9,6 @@ import '../../ui/widgets/news_card.dart';
 class NewsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('rebuild_news');
     return Consumer<NewsRepository>(
       builder: (ctx, model, _) => ListViewPage<NewsRepository>(
         itemCount: model.itemCount,

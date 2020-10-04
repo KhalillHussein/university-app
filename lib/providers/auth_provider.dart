@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -44,20 +44,18 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> _authenticate(String email, String password) async {
-    final url = Url.loginUrl;
     try {
-      final response = await http.post(url,
+      final response = await http.post(Url.loginUrl,
           body: json.encode({
             "email": email,
             "password": password,
           }),
           headers: {"Content-Type": "application/json"});
       final responseData = json.decode(response.body);
-      print(responseData);
       if (responseData['errors'] != null) {
         throw HttpException(responseData['errors']['msg']);
       }
-      var result = responseData['result'];
+      final result = responseData['result'];
       _token = result['token'];
       _userId = result['user']['_id'];
       _name = result['user']['name'];
@@ -74,7 +72,7 @@ class Auth with ChangeNotifier {
       });
       prefs.setString('userData', userData);
     } catch (error) {
-      throw error;
+      rethrow;
     }
   }
 
@@ -83,7 +81,6 @@ class Auth with ChangeNotifier {
   }
 
   Future<bool> _tryAutoLogin() async {
-    print('auto login process..');
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userData')) {
       return false;
@@ -99,7 +96,7 @@ class Auth with ChangeNotifier {
     return true;
   }
 
-  void logout() async {
+  Future<void> logout() async {
     _token = null;
     _userId = null;
     notifyListeners();

@@ -18,13 +18,13 @@ class AuthForm extends StatefulWidget {
 
 class _AuthFormState extends State<AuthForm> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  FocusNode _loginFocusNode = FocusNode();
-  FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _loginFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
 
   var _loginFieldHasData = false;
   var _pwdFieldHasData = false;
 
-  Map<String, String> _authData = {
+  final Map<String, String> _authData = {
     'login': '',
     'password': '',
   };
@@ -43,9 +43,9 @@ class _AuthFormState extends State<AuthForm> {
   }
 
   bool validateEmail(String value) {
-    Pattern pattern =
+    const Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = RegExp(pattern, caseSensitive: false);
+    final RegExp regex = RegExp(pattern, caseSensitive: false);
     return regex.hasMatch(value) ? false : true;
   }
 
@@ -116,6 +116,8 @@ class _AuthFormState extends State<AuthForm> {
         disabledTextColor: Theme.of(context).textTheme.button.color,
         textColor: Theme.of(context).textTheme.headline5.color,
         color: Theme.of(context).accentColor,
+        shape: const StadiumBorder(),
+        onPressed: _pwdFieldHasData && _loginFieldHasData ? _trySubmit : null,
         child: widget.isLoading
             ? const SizedBox(
                 height: 22.0,
@@ -129,8 +131,6 @@ class _AuthFormState extends State<AuthForm> {
                 'ВХОД',
                 style: TextStyle(fontSize: 15),
               ),
-        shape: const StadiumBorder(),
-        onPressed: _pwdFieldHasData && _loginFieldHasData ? _trySubmit : null,
       ),
     );
   }
@@ -149,8 +149,6 @@ class _AuthFormState extends State<AuthForm> {
             padding:
                 const EdgeInsets.symmetric(vertical: 30.0, horizontal: 50.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 const Text(
                   'Авторизация',
