@@ -25,11 +25,6 @@ class Routes {
             settings: routeSettings,
             builder: (_) => LecturersScreen(),
           );
-        case info:
-          return MaterialPageRoute(
-            settings: routeSettings,
-            builder: (_) => Info(),
-          );
         default:
           return errorRoute(routeSettings);
       }

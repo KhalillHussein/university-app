@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'colors.dart';
 
@@ -14,110 +15,132 @@ class Style {
 
   /// Light style
   static final ThemeData light = ThemeData(
+    accentColor: kAccentThemeColor,
+    accentIconTheme: IconThemeData(color: Colors.grey[300]),
+    accentTextTheme: TextTheme(
+      button: const TextStyle(color: kAccentThemeColor, height: 1.5),
+    ),
+    appBarTheme: AppBarTheme(brightness: Brightness.light),
+    backgroundColor: kLightPrimaryColor,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: kLightPrimaryColor,
+      elevation: 1.5,
       selectedItemColor: kAccentColor,
       unselectedItemColor: Colors.grey[600],
+      type: BottomNavigationBarType.fixed,
     ),
+    cardTheme: CardTheme(color: kLightPrimaryColor, elevation: 1),
+    cardColor: kLightAltLightColor,
+    dividerColor: Colors.grey[400],
+    disabledColor: Colors.grey[300],
     dialogTheme: DialogTheme(
       backgroundColor: kLightPrimaryColor,
       contentTextStyle: TextStyle(
           fontWeight: FontWeight.bold, color: Colors.grey[600], fontSize: 14),
     ),
-    pageTransitionsTheme: _pageTransitionsTheme,
-    cardTheme: CardTheme(color: kLightPrimaryColor),
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    primaryColorLight: kAvatarColor,
-    backgroundColor: kLightPrimaryColor,
-    snackBarTheme: SnackBarThemeData(backgroundColor: Colors.grey[200]),
-    primaryColor: kLightPrimaryColor,
-    accentColor: kAccentThemeColor,
-    disabledColor: Colors.grey[300],
-    scaffoldBackgroundColor: kLightPrimaryColor,
-    dividerColor: Colors.grey[400],
-    selectedRowColor: Colors.black.withOpacity(0.08),
     focusColor: Colors.black,
-    appBarTheme: AppBarTheme(
-      color: kLightAppBarColor,
-    ),
+    highlightColor: Colors.grey.withOpacity(0.2),
+    iconTheme: IconThemeData(color: Colors.black),
     inputDecorationTheme: InputDecorationTheme(
-      enabledBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey[900])),
+      enabledBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.grey[900]),
+      ),
     ),
+    primaryColorLight: kAvatarColor,
+    primaryColor: kLightPrimaryColor,
+    pageTransitionsTheme: _pageTransitionsTheme,
     primaryIconTheme: IconThemeData(color: Colors.grey[700]),
-    accentTextTheme: TextTheme(
-      button: TextStyle(color: kAccentThemeColor, height: 1.5),
-    ),
-    accentIconTheme: IconThemeData(color: Colors.grey[300]),
-    iconTheme: IconThemeData(color: Colors.grey[600]),
+    scaffoldBackgroundColor: kLightScaffoldBgColor,
+    selectedRowColor: Colors.black.withOpacity(0.08),
+    snackBarTheme: SnackBarThemeData(backgroundColor: Colors.grey[200]),
+    splashColor: Colors.white30,
     textTheme: ThemeData.light().textTheme.copyWith(
+          button: TextStyle(color: Colors.grey[400]),
           bodyText1: TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.grey[700],
+            height: 1.7,
+            fontWeight: FontWeight.w400,
+            color: Colors.black,
           ),
-          bodyText2: TextStyle(color: Colors.grey[900]),
+          bodyText2: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 17,
+            color: Colors.black,
+          ),
+          headline5: TextStyle(fontWeight: FontWeight.bold),
           headline6: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,
           ),
-          button: TextStyle(color: Colors.grey[400]),
-          headline5: TextStyle(color: kLightPrimaryColor),
+          caption:
+              TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w500),
         ),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
   );
 
   /// Dark style
   static final ThemeData dark = ThemeData(
-    brightness: Brightness.dark,
-    primarySwatch: Colors.blue,
-    snackBarTheme: SnackBarThemeData(backgroundColor: Colors.grey[800]),
+    accentColor: kAccentThemeColor,
+    accentIconTheme: IconThemeData(color: Colors.grey[700]),
+    accentTextTheme: TextTheme(
+      button: TextStyle(color: kAccentThemeColor, height: 1.5),
+    ),
+    appBarTheme: AppBarTheme(
+      color: kDarkAltColor,
+      brightness: Brightness.dark,
+    ),
+    backgroundColor: kDarkAltColor,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: kDarkPrimaryColor,
+      elevation: 1.5,
       selectedItemColor: kAccentColor,
       unselectedItemColor: Colors.grey[300],
+      type: BottomNavigationBarType.fixed,
     ),
+    brightness: Brightness.dark,
+    canvasColor: Color(0xFF363636),
+    cardTheme: CardTheme(color: kDarkCardColor, elevation: 1),
+    cardColor: kDarkAltColor,
     dialogTheme: DialogTheme(
       backgroundColor: kDarkPrimaryColor,
       contentTextStyle: TextStyle(
           fontWeight: FontWeight.bold, color: Colors.grey[400], fontSize: 14),
     ),
-    pageTransitionsTheme: _pageTransitionsTheme,
-    backgroundColor: kDarkAppBarColor,
-    cardTheme: CardTheme(color: kDarkCardColor),
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    primaryColorDark: kAvatarColor,
-    accentColor: kAccentThemeColor,
     disabledColor: Color(0xFF2F2F2F),
-    scaffoldBackgroundColor: Color(0xFF121212),
-    selectedRowColor: Colors.white.withOpacity(0.2),
-    canvasColor: Color(0xFF363636),
-    primaryColor: kDarkPrimaryColor,
     dividerColor: Colors.grey[700],
     focusColor: Colors.grey[300],
-    appBarTheme: AppBarTheme(
-      color: kDarkAppBarColor,
-    ),
+    highlightColor: Colors.grey[700],
+    iconTheme: IconThemeData(color: Colors.white),
     inputDecorationTheme: InputDecorationTheme(
       helperStyle: TextStyle(color: Colors.white),
       enabledBorder: UnderlineInputBorder(
         borderSide: BorderSide(color: Colors.white),
       ),
     ),
-    accentTextTheme: TextTheme(
-      button: TextStyle(color: kAccentThemeColor, height: 1.5),
-    ),
+    pageTransitionsTheme: _pageTransitionsTheme,
+    primarySwatch: Colors.blue,
+    primaryColorDark: kAvatarColor,
+    primaryColor: kDarkPrimaryColor,
     primaryIconTheme: IconThemeData(color: Colors.white),
-    iconTheme: IconThemeData(color: Colors.grey[300]),
-    accentIconTheme: IconThemeData(color: Colors.grey[700]),
+    scaffoldBackgroundColor: kDarkScaffoldBgColor,
+    selectedRowColor: Colors.white.withOpacity(0.2),
+    snackBarTheme: SnackBarThemeData(backgroundColor: Colors.grey[800]),
+    splashColor: Colors.grey[900].withOpacity(0.4),
     textTheme: ThemeData.dark().textTheme.copyWith(
-          bodyText1: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: Colors.grey[400],
-          ),
-          bodyText2: TextStyle(color: Colors.white),
-          headline5: TextStyle(color: Colors.white),
           button: TextStyle(color: Colors.grey[600]),
+          bodyText1: TextStyle(
+            fontSize: 16,
+            height: 1.7,
+            color: Colors.white,
+          ),
+          bodyText2: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 17,
+            color: Colors.white,
+          ),
+          headline5:
+              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
   );
 }

@@ -4,6 +4,7 @@ import 'package:shimmer/shimmer.dart';
 class SkeletonLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
     return Container(
       width: double.infinity,
       color: Theme.of(context).appBarTheme.color,
@@ -24,8 +25,8 @@ class SkeletonLoading extends StatelessWidget {
                   width: double.infinity,
                   borderRadius: BorderRadius.zero,
                 ),
-                _buildMiddleBox(context),
-                _buildBottomBox(context),
+                _buildMiddleBox(context, width),
+                _buildBottomBox(context, width),
               ],
             ),
           );
@@ -86,13 +87,13 @@ class SkeletonLoading extends StatelessWidget {
     );
   }
 
-  Widget _buildMiddleBox(BuildContext context) {
+  Widget _buildMiddleBox(BuildContext context, double width) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(4.0)),
         color: Theme.of(context).cardTheme.color,
       ),
-      padding: EdgeInsets.symmetric(vertical: 20.0),
+      padding: const EdgeInsets.symmetric(vertical: 20.0),
       child: Column(
         children: [
           Padding(
@@ -114,7 +115,7 @@ class SkeletonLoading extends StatelessWidget {
                   child: _buildAnimationContainer(
                     context,
                     height: 13.0,
-                    width: MediaQuery.of(context).size.width * 0.4,
+                    width: width * 0.4,
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
@@ -123,7 +124,7 @@ class SkeletonLoading extends StatelessWidget {
                   child: _buildAnimationContainer(
                     context,
                     height: 13.0,
-                    width: MediaQuery.of(context).size.width * 0.6,
+                    width: width * 0.6,
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
@@ -135,7 +136,7 @@ class SkeletonLoading extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomBox(BuildContext context) {
+  Widget _buildBottomBox(BuildContext context, double width) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -149,7 +150,7 @@ class SkeletonLoading extends StatelessWidget {
             child: _buildAnimationContainer(
               context,
               height: 24.0,
-              width: MediaQuery.of(context).size.width * 0.4,
+              width: width * 0.4,
               borderRadius: BorderRadius.circular(20.0),
             ),
           ),

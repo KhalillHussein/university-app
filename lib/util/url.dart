@@ -2,24 +2,23 @@
 
 class Url {
   //Base URLs
-  static const baseUrl = 'http://80.78.248.203:3064';
-
-  //API Map Key
-  static const stadiaKey = '0877e6d4-a77b-449d-8386-e6346ac05a58';
-
-  // Map URLs
-  static const lightMap =
-      'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}@2x.png?api_key=$stadiaKey';
-  static const darkMap =
-      'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}@2x.png?api_key=$stadiaKey';
+  static const baseUrl = 'http://188.93.210.205:3000';
 
   //News URLs
   static const newsUrl = '$baseUrl/news';
   static const allNewsUrl = '$newsUrl/all';
   static const newsImgUrl = '$baseUrl/img/news/';
 
-  //Lecturers url
+  //Params for paginate data
+  static const limit = '/?limit=';
+  static const page = '&page=';
+
+  //Lecturers URL
   static const lecturersAllUrl = '$baseUrl/lecturers/all';
+
+  //Schedule URL
+  static const scheduleUrl = '$baseUrl/timetable';
+  static const allScheduleUrl = '$baseUrl/timetable/all';
 
   //Auth URLs
   static const loginUrl = '$baseUrl/login';

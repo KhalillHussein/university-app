@@ -1,24 +1,24 @@
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-
 import '../models/lecturer.dart';
-import '../util/url.dart';
-import 'base.dart';
+import '../services/lecturers.dart';
+import 'index.dart';
 
 /// Repository that holds lecturers data.
-class LecturersRepository extends BaseRepository {
+class LecturersRepository extends BaseRepository<LecturersService> {
   List<Lecturer> _lecturers;
 
+  LecturersRepository(LecturersService service) : super(service);
+
   @override
-  Future<void> loadData() async {
+  Future<void> loadData({int pageIndex, int limit}) async {
     try {
-      final response = await http.get(Url.lecturersAllUrl);
-      final responseData = json.decode(response.body);
-      _lecturers = [for (final item in responseData) Lecturer.fromJson(item)];
+      final lecturersResponse = await service.getLecturers();
+      _lecturers = [
+        for (final item in lecturersResponse.data['result'])
+          Lecturer.fromJson(item)
+      ];
       finishLoading();
-    } catch (_) {
-      receivedError();
+    } catch (e) {
+      receivedError(e);
     }
   }
 

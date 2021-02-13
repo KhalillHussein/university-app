@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
-import 'placeholder_image.dart';
+import 'index.dart';
 
 class CacheImage extends StatelessWidget {
   final String url;
@@ -24,6 +24,8 @@ class CacheImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
+      alignment: Alignment(0.0, -0.8),
+      useOldImageOnUrlChange: true,
       fadeInDuration: const Duration(milliseconds: 200),
       fadeOutDuration: const Duration(milliseconds: 200),
       height: size.height,

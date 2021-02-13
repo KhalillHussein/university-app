@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:community_material_icon/community_material_icon.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:url_launcher/url_launcher.dart';
 
+import 'package:flutter_markdown/flutter_markdown.dart';
+
+import '../../util/index.dart';
 import '../screens/index.dart';
-import 'cache_image.dart';
-import 'expandable.dart';
+import 'index.dart';
 
 class BodyImages extends StatelessWidget {
   final List<String> images;
@@ -99,7 +98,7 @@ class BodyImages extends StatelessWidget {
                         ),
                         IgnorePointer(
                           child: Padding(
-                            padding: const EdgeInsets.all(2.0),
+                            padding: const EdgeInsets.all(1.0),
                             child: Container(
                               color: Colors.black54,
                               child: Center(
@@ -129,7 +128,7 @@ class BodyImages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: imageLayout(),
     );
   }
@@ -142,23 +141,24 @@ class Picture extends StatelessWidget {
   final List<String> imageList;
   final CacheImage imageConstructor;
 
-  const Picture(
-      {@required this.imageUrl,
-      @required this.imageList,
-      @required this.index,
-      this.imageConstructor});
+  const Picture({
+    @required this.imageUrl,
+    @required this.imageList,
+    @required this.index,
+    this.imageConstructor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(2.0),
+        padding: const EdgeInsets.all(1.0),
         child: GestureDetector(
           onTap: () {
             open(context);
           },
           child: Hero(
-            tag: imageUrl,
+            tag: '$imageUrl$index',
             child: imageConstructor,
           ),
         ),
@@ -192,38 +192,29 @@ class Body extends StatelessWidget {
     this.views,
   });
 
-  Widget _buildCollapsed() {
+  Widget _buildCollapsed(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Text(
+      child: SelectableText(
         introText,
-        softWrap: true,
         maxLines: 3,
-        overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.start,
-        style: TextStyle(height: 1.5),
+        style: Theme.of(context).textTheme.bodyText1,
+        scrollPhysics: NeverScrollableScrollPhysics(),
       ),
     );
   }
 
-  Widget _buildExpanded() {
+  Widget _buildExpanded(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: MarkdownBody(
         selectable: true,
         data: fullText,
         styleSheet: MarkdownStyleSheet(
-          p: TextStyle(
-            height: 1.5,
-          ),
+          p: Theme.of(context).textTheme.bodyText1,
         ),
-        onTapLink: (link) async {
-          if (await canLaunch(link)) {
-            await launch(link);
-          } else {
-            throw 'Could not launch $link';
-          }
-        },
+        onTapLink: (link) => showUrl(link),
       ),
     );
   }
@@ -236,8 +227,8 @@ class Body extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ExpandablePanel(
-              collapsed: _buildCollapsed(),
-              expanded: _buildExpanded(),
+              collapsed: _buildCollapsed(context),
+              expanded: _buildExpanded(context),
             ),
             const SizedBox(
               height: 15,
@@ -303,9 +294,9 @@ class Head extends StatelessWidget {
         title,
         style: TextStyle(
           fontSize: 19,
-          fontWeight: FontWeight.w600,
-          color: Theme.of(context).textTheme.bodyText1.color,
-          height: 1.5,
+          fontWeight: FontWeight.w500,
+          color: Theme.of(context).textTheme.headline6.color,
+          height: 1.3,
         ),
         overflow: TextOverflow.fade,
       ),

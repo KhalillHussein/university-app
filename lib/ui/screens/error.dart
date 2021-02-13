@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ErrorScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: Text('Страница не найдена'),
@@ -19,7 +20,7 @@ class ErrorScreen extends StatelessWidget {
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height * 0.3,
+                  fontSize: height * 0.3,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).textTheme.bodyText1.color,
                 ),

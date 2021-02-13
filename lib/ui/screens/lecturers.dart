@@ -1,12 +1,10 @@
-import 'package:community_material_icon/community_material_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/lecturer.dart';
-import '../../repositories/lecturers.dart';
-import '../../ui/widgets/cache_image.dart';
-import '../../ui/widgets/custom_dialog.dart';
-import '../../ui/widgets/custom_page.dart';
+import '../../models/index.dart';
+import '../../repositories/index.dart';
+import '../../ui/widgets/index.dart';
 
 class LecturersScreen extends StatelessWidget {
   @override
@@ -56,12 +54,12 @@ class LecturersScreen extends StatelessWidget {
                           ),
                           _buildTeacherInfo(
                             context,
-                            CommunityMaterialIcons.account_tie,
+                            MdiIcons.accountTie,
                             lecturer.rank,
                           ),
                           _buildTeacherInfo(
                             context,
-                            CommunityMaterialIcons.book_open,
+                            MdiIcons.bookOpen,
                             lecturer.disciplinesTaught,
                           ),
                         ],

@@ -1,19 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/http_exception.dart';
-import '../../providers/auth_provider.dart';
-import '../widgets/auth_form.dart';
+import '../../providers/index.dart';
+import '../../repositories/index.dart';
+import '../../util/index.dart';
 
-class AuthorizationPage extends StatefulWidget {
+class AuthorizationPage extends StatelessWidget {
   @override
-  _AuthorizationPageState createState() => _AuthorizationPageState();
-}
+  Widget build(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).copyWith(
+        primaryColor: kAccentThemeColor,
+        accentColor: kAccentThemeColor,
+      ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 50.0),
+          child: Column(
+            children: <Widget>[
+              const Text(
+                'Авторизация',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              _buildTextFieldEmail(context),
+              _buildTextFieldPwd(context),
+              _buildAuthButton(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-class _AuthorizationPageState extends State<AuthorizationPage> {
-  bool _isLoading = false;
+  Widget _buildTextFieldEmail(BuildContext context) {
+    return Consumer<ValidationProvider>(
+      builder: (ctx, validation, _) => TextFormField(
+        maxLength: 30,
+        initialValue: validation.login.value,
+        keyboardType: TextInputType.emailAddress,
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          labelText: 'Логин',
+          alignLabelWithHint: true,
+          errorText: validation.login.error,
+        ),
+        onChanged: (text) {
+          validation.changeLogin(text);
+        },
+      ),
+    );
+  }
 
-  void _showErrorDialog(String message) {
+  Widget _buildTextFieldPwd(BuildContext context) {
+    return Consumer<ValidationProvider>(
+      builder: (ctx, validation, _) => TextFormField(
+        maxLength: 30,
+        obscureText: true,
+        initialValue: validation.password.value,
+        keyboardType: TextInputType.emailAddress,
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          labelText: 'Пароль',
+          alignLabelWithHint: true,
+          errorText: validation.password.error,
+        ),
+        onChanged: (text) {
+          validation.changePassword(text);
+        },
+      ),
+    );
+  }
+
+  Widget _buildAuthButton(BuildContext context) {
+    return Consumer2<ValidationProvider, Auth>(
+      builder: (ctx, validation, auth, _) => Container(
+        alignment: Alignment.bottomRight,
+        margin: const EdgeInsets.only(top: 10),
+        child: MaterialButton(
+          elevation: 2,
+          disabledColor: Theme.of(context).disabledColor,
+          disabledTextColor: Theme.of(context).textTheme.button.color,
+          textColor: Colors.white,
+          color: Theme.of(context).accentColor,
+          shape: const StadiumBorder(),
+          onPressed: (!validation.isValid)
+              ? null
+              : () async {
+                  await auth.authenticate(
+                      validation.login.value, validation.login.value);
+                  if (auth.loadingFailed) {
+                    _showErrorDialog(context, auth.errorMessage);
+                  }
+                },
+          child: auth.isLoading
+              ? const SizedBox(
+                  height: 22.0,
+                  width: 22.0,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                    valueColor: AlwaysStoppedAnimation(Colors.white),
+                  ),
+                )
+              : Text('ВХОД', style: TextStyle(fontSize: 15)),
+        ),
+      ),
+    );
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -29,42 +126,6 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> _submit({
-    String login,
-    String password,
-  }) async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      // Log user in
-      await Provider.of<Auth>(context, listen: false)
-          .login(login.trim(), password.trim());
-    } on HttpException catch (error) {
-      var errorMessage = 'Ошибка авторизации. Повторите попытку позже.';
-      if (error.toString().contains('WRONG_PASSWORD')) {
-        errorMessage = 'Неверный пароль.';
-      } else if (error.toString().contains('USER_DOES_NOT_EXIST')) {
-        errorMessage = 'Пользователя с таким именем не существует.';
-      }
-      _showErrorDialog(errorMessage);
-    } catch (error) {
-      const errorMessage =
-          'Невозможно выполнить авторизацию. Повторите попытку позже.';
-      _showErrorDialog(errorMessage);
-    }
-    setState(() {
-      _isLoading = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: AuthForm(_submit, _isLoading),
     );
   }
 }

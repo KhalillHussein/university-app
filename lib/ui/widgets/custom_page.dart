@@ -2,15 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import '../../repositories/base.dart';
-
-import 'skeleton_loading.dart';
+import '../../repositories/index.dart';
+import 'index.dart';
 
 /// Centered [CircularProgressIndicator] widget.
 Widget get _loadingIndicator =>
-    Center(child: const CircularProgressIndicator());
+    const Center(child: CircularProgressIndicator());
 
+///Showing a placeholder preview of content before the data gets loaded.
 Widget get _skeletonLoading => SkeletonLoading();
 
 /// Function which handles reloading [QueryModel] models.
@@ -26,7 +27,7 @@ Future<void> _onRefresh(BuildContext context, BaseRepository repository) {
             behavior: SnackBarBehavior.floating,
             backgroundColor: Theme.of(context).snackBarTheme.backgroundColor,
             content: Text(
-              'Невозможно получить данные. Проверьте подключение к интернету',
+              'Невозможно получить данные. ${repository.errorMessage}',
               style:
                   TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
             ),
@@ -137,12 +138,11 @@ class BasicPage<T extends BaseRepository> extends StatelessWidget {
 
 class BasicPageNoScaffold<T extends BaseRepository> extends StatelessWidget {
   final AppBar appBar;
-  final Widget body, fab;
+  final Widget body;
 
   const BasicPageNoScaffold({
     this.appBar,
     @required this.body,
-    this.fab,
   });
 
   @override
@@ -183,11 +183,15 @@ class ListViewPage<T extends BaseRepository> extends StatelessWidget {
                     value: model,
                     child: ConnectionError<T>(),
                   )
-                : ListView.builder(
-                    // key: PageStorageKey(title),
-                    addAutomaticKeepAlives: false,
-                    itemCount: itemCount,
-                    itemBuilder: buildFunction,
+                : Scrollbar(
+                    thickness: 3.0,
+                    child: ScrollablePositionedList.builder(
+                      // physics: BouncingScrollPhysics(),
+                      // key: PageStorageKey(title),
+                      addAutomaticKeepAlives: false,
+                      itemCount: itemCount,
+                      itemBuilder: buildFunction,
+                    ),
                   ),
       ),
     );
@@ -204,13 +208,15 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('При загрузке данных произошла ошибка'),
+            Text(
+              'При загрузке данных что-то пошло не так',
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
             const SizedBox(height: 5),
             FlatButton(
               onPressed: () async => _onRefresh(context, model),
               textColor: Theme.of(context).accentColor,
-              child:
-                  model.isLoading ? _loadingIndicator : const Text('Повторить'),
+              child: const Text('Повторить попытку'),
             ),
           ],
         ),
@@ -218,3 +224,59 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
     );
   }
 }
+//
+// class ListViewPaginatedPage<T extends BaseRepository> extends StatelessWidget {
+//   final String title;
+//   final int itemCount;
+//   final Object buildFunction;
+//
+//   const ListViewPaginatedPage({
+//     this.title,
+//     @required this.itemCount,
+//     @required this.buildFunction,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Consumer<T>(
+//       builder: (context, model, child) => RefreshIndicator(
+//         onRefresh: () => _onRefresh(context, model),
+//         child: model.isLoading
+//             ? _skeletonLoading
+//             : model.loadingFailed && itemCount == 0
+//                 ? ChangeNotifierProvider.value(
+//                     value: model,
+//                     child: ConnectionError<T>(),
+//                   )
+//                 : Scrollbar(
+//                     thickness: 3.0,
+//                     child: NotificationListener<ScrollNotification>(
+//                       onNotification: (ScrollNotification notification) {
+//                         _handleScrollNotification(notification, model);
+//                         return false;
+//                       },
+//                       child: ScrollablePositionedList.builder(
+//                         // physics: BouncingScrollPhysics(),
+//                         // key: PageStorageKey(title),
+//                         itemPositionsListener: ItemPositionsListener.create(),
+//                         addAutomaticKeepAlives: false,
+//                         itemCount:
+//                             model.hasReachedMax() ? itemCount : itemCount + 1,
+//                         itemBuilder: buildFunction,
+//                       ),
+//                     ),
+//                   ),
+//       ),
+//     );
+//   }
+//
+//   void _handleScrollNotification(ScrollNotification notification, T model) {
+//     if (notification is ScrollEndNotification) {
+//       if (notification.metrics.extentAfter == 0) {
+//         if (!model.hasReachedMax()) {
+//           model.nextPage();
+//         }
+//       }
+//     }
+//   }
+// }

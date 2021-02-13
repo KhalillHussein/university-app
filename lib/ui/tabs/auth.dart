@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
-import '../../providers/auth_provider.dart';
-import '../pages/account.dart';
-import '../pages/authorization.dart';
+import '../../repositories/index.dart';
+import '../pages/index.dart';
 
 class AuthTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Auth>(
-      builder: (ctx, authData, _) =>
-          authData.isAuth ? AccountPage() : AuthorizationPage(),
+      builder: (ctx, model, _) =>
+          model.isAuth ? AccountPage() : AuthorizationPage(),
     );
   }
 }
