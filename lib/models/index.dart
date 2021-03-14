@@ -1,4 +1,3 @@
-export 'http_exception.dart';
 export 'lecturer.dart';
 export 'news.dart';
 export 'timetable.dart';

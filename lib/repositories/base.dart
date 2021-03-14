@@ -10,7 +10,7 @@ enum Status { loading, error, loaded }
 /// A repository has the purpose to load and parse the data
 
 abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
-  final BuildContext context;
+  DateTime timestamp;
 
   /// System to perform data manipulation operations
   final T service;
@@ -21,7 +21,7 @@ abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
   /// String that saves information about the latest error
   String _errorMessage;
 
-  BaseRepository(this.service, [this.context]) {
+  BaseRepository(this.service) {
     startLoading();
     loadData();
   }

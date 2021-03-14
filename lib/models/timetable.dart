@@ -11,28 +11,33 @@ class Timetable {
   final String subjectType;
   final DateTime date;
   final String cafedra;
+  final int timestamp;
 
-  Timetable(
-      {@required this.id,
-      @required this.group,
-      @required this.lesson,
-      @required this.aud,
-      @required this.name,
-      @required this.subject,
-      @required this.subjectType,
-      @required this.date,
-      @required this.cafedra});
+  Timetable({
+    @required this.id,
+    @required this.group,
+    @required this.lesson,
+    @required this.aud,
+    @required this.name,
+    @required this.subject,
+    @required this.subjectType,
+    @required this.date,
+    @required this.cafedra,
+    this.timestamp,
+  });
 
   factory Timetable.fromJson(Map<String, dynamic> json) {
     return Timetable(
-        id: json['_id'],
-        group: json['GROUP'] ?? json['studGROUP'],
-        lesson: json['LES'],
-        aud: json['AUD'],
-        name: json['NAME'],
-        subject: json['SUBJECT'],
-        subjectType: json['SUBJ_TYPE'],
-        date: DateFormat('dd-MM-yyyy').parse(json['DATE']),
-        cafedra: json['CAFEDRA']);
+      id: json['_id'],
+      group: json['GROUP'] ?? json['studGROUP'],
+      lesson: json['LES'],
+      aud: json['AUD'],
+      name: json['NAME'],
+      subject: json['SUBJECT'],
+      subjectType: json['SUBJ_TYPE'],
+      date: DateFormat('dd-MM-yyyy').parse(json['DATE']),
+      cafedra: json['CAFEDRA'],
+      timestamp: json['timestamp'],
+    );
   }
 }

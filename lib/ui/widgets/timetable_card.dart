@@ -23,119 +23,65 @@ class TimetableCard extends StatelessWidget {
     return Card(
       color: Theme.of(context).cardTheme.color,
       margin: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 20.0),
-      child: Row(
-        children: [
-          // _buildLeading(context),
-          // const SizedBox(width: 10),
-          // SizedBox(
-          //   height: 60,
-          //   child: VerticalDivider(
-          //     thickness: 2,
-          //     // width: 1,
-          //   ),
-          // ),
-          // const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const SizedBox(height: 15),
-                _buildTitle(context),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 10.0, horizontal: 20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        subject,
-                        style: Theme.of(context).textTheme.bodyText2.copyWith(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
-                            ),
-                      ),
-                      const SizedBox(height: 10),
-                      _buildScheduleInfo(
-                        icon: MdiIcons.accountTie,
-                        context: context,
-                        text: name,
-                      ),
-                      const SizedBox(height: 10),
-                      _buildScheduleInfo(
-                        icon: MdiIcons.mapMarker,
-                        context: context,
-                        text: aud,
-                      ),
-                    ],
-                  ),
-                )
-              ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
+        child: Row(
+          children: [
+            _buildLeading(context),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            subject,
+                            style:
+                                Theme.of(context).textTheme.bodyText2.copyWith(
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                            maxLines: 4,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          aud,
+                          style: Theme.of(context).textTheme.bodyText2.copyWith(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context).primaryIconTheme.color,
+                              ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    _buildScheduleInfo(
+                      icon: MdiIcons.accountTie,
+                      context: context,
+                      text: name,
+                    ),
+                    const SizedBox(height: 2),
+                    _buildScheduleInfo(
+                      icon: MdiIcons.tagMultiple,
+                      context: context,
+                      text: subjectType,
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
-  }
-
-  Widget _buildTitle(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          width: 50,
-          decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
-            borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(40.0),
-              bottomRight: Radius.circular(40.0),
-            ),
-          ),
-          padding: EdgeInsets.all(5.0),
-          child: Text(
-            lesson,
-            maxLines: 5,
-            style: TextStyle(
-              fontSize: 17,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        const SizedBox(width: 10),
-        Text(subjectType, style: Theme.of(context).textTheme.bodyText2),
-      ],
-    );
-
-    //   RichText(
-    //   text: TextSpan(
-    //     children: [
-    //       WidgetSpan(
-    //         child: Container(
-    //           width: 50,
-    //           decoration: BoxDecoration(
-    //               color: Theme.of(context).accentColor,
-    //               borderRadius: const BorderRadius.only(
-    //                 topRight: Radius.circular(40.0),
-    //                 bottomRight: Radius.circular(40.0),
-    //               )),
-    //           padding: EdgeInsets.all(5.0),
-    //           child: Text(
-    //             '$lesson',
-    //             maxLines: 5,
-    //             style: TextStyle(
-    //               fontSize: 15,
-    //               color: Colors.white,
-    //               fontWeight: FontWeight.bold,
-    //             ),
-    //             textAlign: TextAlign.center,
-    //           ),
-    //         ),
-    //       ),
-    //       TextSpan(
-    //           text: subjectType, style: Theme.of(context).textTheme.bodyText2),
-    //     ],
-    //   ),
-    // );
   }
 
   Widget _buildScheduleInfo(
@@ -148,7 +94,7 @@ class TimetableCard extends StatelessWidget {
               padding: const EdgeInsets.only(right: 5.0),
               child: Icon(
                 icon,
-                size: 24,
+                size: 18,
                 color: Theme.of(context).primaryIconTheme.color,
               ),
             ),
@@ -157,7 +103,7 @@ class TimetableCard extends StatelessWidget {
             text: text,
             style: TextStyle(
               color: Theme.of(context).primaryIconTheme.color,
-              fontSize: 16,
+              fontSize: 15,
             ),
           ),
         ],
@@ -166,18 +112,9 @@ class TimetableCard extends StatelessWidget {
   }
 
   Widget _buildLeading(BuildContext context) {
-    return Container(
-      // padding: const EdgeInsets.only(right: 15.0),
-      margin: const EdgeInsets.only(left: 10.0),
-      // decoration: BoxDecoration(
-      //   border: Border(
-      //     right: BorderSide(color: Theme.of(context).dividerColor),
-      //   ),
-      // ),
-      child: Text(
-        lesson,
-        style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),
-      ),
+    return Text(
+      lesson,
+      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
     );
   }
 }

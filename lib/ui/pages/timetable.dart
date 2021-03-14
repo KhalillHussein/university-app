@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mtusiapp/helpers/repositories/index.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/index.dart';
@@ -9,62 +10,70 @@ import '../../repositories/index.dart';
 import '../../ui/widgets/index.dart';
 
 class TimetablePage extends StatelessWidget {
-  final List<String> _tabs = [
-    'ДВ-11',
-    'ДИ-11',
-    'ДИ-12',
-    'ДВ-21',
-    'ДИ-21',
-    'ДИ-22',
-    'ДП-31',
-    'ДЗ-31',
-    'ДС-31',
-    'В-31',
-    'ДП-41',
-    'ДЗ-41',
-    'ЗС-41',
-    'ЗС-42',
-    'М-41',
-    'С-41',
-  ];
+  @override
+  Widget build(BuildContext context) {
+    return _GroupList();
+  }
+}
+
+class _GroupList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BasicPageNoScaffoldWithMessage<TimetableDbRepository,
+        TimetableRepository>(
+      body: Consumer<TimetableRepository>(
+        builder: (ctx, model, _) => ListView.separated(
+          itemBuilder: (ctx, index) => ListTile(
+            leading: Icon(
+              MdiIcons.accountGroup,
+              size: 35,
+            ),
+            title: Text(model.groups[index],
+                style: Theme.of(context)
+                    .textTheme
+                    .headline6
+                    .copyWith(fontSize: 17)),
+            trailing: Icon(
+              Icons.arrow_forward_ios_outlined,
+              size: 15,
+            ),
+            subtitle: Text(
+              'Курс ${model.course[index]}',
+              style: TextStyle(fontSize: 14),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => _Timetable(model.groups[index])),
+              );
+            },
+          ),
+          separatorBuilder: (ctx, index) => Divider(
+            height: 1,
+            endIndent: 15,
+            indent: 70,
+          ),
+          itemCount: model.groups.length,
+        ),
+      ),
+    );
+  }
+}
+
+class _Timetable extends StatelessWidget {
+  final String groupName;
+
+  const _Timetable(this.groupName);
 
   @override
   Widget build(BuildContext context) {
-    return BasicPageNoScaffold<TimetableRepository>(
-      body: DefaultTabController(
-        length: _tabs.length,
-        child: Column(
-          children: [
-            Container(
-              color: Theme.of(context).cardTheme.color,
-              child: TabBar(
-                isScrollable: true,
-                unselectedLabelColor:
-                    Theme.of(context).textTheme.bodyText1.color,
-                labelColor: Theme.of(context).accentColor,
-                indicatorColor: Theme.of(context).accentColor,
-                tabs: List<Widget>.generate(
-                  _tabs.length,
-                  (int index) {
-                    return Tab(text: _tabs[index]);
-                  },
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 6,
-              child: TabBarView(
-                children: List<Widget>.generate(_tabs.length, (int index) {
-                  return Consumer<TimetableRepository>(
-                    builder: (ctx, model, _) => _buildListView(
-                      context,
-                      model.getByGroup(_tabs[index]),
-                    ),
-                  );
-                }),
-              ),
-            ),
-          ],
+    return BasicPage<TimetableRepository>(
+      title: 'Группа: $groupName',
+      body: Consumer<TimetableRepository>(
+        builder: (ctx, model, _) => _buildListView(
+          context,
+          model.getByGroup(groupName),
         ),
       ),
     );
@@ -74,7 +83,6 @@ class TimetablePage extends StatelessWidget {
     return GroupedListView<Timetable, DateTime>(
       floatingHeader: true,
       addAutomaticKeepAlives: false,
-      // useStickyGroupSeparators: true,
       elements: timetable,
       groupBy: (element) =>
           DateTime(element.date.year, element.date.month, element.date.day),
@@ -92,61 +100,32 @@ class TimetablePage extends StatelessWidget {
     );
   }
 
-  // Widget _buildSeparator(BuildContext context, dynamic date) {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(10.0),
-  //     child: SizedBox(
-  //       height: 30,
-  //       child: Align(
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: <Widget>[
-  //             Expanded(
-  //               child: Container(
-  //                 decoration: BoxDecoration(
-  //                   boxShadow: [
-  //                     BoxShadow(
-  //                       color: Colors.black12,
-  //                       spreadRadius: 1,
-  //                       blurRadius: 2,
-  //                       offset: Offset(0, 1), // changes position of shadow
-  //                     ),
-  //                   ],
-  //                   color: Theme.of(context).canvasColor,
-  //                   border: Border.all(
-  //                     width: 0.5,
-  //                     color: Theme.of(context).dividerColor,
-  //                   ),
-  //                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
-  //                 ),
-  //                 child: Padding(
-  //                   padding:
-  //                       const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-  //                   child: Text(
-  //                     '${toBeginningOfSentenceCase(DateFormat.EEEE('Ru').format(date))}, ${DateFormat('dd.MM.yyyy').format(date)}',
-  //                     textAlign: TextAlign.center,
-  //                     style:
-  //                         TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-  //                   ),
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _buildSeparator(BuildContext context, DateTime date) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 12),
-      child: Text(
-        '${toBeginningOfSentenceCase(DateFormat.EEEE('Ru').format(date))}, ${DateFormat('dd.MM.yyyy').format(date)}',
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      child: Row(children: <Widget>[
+        Expanded(
+          child: Container(
+              margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+              child: Divider(
+                //color: Colors.black,
+                height: 36,
+              )),
+        ),
+        Text(
+          '${toBeginningOfSentenceCase(DateFormat.EEEE('Ru').format(date))}, ${DateFormat.MMMMd('Ru').format(date)}',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
+        Expanded(
+          child: Container(
+              margin: const EdgeInsets.only(left: 20.0, right: 10.0),
+              child: Divider(
+                //  color: Colors.black,
+                height: 36,
+              )),
+        ),
+      ]),
     );
   }
 }

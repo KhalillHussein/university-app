@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mtusiapp/helpers/repositories/base_db.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -112,7 +115,7 @@ class BasicPage<T extends BaseRepository> extends StatelessWidget {
   final Widget body, fab;
 
   const BasicPage({
-    this.title,
+    @required this.title,
     @required this.body,
     this.fab,
   });
@@ -137,11 +140,9 @@ class BasicPage<T extends BaseRepository> extends StatelessWidget {
 }
 
 class BasicPageNoScaffold<T extends BaseRepository> extends StatelessWidget {
-  final AppBar appBar;
   final Widget body;
 
   const BasicPageNoScaffold({
-    this.appBar,
     @required this.body,
   });
 
@@ -178,7 +179,7 @@ class ListViewPage<T extends BaseRepository> extends StatelessWidget {
         onRefresh: () => _onRefresh(context, model),
         child: model.isLoading
             ? _skeletonLoading
-            : model.loadingFailed
+            : model.loadingFailed && itemCount <= 1
                 ? ChangeNotifierProvider.value(
                     value: model,
                     child: ConnectionError<T>(),
@@ -224,59 +225,114 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
     );
   }
 }
+
+// class BasicPageNoScaffoldWithMessage<D extends BaseDbRepository,
+//     T extends BaseRepository> extends StatelessWidget {
+//   final Widget body;
 //
-// class ListViewPaginatedPage<T extends BaseRepository> extends StatelessWidget {
-//   final String title;
-//   final int itemCount;
-//   final Object buildFunction;
-//
-//   const ListViewPaginatedPage({
-//     this.title,
-//     @required this.itemCount,
-//     @required this.buildFunction,
+//   const BasicPageNoScaffoldWithMessage({
+//     @required this.body,
 //   });
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return Consumer<T>(
-//       builder: (context, model, child) => RefreshIndicator(
+//     return Consumer2<D, T>(
+//       builder: (context, dbModel, model, child) => RefreshIndicator(
 //         onRefresh: () => _onRefresh(context, model),
 //         child: model.isLoading
-//             ? _skeletonLoading
-//             : model.loadingFailed && itemCount == 0
+//             ? _loadingIndicator
+//             : model.loadingFailed
 //                 ? ChangeNotifierProvider.value(
 //                     value: model,
 //                     child: ConnectionError<T>(),
 //                   )
-//                 : Scrollbar(
-//                     thickness: 3.0,
-//                     child: NotificationListener<ScrollNotification>(
-//                       onNotification: (ScrollNotification notification) {
-//                         _handleScrollNotification(notification, model);
-//                         return false;
-//                       },
-//                       child: ScrollablePositionedList.builder(
-//                         // physics: BouncingScrollPhysics(),
-//                         // key: PageStorageKey(title),
-//                         itemPositionsListener: ItemPositionsListener.create(),
-//                         addAutomaticKeepAlives: false,
-//                         itemCount:
-//                             model.hasReachedMax() ? itemCount : itemCount + 1,
-//                         itemBuilder: buildFunction,
-//                       ),
-//                     ),
-//                   ),
+//                 : dbModel.isActive
+//                     ? Column(
+//                         children: [
+//                           Message<T>(),
+//                           Expanded(
+//                             child: SafeArea(bottom: false, child: body),
+//                           ),
+//                         ],
+//                       )
+//                     : SafeArea(bottom: false, child: body),
 //       ),
 //     );
 //   }
-//
-//   void _handleScrollNotification(ScrollNotification notification, T model) {
-//     if (notification is ScrollEndNotification) {
-//       if (notification.metrics.extentAfter == 0) {
-//         if (!model.hasReachedMax()) {
-//           model.nextPage();
-//         }
-//       }
-//     }
-//   }
 // }
+
+class BasicPageNoScaffoldWithMessage<D extends BaseDbRepository,
+    T extends BaseRepository> extends StatelessWidget {
+  final Widget body;
+
+  const BasicPageNoScaffoldWithMessage({
+    @required this.body,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer2<D, T>(
+      builder: (context, dbModel, model, child) => RefreshIndicator(
+        onRefresh: () => _onRefresh(context, model),
+        child: model.isLoading
+            ? _loadingIndicator
+            : model.loadingFailed && dbModel.isInactive
+                ? ChangeNotifierProvider.value(
+                    value: model,
+                    child: ConnectionError<T>(),
+                  )
+                : dbModel.isActive
+                    ? Column(
+                        children: [
+                          ChangeNotifierProvider.value(
+                            value: model,
+                            child: Message<T>(),
+                          ),
+                          Expanded(
+                            child: SafeArea(bottom: false, child: body),
+                          ),
+                        ],
+                      )
+                    : SafeArea(bottom: false, child: body),
+      ),
+    );
+  }
+}
+
+class Message<T extends BaseRepository> extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<T>(
+      builder: (ctx, model, _) => Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(15.0),
+        color: Theme.of(context).snackBarTheme.backgroundColor,
+        alignment: Alignment.center,
+        child: RichText(
+          text: TextSpan(
+            children: [
+              WidgetSpan(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 5.0),
+                  child: Icon(
+                    MdiIcons.alertOutline,
+                    size: 20,
+                    color: Theme.of(context).primaryIconTheme.color,
+                  ),
+                ),
+              ),
+              TextSpan(
+                text:
+                    'Сохраненная копия за ${DateFormat('yyyy.MM.dd - HH:mm', 'Ru').format(model.timestamp)}',
+                style: TextStyle(
+                  color: Theme.of(context).primaryIconTheme.color,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

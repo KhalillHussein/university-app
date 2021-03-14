@@ -8,12 +8,12 @@ class DatabaseProvider {
 
   DatabaseProvider(this.query) : assert(query != null);
 
-  Future<Database> getDatabase() async {
+  Future<Database> get databaseInstance async {
     if (_db != null) return _db;
-    return _db = await getDatabaseInstance();
+    return _db = await _getDatabaseInstance();
   }
 
-  Future<Database> getDatabaseInstance() async {
+  Future<Database> _getDatabaseInstance() async {
     final dbPath = await getDatabasesPath();
     final String path = join(dbPath, 'university.db');
     return openDatabase(

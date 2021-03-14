@@ -5,9 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/index.dart';
-import 'index.dart';
 import '../services/index.dart';
+import 'index.dart';
 
+///Repository that manage authentication process
 class Auth extends BaseRepository<AuthService> {
   String _token;
   User _user;
@@ -18,6 +19,7 @@ class Auth extends BaseRepository<AuthService> {
   bool get isAuth => _token != null;
   User get user => _user;
 
+  ///Function that checks if token contains in phone memory
   @override
   Future<void> loadData({int limit, int pageIndex}) async {
     _prefs = await SharedPreferences.getInstance();
@@ -32,6 +34,7 @@ class Auth extends BaseRepository<AuthService> {
     finishLoading();
   }
 
+  ///Function to perform api request
   Future<void> authenticate(String email, String password) async {
     try {
       startLoading();
@@ -54,6 +57,7 @@ class Auth extends BaseRepository<AuthService> {
     }
   }
 
+  ///Parse data to json for saving on device local storage
   String _toStr(User user) {
     return json.encode({
       'token': user.token,
@@ -64,6 +68,7 @@ class Auth extends BaseRepository<AuthService> {
     });
   }
 
+  ///Function that performs logout operations
   Future<void> logout() async {
     _user = User.fromJson(null);
     notifyListeners();

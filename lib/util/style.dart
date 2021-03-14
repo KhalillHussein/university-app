@@ -20,7 +20,7 @@ class Style {
     accentTextTheme: TextTheme(
       button: const TextStyle(color: kAccentThemeColor, height: 1.5),
     ),
-    appBarTheme: AppBarTheme(brightness: Brightness.light),
+    appBarTheme: AppBarTheme(brightness: Brightness.light, elevation: 1),
     backgroundColor: kLightPrimaryColor,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: kLightPrimaryColor,
@@ -52,7 +52,7 @@ class Style {
     primaryIconTheme: IconThemeData(color: Colors.grey[700]),
     scaffoldBackgroundColor: kLightScaffoldBgColor,
     selectedRowColor: Colors.black.withOpacity(0.08),
-    snackBarTheme: SnackBarThemeData(backgroundColor: Colors.grey[200]),
+    snackBarTheme: SnackBarThemeData(backgroundColor: kLightPrimaryColor),
     splashColor: Colors.white30,
     textTheme: ThemeData.light().textTheme.copyWith(
           button: TextStyle(color: Colors.grey[400]),
@@ -88,6 +88,7 @@ class Style {
     appBarTheme: AppBarTheme(
       color: kDarkAltColor,
       brightness: Brightness.dark,
+      elevation: 1,
     ),
     backgroundColor: kDarkAltColor,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -124,7 +125,7 @@ class Style {
     primaryIconTheme: IconThemeData(color: Colors.white),
     scaffoldBackgroundColor: kDarkScaffoldBgColor,
     selectedRowColor: Colors.white.withOpacity(0.2),
-    snackBarTheme: SnackBarThemeData(backgroundColor: Colors.grey[800]),
+    snackBarTheme: SnackBarThemeData(backgroundColor: Color(0xFF1E1E1E)),
     splashColor: Colors.grey[900].withOpacity(0.4),
     textTheme: ThemeData.dark().textTheme.copyWith(
           button: TextStyle(color: Colors.grey[600]),

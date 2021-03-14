@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+///Provider that performs navigation between pages
 class NavigationProvider with ChangeNotifier {
   int _currentIndex = 0;
 

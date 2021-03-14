@@ -1,3 +1,3 @@
 export 'auth.dart';
-export 'info.dart';
+export 'about.dart';
 export 'news.dart';

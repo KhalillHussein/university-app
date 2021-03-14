@@ -72,6 +72,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+import 'package:mtusiapp/helpers/repositories/index.dart';
+import 'package:mtusiapp/helpers/services/index.dart';
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -107,10 +109,17 @@ class App extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
             create: (ctx) => Auth(AuthService(httpClient)), lazy: false),
+        ChangeNotifierProvider(
+          create: (ctx) => TimetableDbRepository(TimeTableDbService()),
+          lazy: false,
+        ),
+        ChangeNotifierProxyProvider<TimetableDbRepository, TimetableRepository>(
+          create: (ctx) => TimetableRepository(TimetableService(httpClient)),
+          update: (ctx, dbRepository, repository) =>
+              repository..dbRepository = dbRepository,
+        ),
         ChangeNotifierProvider(create: (ctx) => ValidationProvider()),
         ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
-        ChangeNotifierProvider(
-            create: (ctx) => TimetableRepository(TimetableService(httpClient))),
         ChangeNotifierProvider(
             create: (ctx) => LecturersRepository(LecturersService(httpClient))),
         ChangeNotifierProvider(

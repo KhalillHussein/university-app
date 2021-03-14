@@ -30,7 +30,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     },
     {
       'title': 'Основные сведения',
-      'page': Info(),
+      'page': AboutTab(),
     },
   ];
 
@@ -69,7 +69,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   Widget _buildAppBar() {
     return AppBar(
-      elevation: 1,
       leading: IconButton(
         splashRadius: 20,
         icon: Icon(Icons.menu),

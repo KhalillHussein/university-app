@@ -8,28 +8,30 @@ import 'index.dart';
 class TimeTableDbService extends DbBaseService<Timetable> {
   final String tableName = 'timetable';
   final String columnId = '_id';
-  final String group = 'studGROUP';
-  final String lesson = 'LES';
-  final String aud = 'AUD';
-  final String name = 'NAME';
-  final String subject = 'SUBJECT';
-  final String subjectType = 'SUBJ_TYPE';
-  final String date = 'DATE';
-  final String cafedra = 'CAFEDRA';
+  final String timestamp = 'timestamp';
+  final String _group = 'studGROUP';
+  final String _lesson = 'LES';
+  final String _aud = 'AUD';
+  final String _name = 'NAME';
+  final String _subject = 'SUBJECT';
+  final String _subjectType = 'SUBJ_TYPE';
+  final String _date = 'DATE';
+  final String _cafedra = 'CAFEDRA';
 
   @override
   String get createTableQuery => """
       CREATE TABLE $tableName
       (
       $columnId TEXT PRIMARY KEY,
-      $group TEXT,
-      $lesson TEXT,
-      $aud TEXT,
-      $name TEXT,
-      $subject TEXT,
-      $subjectType TEXT,
-      $date TEXT,
-      $cafedra TEXT
+      $_group TEXT,
+      $_lesson TEXT,
+      $_aud TEXT,
+      $_name TEXT,
+      $_subject TEXT,
+      $_subjectType TEXT,
+      $_date TEXT,
+      $_cafedra TEXT,
+      $timestamp INTEGER
       )
       """;
 
@@ -37,14 +39,15 @@ class TimeTableDbService extends DbBaseService<Timetable> {
   Map<String, dynamic> toMap(Timetable object) {
     return <String, dynamic>{
       columnId: object.id,
-      group: object.group,
-      lesson: object.lesson,
-      aud: object.aud,
-      name: object.name,
-      subject: object.subject,
-      subjectType: object.subjectType,
-      date: DateFormat('dd-MM-yyyy').format(object.date).toString(),
-      cafedra: object.cafedra,
+      _group: object.group,
+      _lesson: object.lesson,
+      _aud: object.aud,
+      _name: object.name,
+      _subject: object.subject,
+      _subjectType: object.subjectType,
+      _date: DateFormat('dd-MM-yyyy').format(object.date).toString(),
+      _cafedra: object.cafedra,
+      timestamp: DateTime.now().millisecondsSinceEpoch,
     };
   }
 }

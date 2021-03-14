@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../util/index.dart';
 
+///Provider that performs operations by saving current theme on device local storage
 class ThemesProvider with ChangeNotifier {
   ThemeData _themeData;
 

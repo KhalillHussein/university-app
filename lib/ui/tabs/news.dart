@@ -379,13 +379,27 @@ class NewsTab extends StatelessWidget {
     return Consumer<NewsRepository>(
       builder: (ctx, model, _) => ListViewPage<NewsRepository>(
         buildFunction: (BuildContext context, int index) {
+          model.handleScrollWithIndex(index);
           return index >= model.itemCount
               ? BottomLoader<NewsRepository>()
               : _buildNewsCard(context, index);
         },
-        itemCount: model.itemCount,
+        itemCount:
+            model.hasReachedMax() ? model.itemCount : model.itemCount + 1,
       ),
     );
+  }
+
+  void _handleScrollNotification(
+      ScrollNotification notification, NewsRepository model) {
+    if (notification is ScrollEndNotification) {
+      if (notification.metrics.pixels >=
+          notification.metrics.maxScrollExtent * 0.8) {
+        if (!model.hasReachedMax()) {
+          model.nextPage();
+        }
+      }
+    }
   }
 
   Widget _buildNewsHeader(String date) {

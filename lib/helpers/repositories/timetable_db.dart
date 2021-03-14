@@ -8,19 +8,19 @@ import 'index.dart';
 ///Repository that performs operations with the [timetable] table.
 class TimetableDbRepository
     extends BaseDbRepository<Timetable, TimeTableDbService> {
-  DatabaseProvider _databaseProvider;
   Database _db;
 
   TimetableDbRepository(TimeTableDbService service) : super(service);
 
   @override
   Future<void> init() async {
-    _databaseProvider = DatabaseProvider(service.createTableQuery);
-    _db = await _databaseProvider.getDatabase();
+    final databaseProvider = DatabaseProvider(service.createTableQuery);
+    _db = await databaseProvider.databaseInstance;
   }
 
   @override
   Future<void> insert(Timetable timetable) async {
+    startInsert();
     await _db.insert(
       service.tableName,
       service.toMap(timetable),
@@ -42,7 +42,7 @@ class TimetableDbRepository
 
   @override
   Future<List<Map>> getRecords() async {
-    _db = await _databaseProvider.getDatabase();
+    startFetching();
     final List<Map> maps = await _db.query(service.tableName);
     return maps;
   }
