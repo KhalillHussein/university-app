@@ -11,7 +11,7 @@ class CacheImage extends StatelessWidget {
   const CacheImage(this.url, this.size, this.fit);
 
   static const Size _smallSize = Size(120, 220.0),
-      _bigSize = Size(double.infinity, 200.0);
+      _bigSize = Size(double.infinity, 209);
 
   factory CacheImage.teacher({String url}) {
     return CacheImage(url, _smallSize, BoxFit.cover);
@@ -32,7 +32,7 @@ class CacheImage extends StatelessWidget {
       width: size.width,
       imageUrl: url,
       fit: fit,
-      memCacheWidth: 428,
+      memCacheWidth: 400,
       placeholder: (context, url) => Container(
         height: size.height,
         width: size.width,

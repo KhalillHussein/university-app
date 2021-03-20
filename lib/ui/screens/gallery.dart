@@ -186,10 +186,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
       loadingBuilder: _loadingBuilder,
       onPageChanged: onPageChanged,
       pageController: widget.pageController,
-      loadFailedChild: PlaceholderImage(
-        height: 200,
-        width: double.infinity,
-      ),
     );
   }
 
@@ -216,6 +212,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
       initialScale: PhotoViewComputedScale.contained * 1.0,
       minScale: PhotoViewComputedScale.contained * 1.0,
       maxScale: PhotoViewComputedScale.covered * 1.4,
+      errorBuilder: (ctx, _, __) => const Center(
+        child: PlaceholderImage(
+          height: 200,
+          width: double.infinity,
+        ),
+      ),
       heroAttributes: PhotoViewHeroAttributes(tag: '$item$index'),
     );
   }

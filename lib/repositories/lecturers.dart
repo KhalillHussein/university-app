@@ -9,7 +9,7 @@ class LecturersRepository extends BaseRepository<LecturersService> {
   LecturersRepository(LecturersService service) : super(service);
 
   @override
-  Future<void> loadData({int pageIndex, int limit}) async {
+  Future<void> loadData() async {
     try {
       final lecturersResponse = await service.getLecturers();
       _lecturers = [

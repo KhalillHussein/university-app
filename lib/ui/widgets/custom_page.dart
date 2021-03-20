@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mtusiapp/helpers/repositories/base_db.dart';
 import 'package:provider/provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -22,19 +21,18 @@ Future<void> _onRefresh(BuildContext context, BaseRepository repository) {
   final Completer<void> completer = Completer<void>();
   repository.refreshData().then((_) {
     if (repository.loadingFailed) {
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
             elevation: 0,
             behavior: SnackBarBehavior.floating,
-            backgroundColor: Theme.of(context).snackBarTheme.backgroundColor,
+            backgroundColor: Theme.of(context).errorColor,
             content: Text(
-              'Невозможно получить данные. ${repository.errorMessage}',
-              style:
-                  TextStyle(color: Theme.of(context).textTheme.bodyText2.color),
+              repository.errorMessage,
+              style: Theme.of(context).snackBarTheme.contentTextStyle,
             ),
-            duration: Duration(seconds: 1),
+            duration: const Duration(seconds: 1),
           ),
         );
     }
@@ -211,13 +209,19 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
           children: [
             Text(
               'При загрузке данных что-то пошло не так',
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.headline6,
+              textScaleFactor: 0.85,
             ),
             const SizedBox(height: 5),
-            FlatButton(
+            TextButton(
               onPressed: () async => _onRefresh(context, model),
-              textColor: Theme.of(context).accentColor,
-              child: const Text('Повторить попытку'),
+              style: TextButton.styleFrom(
+                primary: Theme.of(context).accentColor,
+              ),
+              child: const Text(
+                'Повторить попытку',
+                textScaleFactor: 1.1,
+              ),
             ),
           ],
         ),
@@ -226,43 +230,8 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
   }
 }
 
-// class BasicPageNoScaffoldWithMessage<D extends BaseDbRepository,
-//     T extends BaseRepository> extends StatelessWidget {
-//   final Widget body;
-//
-//   const BasicPageNoScaffoldWithMessage({
-//     @required this.body,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer2<D, T>(
-//       builder: (context, dbModel, model, child) => RefreshIndicator(
-//         onRefresh: () => _onRefresh(context, model),
-//         child: model.isLoading
-//             ? _loadingIndicator
-//             : model.loadingFailed
-//                 ? ChangeNotifierProvider.value(
-//                     value: model,
-//                     child: ConnectionError<T>(),
-//                   )
-//                 : dbModel.isActive
-//                     ? Column(
-//                         children: [
-//                           Message<T>(),
-//                           Expanded(
-//                             child: SafeArea(bottom: false, child: body),
-//                           ),
-//                         ],
-//                       )
-//                     : SafeArea(bottom: false, child: body),
-//       ),
-//     );
-//   }
-// }
-
-class BasicPageNoScaffoldWithMessage<D extends BaseDbRepository,
-    T extends BaseRepository> extends StatelessWidget {
+class BasicPageNoScaffoldWithMessage<T extends BaseRepository>
+    extends StatelessWidget {
   final Widget body;
 
   const BasicPageNoScaffoldWithMessage({
@@ -271,17 +240,17 @@ class BasicPageNoScaffoldWithMessage<D extends BaseDbRepository,
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<D, T>(
-      builder: (context, dbModel, model, child) => RefreshIndicator(
+    return Consumer<T>(
+      builder: (context, model, child) => RefreshIndicator(
         onRefresh: () => _onRefresh(context, model),
         child: model.isLoading
             ? _loadingIndicator
-            : model.loadingFailed && dbModel.isInactive
+            : model.loadingFailed
                 ? ChangeNotifierProvider.value(
                     value: model,
                     child: ConnectionError<T>(),
                   )
-                : dbModel.isActive
+                : model.databaseFetch
                     ? Column(
                         children: [
                           ChangeNotifierProvider.value(
@@ -306,7 +275,7 @@ class Message<T extends BaseRepository> extends StatelessWidget {
       builder: (ctx, model, _) => Container(
         width: double.infinity,
         padding: EdgeInsets.all(15.0),
-        color: Theme.of(context).snackBarTheme.backgroundColor,
+        color: Theme.of(context).cardTheme.color,
         alignment: Alignment.center,
         child: RichText(
           text: TextSpan(

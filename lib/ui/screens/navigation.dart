@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mtusiapp/repositories/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
@@ -9,12 +10,7 @@ import '../../ui/pages/index.dart';
 import '../tabs/index.dart';
 import '../widgets/index.dart';
 
-class NavigationScreen extends StatefulWidget {
-  @override
-  _NavigationScreenState createState() => _NavigationScreenState();
-}
-
-class _NavigationScreenState extends State<NavigationScreen> {
+class NavigationScreen extends StatelessWidget {
   final List<Map<String, Object>> _pages = [
     {
       'title': 'Новости',
@@ -26,7 +22,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     },
     {
       'title': 'Авторизация',
-      'page': AuthTab(),
+      'page': AuthorizationPage(),
     },
     {
       'title': 'Основные сведения',
@@ -48,8 +44,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
           boxShadow: [
             BoxShadow(
               color: Colors.grey[500].withOpacity(0.8),
-              //spreadRadius: 0,
-              //blurRadius: 0,
             ),
           ],
           offset: IDOffset.horizontal(0.6),
@@ -75,23 +69,14 @@ class _NavigationScreenState extends State<NavigationScreen> {
         onPressed: () => innerDrawerKey.currentState.toggle(),
       ),
       titleSpacing: 0.0,
-      title: Consumer<NavigationProvider>(
-        builder: (ctx, tabData, _) => Text(
+      title:
+          Consumer2<NavigationProvider, Auth>(builder: (ctx, tabData, auth, _) {
+        _pages[2]['title'] = auth.isAuth ? 'Аккаунт' : 'Авторизация';
+        return Text(
           _pages[tabData.currentIndex]['title'],
-          style: TextStyle(fontWeight: FontWeight.w400),
-        ),
-      ),
-      // SizedBox(
-      //   width: 165,
-      //   height: 60,
-      //   child: const Badge(
-      //     value: 'version 0.1',
-      //     child: Text(
-      //       'СКФ МТУСИ',
-      //       style: TextStyle(fontWeight: FontWeight.w400),
-      //     ),
-      //   ),
-      // ),
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
+        );
+      }),
       actions: <Widget>[
         ThemeSwitch(),
         IconButton(
@@ -104,9 +89,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
   }
 
   Widget _buildBody() {
-    return Consumer<NavigationProvider>(
-      builder: (ctx, tabData, _) => _pages[tabData.currentIndex]['page'],
-    );
+    return Consumer2<NavigationProvider, Auth>(
+        builder: (ctx, tabData, auth, _) {
+      _pages[2]['page'] = auth.isAuth ? AccountPage() : AuthorizationPage();
+      return _pages[tabData.currentIndex]['page'];
+    });
   }
 
   Widget _buildBottomNavigationBar(BuildContext context) {

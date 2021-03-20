@@ -21,7 +21,6 @@ class TimetableCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Theme.of(context).cardTheme.color,
       margin: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 20.0),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
@@ -41,24 +40,18 @@ class TimetableCard extends StatelessWidget {
                       textBaseline: TextBaseline.alphabetic,
                       children: [
                         Expanded(
+                          flex: 10,
                           child: Text(
                             subject,
-                            style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                            maxLines: 4,
+                            style: Theme.of(context).textTheme.headline6,
+                            maxLines: 2,
+                            softWrap: true,
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        Spacer(),
                         Text(
                           aud,
-                          style: Theme.of(context).textTheme.bodyText2.copyWith(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w400,
-                                color: Theme.of(context).primaryIconTheme.color,
-                              ),
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
                       ],
                     ),
@@ -86,27 +79,28 @@ class TimetableCard extends StatelessWidget {
 
   Widget _buildScheduleInfo(
       {BuildContext context, String text, IconData icon}) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          WidgetSpan(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 5.0),
-              child: Icon(
-                icon,
-                size: 18,
-                color: Theme.of(context).primaryIconTheme.color,
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: RichText(
+        text: TextSpan(
+          children: [
+            WidgetSpan(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 5.0),
+                child: Icon(
+                  icon,
+                  size: 18,
+                ),
               ),
             ),
-          ),
-          TextSpan(
-            text: text,
-            style: TextStyle(
-              color: Theme.of(context).primaryIconTheme.color,
-              fontSize: 15,
+            TextSpan(
+              text: text,
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                    height: 1.3,
+                  ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

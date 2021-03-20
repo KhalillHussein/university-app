@@ -10,8 +10,8 @@ class AuthorizationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
-        primaryColor: kAccentThemeColor,
-        accentColor: kAccentThemeColor,
+        primaryColor: kSecondaryThemeColor,
+        accentColor: kSecondaryThemeColor,
       ),
       child: SingleChildScrollView(
         child: Padding(
@@ -90,7 +90,7 @@ class AuthorizationPage extends StatelessWidget {
               ? null
               : () async {
                   await auth.authenticate(
-                      validation.login.value, validation.login.value);
+                      validation.login.value, validation.password.value);
                   if (auth.loadingFailed) {
                     _showErrorDialog(context, auth.errorMessage);
                   }
@@ -117,8 +117,10 @@ class AuthorizationPage extends StatelessWidget {
         title: const Text('Ошибка'),
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
-            textColor: Theme.of(context).accentColor,
+          TextButton(
+            style: TextButton.styleFrom(
+              primary: Theme.of(context).accentColor,
+            ),
             onPressed: () {
               Navigator.of(ctx).pop();
             },

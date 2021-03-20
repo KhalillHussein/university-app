@@ -125,9 +125,12 @@ class _Header extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: Theme.of(context).appBarTheme.color,
-        content: const Text('Вы действительно хотите выйти?'),
+        content: Text(
+          'Вы действительно хотите выйти?',
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
         actions: <Widget>[
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(ctx).pop();
             },
@@ -136,7 +139,7 @@ class _Header extends StatelessWidget {
               style: Theme.of(context).accentTextTheme.button,
             ),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(ctx).pop(userData.logout());
             },

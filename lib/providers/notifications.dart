@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:web_socket_channel/io.dart';
 
 /// Serves as a way to communicate with the notification system.
 class NotificationsProvider with ChangeNotifier {

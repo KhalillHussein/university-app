@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mtusiapp/helpers/repositories/index.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/index.dart';
@@ -19,8 +18,7 @@ class TimetablePage extends StatelessWidget {
 class _GroupList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BasicPageNoScaffoldWithMessage<TimetableDbRepository,
-        TimetableRepository>(
+    return BasicPageNoScaffoldWithMessage<TimetableRepository>(
       body: Consumer<TimetableRepository>(
         builder: (ctx, model, _) => ListView.separated(
           itemBuilder: (ctx, index) => ListTile(
@@ -115,7 +113,7 @@ class _Timetable extends StatelessWidget {
         Text(
           '${toBeginningOfSentenceCase(DateFormat.EEEE('Ru').format(date))}, ${DateFormat.MMMMd('Ru').format(date)}',
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          style: Theme.of(context).textTheme.bodyText2,
         ),
         Expanded(
           child: Container(

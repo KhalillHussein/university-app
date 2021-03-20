@@ -82,7 +82,7 @@ class Routes {
         case account:
           return MaterialPageRoute(
             settings: routeSettings,
-            builder: (_) => AuthTab(),
+            builder: (_) => AuthorizationPage(),
           );
         case about:
           return MaterialPageRoute(

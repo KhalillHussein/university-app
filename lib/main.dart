@@ -71,10 +71,6 @@
 // }
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
-import 'package:mtusiapp/helpers/repositories/index.dart';
-import 'package:mtusiapp/helpers/services/index.dart';
-
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
@@ -104,20 +100,10 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final httpClient = Dio();
-    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
             create: (ctx) => Auth(AuthService(httpClient)), lazy: false),
-        ChangeNotifierProvider(
-          create: (ctx) => TimetableDbRepository(TimeTableDbService()),
-          lazy: false,
-        ),
-        ChangeNotifierProxyProvider<TimetableDbRepository, TimetableRepository>(
-          create: (ctx) => TimetableRepository(TimetableService(httpClient)),
-          update: (ctx, dbRepository, repository) =>
-              repository..dbRepository = dbRepository,
-        ),
         ChangeNotifierProvider(create: (ctx) => ValidationProvider()),
         ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
         ChangeNotifierProvider(
@@ -125,6 +111,8 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(
             create: (ctx) => NewsRepository(NewsService(httpClient))),
         ChangeNotifierProvider(create: (ctx) => NotificationsProvider()),
+        ChangeNotifierProvider(
+            create: (ctx) => TimetableRepository(TimetableService(httpClient))),
       ],
       child: Consumer<ThemesProvider>(builder: (ctx, themeData, _) {
         return ThemeProvider(

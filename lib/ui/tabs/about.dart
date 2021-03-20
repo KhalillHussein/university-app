@@ -18,7 +18,6 @@ class AboutTab extends StatelessWidget {
   Widget _buildAboutCard(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(10.0),
-      elevation: 1.5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(2.0),
       ),
@@ -37,7 +36,6 @@ class AboutTab extends StatelessWidget {
   Widget _buildCardBody(BuildContext context) {
     return Card(
       margin: EdgeInsets.all(10.0),
-      elevation: 1.5,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(2.0),
       ),
@@ -47,10 +45,13 @@ class AboutTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 15.0, left: 6),
-              child: const Text(
-                'КОНТАКТНАЯ ИНФОРМАЦИЯ СКФ МТУСИ',
-                style: TextStyle(letterSpacing: 1.0, fontSize: 13),
+              padding: const EdgeInsets.only(bottom: 15.0, left: 6, top: 10.0),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: const Text(
+                  'КОНТАКТНАЯ ИНФОРМАЦИЯ СКФ МТУСИ',
+                  style: TextStyle(letterSpacing: 0.8, fontSize: 14),
+                ),
               ),
             ),
             Column(children: _listRequisites(context)),
@@ -61,11 +62,11 @@ class AboutTab extends StatelessWidget {
   }
 
   List<Widget> _listRequisites(BuildContext context) {
-    final List<Widget> requisites = [];
-    for (final Map item in Doc.info) {
-      requisites.add(
+    return [
+      for (final Map item in Doc.info)
         Card(
-          elevation: 1.5,
+          color: Theme.of(context).cardColor,
+          elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
           ),
@@ -83,10 +84,11 @@ class AboutTab extends StatelessWidget {
                     children: [
                       Text(
                         item['name'],
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .copyWith(fontWeight: FontWeight.w600),
                         textScaleFactor: 0.85,
-                        // style: TextStyle(
-                        //     fontWeight: FontWeight.w600, fontSize: 13),
                       ),
                       const SizedBox(
                         height: 4,
@@ -105,8 +107,6 @@ class AboutTab extends StatelessWidget {
             ),
           ),
         ),
-      );
-    }
-    return requisites;
+    ];
   }
 }

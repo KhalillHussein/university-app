@@ -390,18 +390,6 @@ class NewsTab extends StatelessWidget {
     );
   }
 
-  void _handleScrollNotification(
-      ScrollNotification notification, NewsRepository model) {
-    if (notification is ScrollEndNotification) {
-      if (notification.metrics.pixels >=
-          notification.metrics.maxScrollExtent * 0.8) {
-        if (!model.hasReachedMax()) {
-          model.nextPage();
-        }
-      }
-    }
-  }
-
   Widget _buildNewsHeader(String date) {
     return SizedBox(
       height: 38,
@@ -427,7 +415,6 @@ class NewsTab extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),
           ),
-          elevation: 1,
           margin: const EdgeInsets.all(10.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,

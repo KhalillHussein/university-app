@@ -37,7 +37,7 @@ class BodyImages extends StatelessWidget {
               _listImages().first,
               SizedBox(
                 width: 110,
-                height: 204,
+                height: 211,
                 child: Column(
                   children: _listImages().getRange(1, 3).toList(),
                 ),
@@ -90,31 +90,33 @@ class BodyImages extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Stack(children: [
-                        Row(
-                          children: [
-                            _listImages().elementAt(3),
-                          ],
-                        ),
-                        IgnorePointer(
-                          child: Padding(
-                            padding: const EdgeInsets.all(1.0),
-                            child: Container(
-                              color: Colors.black54,
-                              child: Center(
-                                child: Text(
-                                  'еще \n${_listImages().length - 3} фото',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w500),
+                      child: Stack(
+                        children: [
+                          ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(0.78),
+                                BlendMode.darken),
+                            child: Row(
+                              children: [
+                                _listImages().elementAt(3),
+                              ],
+                            ),
+                          ),
+                          IgnorePointer(
+                            child: Center(
+                              child: Text(
+                                'еще \n${_listImages().length - 3} фото',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ]),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -214,7 +216,7 @@ class Body extends StatelessWidget {
         styleSheet: MarkdownStyleSheet(
           p: Theme.of(context).textTheme.bodyText1,
         ),
-        onTapLink: (link) => showUrl(link),
+        onTapLink: (_, link, __) => showUrl(link),
       ),
     );
   }
@@ -240,7 +242,7 @@ class Body extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Builder(
                     builder: (context) {
                       final controller = ExpandableController.of(context);
@@ -255,7 +257,11 @@ class Body extends StatelessWidget {
                             Theme.of(context).accentTextTheme.button.color,
                         child: Text(
                           controller.expanded ? "СКРЫТЬ" : "ПОДРОБНЕЕ",
-                          style: TextStyle(height: 1.5, letterSpacing: 0.9),
+                          style: TextStyle(
+                            letterSpacing: 0.9,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       );
                     },
@@ -292,12 +298,7 @@ class Head extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Text(
         title,
-        style: TextStyle(
-          fontSize: 19,
-          fontWeight: FontWeight.w500,
-          color: Theme.of(context).textTheme.headline6.color,
-          height: 1.3,
-        ),
+        style: Theme.of(context).textTheme.headline6,
         overflow: TextOverflow.fade,
       ),
     );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../services/base.dart';
 
-enum Status { loading, error, loaded }
+enum Status { loading, error, loaded, databaseFetch }
 
 /// This class serves as the building blocks of a repository.
 ///
@@ -19,7 +19,7 @@ abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
   Status _status;
 
   /// String that saves information about the latest error
-  String _errorMessage;
+  String errorMessage;
 
   BaseRepository(this.service) {
     startLoading();
@@ -27,16 +27,15 @@ abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
   }
 
   /// Overridable method, used to load the model's data.
-  Future<void> loadData({int pageIndex, int limit});
+  Future<void> loadData();
 
   /// Reloads model's data, calling [loadData] once again.
   Future<void> refreshData() => loadData();
 
-  String get errorMessage => _errorMessage;
-
   bool get isLoading => _status == Status.loading;
   bool get loadingFailed => _status == Status.error;
   bool get isLoaded => _status == Status.loaded;
+  bool get databaseFetch => _status == Status.databaseFetch;
 
   /// Signals that information is being downloaded.
   void startLoading() {
@@ -50,10 +49,15 @@ abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
     notifyListeners();
   }
 
+  void databaseFetching() {
+    _status = Status.databaseFetch;
+    notifyListeners();
+  }
+
   /// Signals that there has been an error downloading data.
   void receivedError(String error) {
     _status = Status.error;
-    _errorMessage = error;
+    errorMessage = error;
     debugPrint(error);
     notifyListeners();
   }

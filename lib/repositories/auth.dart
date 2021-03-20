@@ -19,19 +19,23 @@ class Auth extends BaseRepository<AuthService> {
   bool get isAuth => _token != null;
   User get user => _user;
 
-  ///Function that checks if token contains in phone memory
+  ///Function that checks if token contains in local memory
   @override
-  Future<void> loadData({int limit, int pageIndex}) async {
-    _prefs = await SharedPreferences.getInstance();
-    if (!_prefs.containsKey('userData')) {
+  Future<void> loadData() async {
+    try {
+      _prefs = await SharedPreferences.getInstance();
+      if (!_prefs.containsKey('userData')) {
+        finishLoading();
+        return;
+      }
+      final extractedUserData =
+          json.decode(_prefs.getString('userData')) as Map<String, dynamic>;
+      _user = User.fromJson(extractedUserData);
+      _token = _user.token;
       finishLoading();
-      return;
+    } catch (e) {
+      receivedError(e.toString());
     }
-    final extractedUserData =
-        json.decode(_prefs.getString('userData')) as Map<String, dynamic>;
-    _user = User.fromJson(extractedUserData);
-    _token = _user.token;
-    finishLoading();
   }
 
   ///Function to perform api request
@@ -39,12 +43,13 @@ class Auth extends BaseRepository<AuthService> {
     try {
       startLoading();
       final userResponse = await service.getUser(login: email, pwd: password);
-      _user = User.fromJson(userResponse.data);
+      _user = User.fromJson(userResponse.data['result']);
+      _token = _user.token;
       finishLoading();
       final userData = _toStr(_user);
       _prefs.setString('userData', userData);
-    } on DioError catch (error) {
-      final String e = error.response.data['errors']['msg'];
+    } on DioError catch (dioError) {
+      final String e = dioError.response.data['errors']['msg'];
       if (e.contains('WRONG_PASSWORD')) {
         receivedError('Неверный пароль.');
       } else if (e.contains('USER_DOES_NOT_EXIST')) {
@@ -70,7 +75,8 @@ class Auth extends BaseRepository<AuthService> {
 
   ///Function that performs logout operations
   Future<void> logout() async {
-    _user = User.fromJson(null);
+    _user = User.fromJson({});
+    _token = null;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('userData');

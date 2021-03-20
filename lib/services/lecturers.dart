@@ -8,7 +8,7 @@ class LecturersService extends BaseService {
   const LecturersService(Dio client) : super(client);
 
   /// Retrieves a list featuring the latest news.
-  Future<Response> getLecturers({int limit, int pageIndex}) async {
+  Future<Response> getLecturers() async {
     return client.get(Url.lecturersAllUrl);
   }
 }
