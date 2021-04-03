@@ -258,8 +258,7 @@ class Body extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         onPressed:
                             fullText.isEmpty ? null : () => controller.toggle(),
-                        textColor:
-                            Theme.of(context).accentTextTheme.button.color,
+                        textColor: Theme.of(context).primaryColor,
                         child: Text(
                           controller.expanded ? "СКРЫТЬ" : "ПОДРОБНЕЕ",
                           style: TextStyle(

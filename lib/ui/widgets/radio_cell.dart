@@ -20,8 +20,8 @@ class RadioCell<T> extends StatelessWidget {
       children: [
         Radio(
           value: value,
-          activeColor: Theme.of(context).accentColor,
-          hoverColor: Theme.of(context).accentColor,
+          activeColor: Theme.of(context).primaryColor,
+          hoverColor: Theme.of(context).primaryColor,
           groupValue: groupValue,
           onChanged: (value) => onChanged(value),
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

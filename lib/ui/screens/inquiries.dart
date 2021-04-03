@@ -138,7 +138,7 @@ class InquiriesScreen extends StatelessWidget {
                           .changeCompanyName(docs[index]['title']);
                       _showForm(context, docs[index]['title']);
                     },
-                    textColor: Theme.of(context).accentTextTheme.button.color,
+                    textColor: Theme.of(context).primaryColor,
                     child: Text(
                       'ЗАКАЗАТЬ',
                       style: TextStyle(

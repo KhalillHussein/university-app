@@ -48,6 +48,7 @@ class LecturersScreen extends StatelessWidget {
                                   style:
                                       TextStyle(fontSize: 11, letterSpacing: 1),
                                 ),
+                                const SizedBox(height: 5),
                                 Text(
                                   lecturer.fullName,
                                   style: TextStyle(fontSize: 21),
@@ -58,12 +59,14 @@ class LecturersScreen extends StatelessWidget {
                                   MdiIcons.accountTie,
                                   lecturer.rank,
                                 ),
-                                _buildTeacherInfo(
-                                  context,
-                                  MdiIcons.bookOpen,
-                                  lecturer.disciplinesTaught.reduce(
-                                      (value, element) =>
-                                          value + ', ' + element),
+                                Expanded(
+                                  child: _buildTeacherInfo(
+                                    context,
+                                    MdiIcons.bookOpen,
+                                    lecturer.disciplinesTaught.reduce(
+                                        (value, element) =>
+                                            value + ', ' + element),
+                                  ),
                                 ),
                               ],
                             ),
@@ -77,7 +80,7 @@ class LecturersScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 5.0),
                     child: FlatButton(
-                      textColor: Theme.of(context).accentTextTheme.button.color,
+                      textColor: Theme.of(context).primaryColor,
                       padding: const EdgeInsets.all(10),
                       onPressed: () {
                         showDialog(
@@ -127,7 +130,7 @@ class LecturersScreen extends StatelessWidget {
       ),
       maxLines: 4,
       overflow: TextOverflow.ellipsis,
-      textScaleFactor: 0.85,
+      textScaleFactor: 0.8,
     );
   }
 }

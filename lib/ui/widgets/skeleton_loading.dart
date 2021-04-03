@@ -39,7 +39,7 @@ class SkeletonLoading extends StatelessWidget {
       {double height, double width, BorderRadiusGeometry borderRadius}) {
     return Shimmer.fromColors(
       baseColor: Theme.of(context).disabledColor,
-      highlightColor: Colors.white12,
+      highlightColor: Colors.white10,
       child: Container(
         height: height,
         width: width,
@@ -64,7 +64,7 @@ class SkeletonLoading extends StatelessWidget {
           children: <Widget>[
             Shimmer.fromColors(
               baseColor: Theme.of(context).disabledColor,
-              highlightColor: Colors.white12,
+              highlightColor: Colors.white10,
               child: CircleAvatar(
                 radius: 21.0,
                 backgroundColor: Theme.of(context).disabledColor,

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class CustomDialog extends StatelessWidget {
@@ -18,7 +19,7 @@ class CustomDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            AutoSizeText(
               title,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
@@ -39,13 +40,13 @@ class CustomDialog extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: Text(
+                        child: AutoSizeText(
                           key,
                           style: Theme.of(context).dialogTheme.contentTextStyle,
                         ),
                       ),
                       Expanded(
-                        child: Text(
+                        child: AutoSizeText(
                           '${description[key]}',
                           style: Theme.of(context)
                               .dialogTheme

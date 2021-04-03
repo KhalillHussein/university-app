@@ -116,7 +116,7 @@ class TimetableList extends StatelessWidget {
         Text(
           '${toBeginningOfSentenceCase(DateFormat.EEEE('Ru').format(date))}, ${DateFormat.MMMMd('Ru').format(date)}',
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2,
+          style: Theme.of(context).textTheme.subtitle1,
         ),
         Expanded(
           child: Container(

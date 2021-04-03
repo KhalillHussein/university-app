@@ -48,6 +48,7 @@ class TimetableCard extends StatelessWidget {
                             style: Theme.of(context).textTheme.headline6,
                             maxLines: 1,
                             softWrap: true,
+                            textScaleFactor: 0.9,
                           ),
                         ),
                         Spacer(),

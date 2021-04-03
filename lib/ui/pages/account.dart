@@ -90,10 +90,15 @@ class _Header extends StatelessWidget {
                 Positioned(
                   right: 12,
                   top: 12,
-                  child: Icon(
-                    MdiIcons.circle,
-                    color: Theme.of(context).errorColor,
-                    size: 12,
+                  child: Container(
+                    width: 11.0,
+                    height: 11.0,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).errorColor,
+                      border: Border.all(
+                          color: Theme.of(context).cardColor, width: 1.5),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
                   ),
                 ),
               ],
@@ -186,6 +191,7 @@ class _StudentTabs extends StatelessWidget {
                   child: TabBar(
                     isScrollable: true,
                     indicatorColor: Theme.of(context).primaryColor,
+                    indicatorWeight: 1.5,
                     tabs: const <Widget>[
                       Tab(
                         child: Text(

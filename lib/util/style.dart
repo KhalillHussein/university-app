@@ -16,9 +16,6 @@ class Style {
   /// Light style
   static final ThemeData light = ThemeData(
     accentColor: kLightPrimaryColor,
-    accentTextTheme: TextTheme(
-      button: const TextStyle(color: kLightPrimaryColor, height: 1.5),
-    ),
     appBarTheme: AppBarTheme(
       titleSpacing: 0.0,
       backgroundColor: kLightColor,
@@ -41,6 +38,9 @@ class Style {
     disabledColor: Colors.grey[300],
     dividerColor: Colors.black12,
     errorColor: kLightErrorColor,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: kLightSecondaryColor,
+    ),
     iconTheme: IconThemeData(color: Colors.black54),
     pageTransitionsTheme: _pageTransitionsTheme,
     primaryColor: kLightPrimaryColor,
@@ -55,6 +55,9 @@ class Style {
     tabBarTheme: TabBarTheme(
       labelColor: kLightPrimaryColor,
       unselectedLabelColor: Colors.black54,
+      labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      unselectedLabelStyle:
+          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
     ),
     textTheme: ThemeData.light().textTheme.copyWith(
           button: TextStyle(color: Colors.grey[400]),
@@ -86,10 +89,7 @@ class Style {
 
   /// Dark style
   static final ThemeData dark = ThemeData(
-    accentColor: kLightPrimaryColor,
-    accentTextTheme: TextTheme(
-      button: TextStyle(color: kLightPrimaryColor, height: 1.5),
-    ),
+    accentColor: kDarkPrimaryColor,
     appBarTheme: AppBarTheme(
       color: k04dp,
       titleSpacing: 0.0,
@@ -114,6 +114,9 @@ class Style {
     tabBarTheme: TabBarTheme(
       unselectedLabelColor: Colors.white60,
       labelColor: kDarkPrimaryColor,
+      labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      unselectedLabelStyle:
+          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
     ),
     brightness: Brightness.dark,
     cardTheme: CardTheme(color: k01dp),
@@ -124,6 +127,10 @@ class Style {
     disabledColor: Color(0xFF2F2F2F),
     dividerColor: Colors.white12,
     errorColor: kDarkErrorColor,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: kDarkSecondaryColor,
+      foregroundColor: Colors.black,
+    ),
     iconTheme: IconThemeData(color: Colors.white.withOpacity(0.7)),
     primaryColor: kDarkPrimaryColor,
     pageTransitionsTheme: _pageTransitionsTheme,

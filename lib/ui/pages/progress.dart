@@ -1,7 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+
 import 'package:expandable/expandable.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -53,7 +51,7 @@ class Progress extends StatelessWidget {
                 ),
                 collapsed: SizedBox(),
                 header: Padding(
-                  padding: EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Text(
                     _disciplines[index]['discipline'],
                     style: Theme.of(context).textTheme.bodyText2,
@@ -81,86 +79,44 @@ class Progress extends StatelessWidget {
   }
 
   Widget _buildExpanded(BuildContext context, String lecturer, double percent) {
-    // final List<charts.Series<Task, String>> _seriesPieData = [
-    //   charts.Series(
-    //     domainFn: (Task task, _) => task.task,
-    //     measureFn: (Task task, _) => task.taskvalue,
-    //     colorFn: (Task task, _) =>
-    //         charts.ColorUtil.fromDartColor(task.colorval),
-    //     id: 'Segments',
-    //     data: [
-    //       Task('1 Модуль', 22, Colors.blue),
-    //       Task('2 Модуль', 44, Colors.red),
-    //       Task('3 Модуль', 33, Colors.lightGreen),
-    //     ],
-    //     labelAccessorFn: (Task row, _) => '${row.taskvalue}',
-    //   ),
-    // ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 5.0, bottom: 5),
+          padding: const EdgeInsets.only(left: 10.0, bottom: 5),
           child: Text(
             'Преподаватель: $lecturer',
-            style: TextStyle(
-                color: Theme.of(context).textTheme.bodyText2.color,
-                fontSize: 15),
+            style: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(fontWeight: FontWeight.w400),
+            textScaleFactor: 0.85,
           ),
         ),
         Row(
           children: [
-            Card(
-              elevation: 2,
-              color: Theme.of(context).appBarTheme.color,
-              child: Stack(
-                children: [
-                  SizedBox(
-                    height: 150,
-                    width: 155,
-                    child: CircularPercentIndicator(
-                      radius: 120.0,
-                      lineWidth: 13.0,
-                      animation: true,
-                      percent: percent,
-                      center: Text(
-                        '${percent * 100}%',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20.0,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      circularStrokeCap: CircularStrokeCap.round,
-                      progressColor: Theme.of(context).primaryColor,
-                    ),
-                    // charts.PieChart(
-                    //   _seriesPieData,
-                    //   animate: true,
-                    //   animationDuration: Duration(seconds: 1),
-                    //   defaultRenderer: charts.ArcRendererConfig(
-                    //     arcWidth: 10,
-                    //     strokeWidthPx: 0.0,
-                    //     // startAngle: 4 / 5 * pi,
-                    //     // arcLength: 7 / 5 * pi,
-                    //     layoutPaintOrder: charts.LayoutViewPaintOrder.bar,
-                    //   ),
-                    // ),
+            SizedBox(
+              height: 150,
+              width: 162,
+              child: CircularPercentIndicator(
+                animationDuration: 800,
+                startAngle: 220,
+                radius: 120.0,
+                lineWidth: 12.0,
+                animation: true,
+                percent: percent,
+                addAutomaticKeepAlive: false,
+                backgroundColor: Theme.of(context).dividerColor,
+                center: Text(
+                  '${percent * 100}%',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                    color: Theme.of(context).primaryColor,
                   ),
-                  SizedBox(
-                    height: 150,
-                    width: 155,
-                    child: Center(
-                      child: Text(
-                        '$percent%',
-                        style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+                progressColor: Theme.of(context).primaryColor,
+                circularStrokeCap: CircularStrokeCap.round,
               ),
             ),
             Expanded(
@@ -185,7 +141,7 @@ class Progress extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                                color: Color(0xFF4AA552),
+                                color: Color(0xFF4AA552).withOpacity(0.5),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20))),
                             child: Text(
@@ -220,7 +176,7 @@ class Progress extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                                color: Color(0xFF4AA552),
+                                color: Color(0xFF4AA552).withOpacity(0.5),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20))),
                             child: Text(
@@ -255,7 +211,7 @@ class Progress extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                                color: Color(0xFF4AA552),
+                                color: Color(0xFF4AA552).withOpacity(0.5),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20))),
                             child: Text(
@@ -298,7 +254,7 @@ class Progress extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                         decoration: BoxDecoration(
-                            color: Color(0xFFA5D631),
+                            color: Color(0xFFA5D631).withOpacity(0.5),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         child: Text(
@@ -333,7 +289,7 @@ class Progress extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                         decoration: BoxDecoration(
-                            color: Color(0xFFF7E642),
+                            color: Color(0xFFF7E642).withOpacity(0.8),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         child: Text(
@@ -372,7 +328,7 @@ class Progress extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                         decoration: BoxDecoration(
-                            color: Color(0xFFFFAD31),
+                            color: Color(0xFFFFAD31).withOpacity(0.8),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         child: Text(
@@ -407,7 +363,7 @@ class Progress extends StatelessWidget {
                         padding:
                             EdgeInsets.symmetric(vertical: 5, horizontal: 12),
                         decoration: BoxDecoration(
-                            color: Color(0xFFEE3A19),
+                            color: Color(0xFFEE3A19).withOpacity(0.8),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(20))),
                         child: Text(
