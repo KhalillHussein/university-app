@@ -10,7 +10,12 @@ import '../../ui/pages/index.dart';
 import '../tabs/index.dart';
 import '../widgets/index.dart';
 
-class NavigationScreen extends StatelessWidget {
+class NavigationScreen extends StatefulWidget {
+  @override
+  _NavigationScreenState createState() => _NavigationScreenState();
+}
+
+class _NavigationScreenState extends State<NavigationScreen> {
   final List<Map<String, Object>> _pages = [
     {
       'title': 'Новости',
@@ -68,13 +73,11 @@ class NavigationScreen extends StatelessWidget {
         icon: Icon(Icons.menu),
         onPressed: () => innerDrawerKey.currentState.toggle(),
       ),
-      titleSpacing: 0.0,
-      title:
-          Consumer2<NavigationProvider, Auth>(builder: (ctx, tabData, auth, _) {
+      title: Consumer2<NavigationProvider, AuthRepository>(
+          builder: (ctx, tabData, auth, _) {
         _pages[2]['title'] = auth.isAuth ? 'Аккаунт' : 'Авторизация';
         return Text(
           _pages[tabData.currentIndex]['title'],
-          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
         );
       }),
       actions: <Widget>[
@@ -89,7 +92,7 @@ class NavigationScreen extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return Consumer2<NavigationProvider, Auth>(
+    return Consumer2<NavigationProvider, AuthRepository>(
         builder: (ctx, tabData, auth, _) {
       _pages[2]['page'] = auth.isAuth ? AccountPage() : AuthorizationPage();
       return _pages[tabData.currentIndex]['page'];

@@ -9,12 +9,12 @@ import '../services/index.dart';
 import 'index.dart';
 
 ///Repository that manage authentication process
-class Auth extends BaseRepository<AuthService> {
+class AuthRepository extends BaseRepository<AuthService> {
   String _token;
   User _user;
   SharedPreferences _prefs;
 
-  Auth(AuthService service) : super(service);
+  AuthRepository(AuthService service) : super(service);
 
   bool get isAuth => _token != null;
   User get user => _user;

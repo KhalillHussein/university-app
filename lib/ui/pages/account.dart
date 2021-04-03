@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:mtusiapp/models/index.dart';
 
 import 'package:provider/provider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -13,7 +14,7 @@ import 'index.dart';
 class AccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<Auth>(
+    return Consumer<AuthRepository>(
       builder: (ctx, userData, _) => Column(
         children: <Widget>[
           _Header(userData),
@@ -26,7 +27,7 @@ class AccountPage extends StatelessWidget {
 }
 
 class _Header extends StatelessWidget {
-  final Auth userData;
+  final AuthRepository userData;
 
   const _Header(this.userData);
 
@@ -34,9 +35,9 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      elevation: 2.0,
       shape: RoundedRectangleBorder(),
-      color: Theme.of(context).backgroundColor,
-      elevation: 2,
+      color: Theme.of(context).cardTheme.color,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         child: Row(
@@ -52,8 +53,9 @@ class _Header extends StatelessWidget {
             ),
             if (userData.user.role == 'lecturer')
               Container(
-                margin: EdgeInsets.only(right: 12),
-                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                margin: const EdgeInsets.only(right: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.green, width: 1.5),
                     borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -77,16 +79,17 @@ class _Header extends StatelessWidget {
             Stack(
               children: <Widget>[
                 IconButton(
+                  splashRadius: 20,
                   icon: Icon(
                     MdiIcons.bell,
-                    size: 28,
+                    size: 25,
                     color: Theme.of(context).primaryIconTheme.color,
                   ),
                   onPressed: () {},
                 ),
                 Positioned(
-                  right: 8,
-                  top: 8,
+                  right: 12,
+                  top: 12,
                   child: Icon(
                     MdiIcons.circle,
                     color: Theme.of(context).errorColor,
@@ -98,18 +101,20 @@ class _Header extends StatelessWidget {
             Badge(
               value: '+1',
               child: IconButton(
+                splashRadius: 20,
                 icon: Icon(
                   MdiIcons.email,
-                  size: 28,
+                  size: 25,
                   color: Theme.of(context).primaryIconTheme.color,
                 ),
                 onPressed: () {},
               ),
             ),
             IconButton(
+              splashRadius: 20,
               icon: Icon(
                 MdiIcons.exitToApp,
-                size: 28,
+                size: 25,
                 color: Theme.of(context).primaryIconTheme.color,
               ),
               onPressed: () => _showDialog(context, userData),
@@ -120,7 +125,7 @@ class _Header extends StatelessWidget {
     );
   }
 
-  void _showDialog(BuildContext context, Auth userData) {
+  void _showDialog(BuildContext context, AuthRepository userData) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -169,34 +174,41 @@ class _StudentTabs extends StatelessWidget {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: TabBar(
-                  isScrollable: true,
-                  unselectedLabelColor:
-                      Theme.of(context).textTheme.bodyText1.color,
-                  labelColor: Theme.of(context).accentColor,
-                  indicatorColor: Theme.of(context).accentColor,
-                  tabs: const <Widget>[
-                    Tab(
-                      child: Text(
-                        'РАСПИСАНИЕ ЗАНЯТИЙ',
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        softWrap: true,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Theme.of(context).dividerColor,
                       ),
                     ),
-                    Tab(
-                      child: Text('УСПЕВАЕМОСТЬ'),
-                    ),
-                    Tab(
-                      child: Text('ПОРТФОЛИО'),
-                    ),
-                  ],
+                    color: Theme.of(context).cardTheme.color,
+                  ),
+                  child: TabBar(
+                    isScrollable: true,
+                    indicatorColor: Theme.of(context).primaryColor,
+                    tabs: const <Widget>[
+                      Tab(
+                        child: Text(
+                          'РАСПИСАНИЕ ЗАНЯТИЙ',
+                          maxLines: 2,
+                          textAlign: TextAlign.center,
+                          softWrap: true,
+                        ),
+                      ),
+                      Tab(
+                        child: Text('УСПЕВАЕМОСТЬ'),
+                      ),
+                      Tab(
+                        child: Text('ПОРТФОЛИО'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Expanded(
                 child: TabBarView(
                   children: <Widget>[
-                    TimetablePage(),
+                    TimetableList(context.read<AuthRepository>().user.group),
                     Progress(),
                     const Center(child: Text('Портфолио')),
                   ],
@@ -227,10 +239,7 @@ class _LecturerTabs extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: TabBar(
-                    unselectedLabelColor:
-                        Theme.of(context).textTheme.bodyText1.color,
-                    labelColor: Theme.of(context).accentColor,
-                    indicatorColor: Theme.of(context).accentColor,
+                    indicatorColor: Theme.of(context).primaryColor,
                     tabs: const <Widget>[
                       Tab(
                         child: Text(

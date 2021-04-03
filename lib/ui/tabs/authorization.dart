@@ -10,8 +10,8 @@ class AuthorizationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(
-        primaryColor: kSecondaryThemeColor,
-        accentColor: kSecondaryThemeColor,
+        primaryColor: kLightPrimaryColor,
+        accentColor: kLightPrimaryColor,
       ),
       child: SingleChildScrollView(
         child: Padding(
@@ -75,7 +75,7 @@ class AuthorizationPage extends StatelessWidget {
   }
 
   Widget _buildAuthButton(BuildContext context) {
-    return Consumer2<ValidationProvider, Auth>(
+    return Consumer2<ValidationProvider, AuthRepository>(
       builder: (ctx, validation, auth, _) => Container(
         alignment: Alignment.bottomRight,
         margin: const EdgeInsets.only(top: 10),
@@ -86,7 +86,7 @@ class AuthorizationPage extends StatelessWidget {
           textColor: Colors.white,
           color: Theme.of(context).accentColor,
           shape: const StadiumBorder(),
-          onPressed: (!validation.isValid)
+          onPressed: (!validation.isAuthFormValid)
               ? null
               : () async {
                   await auth.authenticate(

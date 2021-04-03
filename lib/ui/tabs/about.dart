@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import '../../util/index.dart';
 
 class AboutTab extends StatelessWidget {
@@ -26,7 +28,10 @@ class AboutTab extends StatelessWidget {
         child: SelectableText(
           Doc.organizationText,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText1.copyWith(height: 1.3),
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1
+              .copyWith(height: 1.3, fontWeight: FontWeight.w600),
           scrollPhysics: NeverScrollableScrollPhysics(),
         ),
       ),
@@ -50,7 +55,8 @@ class AboutTab extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 child: const Text(
                   'КОНТАКТНАЯ ИНФОРМАЦИЯ СКФ МТУСИ',
-                  style: TextStyle(letterSpacing: 0.8, fontSize: 14),
+                  style: TextStyle(letterSpacing: 0.6),
+                  textScaleFactor: 0.8,
                 ),
               ),
             ),
@@ -59,6 +65,18 @@ class AboutTab extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> launchUrl(String url) async {
+    if (url.contains('http')) {
+      showUrl(url);
+    } else {
+      if (await canLaunch(url)) {
+        launch(url);
+      } else {
+        throw "Could not launch $url";
+      }
+    }
   }
 
   List<Widget> _listRequisites(BuildContext context) {
@@ -70,40 +88,54 @@ class AboutTab extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 20.0, left: 5.0),
-                  child: Icon(item['icon']),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(2.0),
+            onTap: item['url'] != null ? () => launchUrl(item['url']) : null,
+            child: SizedBox(
+              height: 70,
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 15.0, bottom: 15.0, right: 8.0),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15.0, left: 15.0),
+                      child: Icon(item['icon']),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            item['name'],
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(fontWeight: FontWeight.w600),
+                            textScaleFactor: 0.85,
+                          ),
+                          const SizedBox(height: 5),
+                          Expanded(
+                            child: AutoSizeText(
+                              item['desc'],
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                              maxLines: 1,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
+                                    height: 1.2,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item['name'],
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2
-                            .copyWith(fontWeight: FontWeight.w600),
-                        textScaleFactor: 0.85,
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        item['desc'],
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: Theme.of(context).textTheme.caption,
-                        textScaleFactor: 1.1,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),

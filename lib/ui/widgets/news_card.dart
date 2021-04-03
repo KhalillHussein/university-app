@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:expandable/expandable.dart';
 
 import '../../util/index.dart';
 import '../screens/index.dart';
@@ -197,12 +198,15 @@ class Body extends StatelessWidget {
   Widget _buildCollapsed(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: SelectableText(
+      child: Text(
         introText,
         maxLines: 3,
         textAlign: TextAlign.start,
-        style: Theme.of(context).textTheme.bodyText1,
-        scrollPhysics: NeverScrollableScrollPhysics(),
+        style: Theme.of(context)
+            .textTheme
+            .bodyText1
+            .copyWith(fontWeight: FontWeight.w400),
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }
@@ -214,7 +218,10 @@ class Body extends StatelessWidget {
         selectable: true,
         data: fullText,
         styleSheet: MarkdownStyleSheet(
-          p: Theme.of(context).textTheme.bodyText1,
+          p: Theme.of(context)
+              .textTheme
+              .bodyText1
+              .copyWith(fontWeight: FontWeight.w400),
         ),
         onTapLink: (_, link, __) => showUrl(link),
       ),
@@ -237,6 +244,7 @@ class Body extends StatelessWidget {
             ),
             const Divider(
               height: 1,
+              thickness: 1.2,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -248,11 +256,8 @@ class Body extends StatelessWidget {
                       final controller = ExpandableController.of(context);
                       return FlatButton(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        onPressed: introText.isEmpty
-                            ? null
-                            : () {
-                                controller.toggle();
-                              },
+                        onPressed:
+                            fullText.isEmpty ? null : () => controller.toggle(),
                         textColor:
                             Theme.of(context).accentTextTheme.button.color,
                         child: Text(

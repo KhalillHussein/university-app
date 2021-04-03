@@ -13,16 +13,21 @@ class LecturersRepository extends BaseRepository<LecturersService> {
     try {
       final lecturersResponse = await service.getLecturers();
       _lecturers = [
-        for (final item in lecturersResponse.data['result'])
-          Lecturer.fromJson(item)
+        for (final item in lecturersResponse.data) Lecturer.fromJson(item)
       ];
       finishLoading();
     } catch (e) {
-      receivedError(e);
+      receivedError(e.toString());
     }
   }
 
   List<Lecturer> get lecturers => _lecturers;
+
+  List<Lecturer> getByKafedra(String kafedra) {
+    return [..._lecturers]
+        ?.where((element) => element.kafedra == kafedra)
+        ?.toList();
+  }
 
   int get itemCount => _lecturers?.length;
 }

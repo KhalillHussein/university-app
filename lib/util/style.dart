@@ -15,130 +15,124 @@ class Style {
 
   /// Light style
   static final ThemeData light = ThemeData(
-    accentColor: kSecondaryThemeColor,
-    accentIconTheme: IconThemeData(color: Colors.grey[300]),
+    accentColor: kLightPrimaryColor,
     accentTextTheme: TextTheme(
-      button: const TextStyle(color: kSecondaryThemeColor, height: 1.5),
+      button: const TextStyle(color: kLightPrimaryColor, height: 1.5),
     ),
     appBarTheme: AppBarTheme(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        brightness: Brightness.light),
-    backgroundColor: kLightPrimaryColor,
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: kLightPrimaryColor,
-      elevation: 1.5,
-      selectedItemColor: kLightAccentColor,
-      unselectedItemColor: Colors.grey[600],
-      type: BottomNavigationBarType.fixed,
-    ),
-    brightness: Brightness.light,
-    cardTheme: CardTheme(color: kLightPrimaryColor, elevation: 3),
-    cardColor: kLightPrimaryColor,
-    dividerColor: Colors.grey[300],
-    disabledColor: Colors.grey[300],
-    dialogTheme: DialogTheme(
-      backgroundColor: kLightPrimaryColor,
-      contentTextStyle: TextStyle(
-          fontWeight: FontWeight.bold, color: Colors.grey[600], fontSize: 14),
-    ),
-    errorColor: kLightErrorColor,
-    focusColor: Colors.black,
-    highlightColor: Colors.grey.withOpacity(0.2),
-    iconTheme: IconThemeData(color: Colors.black),
-    inputDecorationTheme: InputDecorationTheme(
-      enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.grey[900]),
+      titleSpacing: 0.0,
+      backgroundColor: kLightColor,
+      textTheme: TextTheme(
+        headline6: TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     ),
-    primaryColorLight: k24dp,
-    primaryColor: kLightPrimaryColor,
+    backgroundColor: kLightColor,
+    buttonTheme: ButtonThemeData(buttonColor: kLightPrimaryColor),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: kLightColor,
+      selectedItemColor: kLightSecondaryColor,
+      unselectedItemColor: Colors.black54,
+      type: BottomNavigationBarType.fixed,
+    ),
+    disabledColor: Colors.grey[300],
+    dividerColor: Colors.black12,
+    errorColor: kLightErrorColor,
+    iconTheme: IconThemeData(color: Colors.black54),
     pageTransitionsTheme: _pageTransitionsTheme,
-    primaryIconTheme: IconThemeData(color: Colors.grey[700]),
-    scaffoldBackgroundColor: kLightPrimaryColor,
-    selectedRowColor: Colors.black.withOpacity(0.08),
+    primaryColor: kLightPrimaryColor,
+    primaryIconTheme: IconThemeData(color: Colors.black87),
+    scaffoldBackgroundColor: kLightColor,
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: kLightPrimaryColor,
       contentTextStyle: TextStyle(
-        fontWeight: FontWeight.w600,
         fontSize: 16,
       ),
     ),
     splashColor: Colors.white30,
+    tabBarTheme: TabBarTheme(
+      labelColor: kLightPrimaryColor,
+      unselectedLabelColor: Colors.black54,
+    ),
     textTheme: ThemeData.light().textTheme.copyWith(
           button: TextStyle(color: Colors.grey[400]),
           bodyText1: TextStyle(
             fontSize: 16,
-            height: 1.7,
-            fontWeight: FontWeight.w400,
-            color: Colors.black,
+            height: 1.5,
+            fontWeight: FontWeight.w500,
+            color: Colors.black87,
           ),
           bodyText2: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 17,
             color: Colors.black,
           ),
-          headline5: TextStyle(fontWeight: FontWeight.bold),
+          // headline5: TextStyle(fontWeight: FontWeight.bold),
           headline6: TextStyle(
             fontWeight: FontWeight.w500,
+            color: Colors.black,
+          ),
+          subtitle1: TextStyle(
+            fontSize: 14,
+            color: Colors.black.withOpacity(0.5),
+            fontWeight: FontWeight.w400,
           ),
           caption:
               TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w500),
         ),
-    visualDensity: VisualDensity.adaptivePlatformDensity,
   );
 
   /// Dark style
   static final ThemeData dark = ThemeData(
-    accentColor: kSecondaryThemeColor,
-    accentIconTheme: IconThemeData(color: Colors.grey[700]),
+    accentColor: kLightPrimaryColor,
     accentTextTheme: TextTheme(
-      button: TextStyle(color: kSecondaryThemeColor, height: 1.5),
+      button: TextStyle(color: kLightPrimaryColor, height: 1.5),
     ),
     appBarTheme: AppBarTheme(
-      color: k02dp,
-      systemOverlayStyle: SystemUiOverlayStyle.dark,
-      brightness: Brightness.dark,
-    ),
-    backgroundColor: k02dp,
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: k03dp,
-      selectedItemColor: kDarkAccentColor,
-      unselectedItemColor: Colors.white54,
-      type: BottomNavigationBarType.fixed,
-    ),
-    brightness: Brightness.dark,
-    canvasColor: Color(0xFF363636),
-    cardTheme: CardTheme(color: k01dp, elevation: 3),
-    cardColor: k02dp,
-    dialogTheme: DialogTheme(
-      backgroundColor: k03dp,
-      contentTextStyle: TextStyle(
-          fontWeight: FontWeight.bold, color: Colors.grey[400], fontSize: 14),
-    ),
-    disabledColor: Color(0xFF2F2F2F),
-    dividerColor: Colors.grey[800],
-    errorColor: kDarkErrorColor,
-    focusColor: Colors.grey[300],
-    highlightColor: Colors.grey[700],
-    iconTheme: IconThemeData(color: Colors.white.withOpacity(0.87)),
-    inputDecorationTheme: InputDecorationTheme(
-      helperStyle: TextStyle(color: Colors.white),
-      enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(color: Colors.white),
+      color: k04dp,
+      titleSpacing: 0.0,
+      textTheme: TextTheme(
+        headline6: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     ),
+    backgroundColor: k00dp,
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: k08dp,
+      selectedItemColor: kDarkSecondaryColor,
+      unselectedItemColor: Colors.white60,
+      type: BottomNavigationBarType.fixed,
+    ),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: k08dp,
+    ),
+    tabBarTheme: TabBarTheme(
+      unselectedLabelColor: Colors.white60,
+      labelColor: kDarkPrimaryColor,
+    ),
+    brightness: Brightness.dark,
+    cardTheme: CardTheme(color: k01dp),
+    cardColor: k02dp,
+    dialogTheme: DialogTheme(
+      backgroundColor: k24dp,
+    ),
+    disabledColor: Color(0xFF2F2F2F),
+    dividerColor: Colors.white12,
+    errorColor: kDarkErrorColor,
+    iconTheme: IconThemeData(color: Colors.white.withOpacity(0.7)),
+    primaryColor: kDarkPrimaryColor,
     pageTransitionsTheme: _pageTransitionsTheme,
-    primarySwatch: Colors.blue,
-    primaryColorDark: k24dp,
-    primaryColor: k03dp,
     primaryIconTheme: IconThemeData(color: Colors.white),
     scaffoldBackgroundColor: k00dp,
     selectedRowColor: Colors.white.withOpacity(0.2),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: Colors.grey[600],
       contentTextStyle: TextStyle(
-        color: k00dp,
-        fontWeight: FontWeight.w600,
+        color: k03dp,
         fontSize: 16,
       ),
     ),
@@ -147,9 +141,9 @@ class Style {
           button: TextStyle(color: Colors.grey[600]),
           bodyText1: TextStyle(
             fontSize: 16,
-            height: 1.7,
+            height: 1.5,
             color: Colors.white.withOpacity(0.8),
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w500,
           ),
           bodyText2: TextStyle(
             fontWeight: FontWeight.w500,
@@ -159,6 +153,11 @@ class Style {
           headline6: TextStyle(
             color: Colors.white.withOpacity(0.87),
             fontWeight: FontWeight.w500,
+          ),
+          subtitle1: TextStyle(
+            fontSize: 14,
+            color: Colors.white.withOpacity(0.5),
+            fontWeight: FontWeight.w600,
           ),
         ),
     visualDensity: VisualDensity.adaptivePlatformDensity,

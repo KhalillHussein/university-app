@@ -24,7 +24,7 @@ class _GroupList extends StatelessWidget {
           itemBuilder: (ctx, index) => ListTile(
             leading: Icon(
               MdiIcons.accountGroup,
-              size: 35,
+              size: 30,
             ),
             title: Text(model.groups[index],
                 style: Theme.of(context)
@@ -43,12 +43,15 @@ class _GroupList extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => _Timetable(model.groups[index])),
+                    builder: (context) => BasicPage<TimetableRepository>(
+                        title: model.groups[index],
+                        body: TimetableList(model.groups[index]))),
               );
             },
           ),
           separatorBuilder: (ctx, index) => Divider(
             height: 1,
+            thickness: 1.1,
             endIndent: 15,
             indent: 70,
           ),
@@ -59,15 +62,14 @@ class _GroupList extends StatelessWidget {
   }
 }
 
-class _Timetable extends StatelessWidget {
+class TimetableList extends StatelessWidget {
   final String groupName;
 
-  const _Timetable(this.groupName);
+  const TimetableList(this.groupName);
 
   @override
   Widget build(BuildContext context) {
-    return BasicPage<TimetableRepository>(
-      title: 'Группа: $groupName',
+    return BasicPageNoScaffold<TimetableRepository>(
       body: Consumer<TimetableRepository>(
         builder: (ctx, model, _) => _buildListView(
           context,
@@ -104,11 +106,12 @@ class _Timetable extends StatelessWidget {
       child: Row(children: <Widget>[
         Expanded(
           child: Container(
-              margin: const EdgeInsets.only(left: 10.0, right: 20.0),
-              child: Divider(
-                //color: Colors.black,
-                height: 36,
-              )),
+            margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+            child: Divider(
+              thickness: 1.2,
+              height: 36,
+            ),
+          ),
         ),
         Text(
           '${toBeginningOfSentenceCase(DateFormat.EEEE('Ru').format(date))}, ${DateFormat.MMMMd('Ru').format(date)}',
@@ -119,7 +122,7 @@ class _Timetable extends StatelessWidget {
           child: Container(
               margin: const EdgeInsets.only(left: 20.0, right: 10.0),
               child: Divider(
-                //  color: Colors.black,
+                thickness: 1.2,
                 height: 36,
               )),
         ),

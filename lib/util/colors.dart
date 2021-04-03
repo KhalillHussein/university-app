@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 //LIGHT THEME
-const Color kLightPrimaryColor = Colors.white;
-const Color kLightAltLightColor = Color(0xFFF5F5F5);
-// const Color kLightScaffoldBgColor = Color(0xFFF2F2F2);
+const Color kLightColor = Color(0xFFFAFAFA);
+const Color kAltLightColor = Color(0xFFF5F5F5);
+
 const Color kLightErrorColor = Color(0xFFB00020);
-const Color kLightAccentColor = Color(0xFF009688);
+const Color kLightSecondaryColor = Color(0xFF00999b);
+const Color kLightPrimaryColor = Color(0xFF1976D2);
 
 //DARK THEME
 const Color k00dp = Color(0xFF121212);
@@ -19,7 +20,7 @@ const Color k12dp = Color(0xFF323232);
 const Color k16dp = Color(0xFF353535);
 const Color k24dp = Color(0xFF373737);
 const Color kDarkErrorColor = Color(0xFFCF6679);
-const Color kDarkAccentColor = Color(0xFF03DAC6);
+const Color kDarkSecondaryColor = Color(0xFF19d2d2);
+const Color kDarkPrimaryColor = Color(0xFF64b5f6);
 
 //GENERAL
-const Color kSecondaryThemeColor = Color(0xFF1976D2);

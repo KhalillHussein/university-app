@@ -8,7 +8,7 @@ class SkeletonLoading extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: Theme.of(context).appBarTheme.color,
-      margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+      margin: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
       child: ListView.builder(
         itemCount: 4,
         itemBuilder: (BuildContext context, int index) {
@@ -39,7 +39,7 @@ class SkeletonLoading extends StatelessWidget {
       {double height, double width, BorderRadiusGeometry borderRadius}) {
     return Shimmer.fromColors(
       baseColor: Theme.of(context).disabledColor,
-      highlightColor: Theme.of(context).snackBarTheme.backgroundColor,
+      highlightColor: Colors.white12,
       child: Container(
         height: height,
         width: width,
@@ -54,17 +54,17 @@ class SkeletonLoading extends StatelessWidget {
   Widget _buildTopBox(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
         color: Theme.of(context).cardTheme.color,
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 15.0),
+        padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 15.0),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Shimmer.fromColors(
               baseColor: Theme.of(context).disabledColor,
-              highlightColor: Theme.of(context).snackBarTheme.backgroundColor,
+              highlightColor: Colors.white12,
               child: CircleAvatar(
                 radius: 21.0,
                 backgroundColor: Theme.of(context).disabledColor,
@@ -90,7 +90,7 @@ class SkeletonLoading extends StatelessWidget {
   Widget _buildMiddleBox(BuildContext context, double width) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
         color: Theme.of(context).cardTheme.color,
       ),
       padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -139,7 +139,7 @@ class SkeletonLoading extends StatelessWidget {
   Widget _buildBottomBox(BuildContext context, double width) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(4.0)),
         color: Theme.of(context).cardTheme.color,
       ),
       child: Column(
@@ -161,7 +161,7 @@ class SkeletonLoading extends StatelessWidget {
             borderRadius: BorderRadius.zero,
           ),
           Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: const EdgeInsets.all(15.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

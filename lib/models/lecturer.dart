@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 
 class Lecturer {
-  final String id;
+  final int id;
   final String fullName;
   final String email;
   final String rank;
+  final String kafedra;
   final String academicDegree;
   final String academicRank;
   final DateTime totalLengthOfService;
@@ -22,6 +23,7 @@ class Lecturer {
     @required this.fullName,
     @required this.email,
     @required this.rank,
+    @required this.kafedra,
     @required this.academicDegree,
     @required this.academicRank,
     @required this.totalLengthOfService,
@@ -41,12 +43,11 @@ class Lecturer {
       fullName: json['full_name'],
       email: json['email'],
       rank: json['rank'],
+      kafedra: json['kafedra'],
       academicDegree: json['academic_degree'],
       academicRank: json['academic_rank'],
-      totalLengthOfService:
-          DateTime(int.parse(json['total_length_of_service'])),
-      lengthWorkOfSpeciality:
-          DateTime(int.parse(json['length_work_of_speciality'])),
+      totalLengthOfService: DateTime.parse(json['total_length_of_service']),
+      lengthWorkOfSpeciality: DateTime.parse(json['length_work_of_speciality']),
       photo: json['photo'],
       disciplinesTaught: json['disciplines_taught'],
       scientificInterests: json['scientific_interests'],

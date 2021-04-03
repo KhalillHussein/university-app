@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -22,6 +23,7 @@ class TimetableCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 20.0),
+      color: Theme.of(context).cardColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
         child: Row(
@@ -41,10 +43,10 @@ class TimetableCard extends StatelessWidget {
                       children: [
                         Expanded(
                           flex: 10,
-                          child: Text(
+                          child: AutoSizeText(
                             subject,
                             style: Theme.of(context).textTheme.headline6,
-                            maxLines: 2,
+                            maxLines: 1,
                             softWrap: true,
                           ),
                         ),
@@ -55,13 +57,12 @@ class TimetableCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
                     _buildScheduleInfo(
                       icon: MdiIcons.accountTie,
                       context: context,
                       text: name,
                     ),
-                    const SizedBox(height: 2),
                     _buildScheduleInfo(
                       icon: MdiIcons.tagMultiple,
                       context: context,
@@ -90,17 +91,20 @@ class TimetableCard extends StatelessWidget {
                 child: Icon(
                   icon,
                   size: 18,
+                  color: Theme.of(context).iconTheme.color,
                 ),
               ),
             ),
             TextSpan(
               text: text,
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    height: 1.3,
-                  ),
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle1
+                  .copyWith(height: 1.3, fontWeight: FontWeight.w500),
             ),
           ],
         ),
+        textScaleFactor: 0.95,
       ),
     );
   }

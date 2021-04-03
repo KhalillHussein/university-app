@@ -60,7 +60,7 @@ class SimplePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        centerTitle: true,
+        titleSpacing: 0,
         actions: actions,
       ),
       body: body,
