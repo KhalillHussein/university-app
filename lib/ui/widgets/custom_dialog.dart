@@ -48,10 +48,6 @@ class CustomDialog extends StatelessWidget {
                       Expanded(
                         child: AutoSizeText(
                           '${description[key]}',
-                          style: Theme.of(context)
-                              .dialogTheme
-                              .contentTextStyle
-                              .copyWith(fontWeight: FontWeight.w400),
                         ),
                       ),
                     ],

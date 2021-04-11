@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:expandable/expandable.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../util/index.dart';
 import '../screens/index.dart';
@@ -111,7 +112,7 @@ class BodyImages extends StatelessWidget {
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 22,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ),
@@ -202,10 +203,10 @@ class Body extends StatelessWidget {
         introText,
         maxLines: 3,
         textAlign: TextAlign.start,
-        style: Theme.of(context)
-            .textTheme
-            .bodyText1
-            .copyWith(fontWeight: FontWeight.w400),
+        style: GoogleFonts.rubikTextTheme(
+          Theme.of(context).textTheme,
+        ).bodyText2.copyWith(height: 1.4),
+        textScaleFactor: 1.05,
         overflow: TextOverflow.ellipsis,
       ),
     );
@@ -218,10 +219,10 @@ class Body extends StatelessWidget {
         selectable: true,
         data: fullText,
         styleSheet: MarkdownStyleSheet(
-          p: Theme.of(context)
-              .textTheme
-              .bodyText1
-              .copyWith(fontWeight: FontWeight.w400),
+          p: GoogleFonts.rubikTextTheme(
+            Theme.of(context).textTheme,
+          ).bodyText2.copyWith(height: 1.4),
+          textScaleFactor: 1.05,
         ),
         onTapLink: (_, link, __) => showUrl(link),
       ),
@@ -254,18 +255,17 @@ class Body extends StatelessWidget {
                   child: Builder(
                     builder: (context) {
                       final controller = ExpandableController.of(context);
-                      return FlatButton(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                      return TextButton(
                         onPressed:
                             fullText.isEmpty ? null : () => controller.toggle(),
-                        textColor: Theme.of(context).primaryColor,
                         child: Text(
                           controller.expanded ? "СКРЫТЬ" : "ПОДРОБНЕЕ",
-                          style: TextStyle(
-                            letterSpacing: 0.9,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: GoogleFonts.rubikTextTheme(
+                            Theme.of(context).textTheme,
+                          ).overline.copyWith(
+                              color: Theme.of(context).accentColor,
+                              fontWeight: FontWeight.w600),
+                          textScaleFactor: 1.5,
                         ),
                       );
                     },
@@ -275,7 +275,7 @@ class Body extends StatelessWidget {
                 //   padding: const EdgeInsets.only(right: 10),
                 //   child: Row(
                 //     children: <Widget>[
-                //       const Icon(CommunityMaterialIcons.eye_settings_outline),
+                //       const Icon(Icons.share_outlined),
                 //       const SizedBox(width: 5),
                 //       Text('$views')
                 //     ],
@@ -302,8 +302,13 @@ class Head extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Text(
         title,
-        style: Theme.of(context).textTheme.headline6,
-        overflow: TextOverflow.fade,
+        style: GoogleFonts.rubikTextTheme(
+          Theme.of(context).textTheme,
+        ).headline6.copyWith(
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black87
+                  : Colors.white,
+            ),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:expandable/expandable.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mtusiapp/util/colors.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 ///TODO: REFACTORING REQUIRED
@@ -35,44 +37,88 @@ class Progress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: _disciplines.length,
-      itemBuilder: (ctx, index) => ExpandableNotifier(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 8.0),
-          child: Card(
-            color: Theme.of(context).cardColor,
-            child: ScrollOnExpand(
-              child: ExpandablePanel(
-                theme: ExpandableThemeData(
-                  headerAlignment: ExpandablePanelHeaderAlignment.center,
-                  iconColor: Theme.of(context).iconTheme.color,
-                  tapBodyToCollapse: true,
-                ),
-                collapsed: SizedBox(),
-                header: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    _disciplines[index]['discipline'],
-                    style: Theme.of(context).textTheme.bodyText2,
+    return Padding(
+      padding: const EdgeInsets.only(top: 16.0),
+      child: ListView.builder(
+        itemCount: _disciplines.length,
+        itemBuilder: (ctx, index) => ExpandableNotifier(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Card(
+              child: ScrollOnExpand(
+                child: ExpandablePanel(
+                  theme: ExpandableThemeData(
+                    headerAlignment: ExpandablePanelHeaderAlignment.center,
+                    iconColor: Theme.of(context).iconTheme.color,
+                    tapBodyToCollapse: true,
                   ),
-                ),
-                expanded: _buildExpanded(
-                    context,
-                    _disciplines[index]['lecturer'],
-                    _disciplines[index]['percent']),
-                builder: (_, __, expanded) {
-                  return Expandable(
-                    expanded: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: expanded,
+                  collapsed: SizedBox(),
+                  header: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      _disciplines[index]['discipline'],
+                      style: GoogleFonts.rubikTextTheme(
+                        Theme.of(context).textTheme,
+                      ).headline6,
+                      textScaleFactor: 0.8,
                     ),
-                    collapsed: SizedBox(),
-                  );
-                },
+                  ),
+                  expanded: _buildExpanded(
+                      context,
+                      _disciplines[index]['lecturer'],
+                      _disciplines[index]['percent']),
+                  builder: (_, __, expanded) {
+                    return Expandable(
+                      expanded: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: expanded,
+                      ),
+                      collapsed: const SizedBox(),
+                    );
+                  },
+                ),
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRateCard(BuildContext context,
+      {String name, String overage, Color ovgColor}) {
+    return Card(
+      color: Theme.of(context).brightness == Brightness.light
+          ? Colors.white
+          : k04dp,
+      elevation: 2.0,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Text(
+                name,
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                    color: ovgColor,
+                    borderRadius: BorderRadius.all(Radius.circular(20))),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    overage,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -86,18 +132,15 @@ class Progress extends StatelessWidget {
           padding: const EdgeInsets.only(left: 10.0, bottom: 5),
           child: Text(
             'Преподаватель: $lecturer',
-            style: Theme.of(context)
-                .textTheme
-                .bodyText2
-                .copyWith(fontWeight: FontWeight.w400),
-            textScaleFactor: 0.85,
+            style: GoogleFonts.rubikTextTheme(
+              Theme.of(context).textTheme,
+            ).subtitle1,
+            textScaleFactor: 0.9,
           ),
         ),
         Row(
           children: [
-            SizedBox(
-              height: 150,
-              width: 162,
+            Expanded(
               child: CircularPercentIndicator(
                 animationDuration: 800,
                 startAngle: 220,
@@ -109,124 +152,37 @@ class Progress extends StatelessWidget {
                 backgroundColor: Theme.of(context).dividerColor,
                 center: Text(
                   '${percent * 100}%',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Theme.of(context).primaryColor,
-                  ),
+                  style: GoogleFonts.rubikTextTheme(
+                    Theme.of(context).textTheme,
+                  ).headline6.copyWith(
+                        color: Theme.of(context).accentColor,
+                      ),
                 ),
-                progressColor: Theme.of(context).primaryColor,
-                circularStrokeCap: CircularStrokeCap.round,
+                progressColor: Theme.of(context).accentColor,
+                circularStrokeCap: CircularStrokeCap.butt,
               ),
             ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Card(
-                    color: Theme.of(context).appBarTheme.color,
-                    elevation: 2.0,
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Модуль 1',
-                            style: TextStyle(
-                                color:
-                                    Theme.of(context).textTheme.bodyText2.color,
-                                fontSize: 13),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                color: Color(0xFF4AA552).withOpacity(0.5),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Text(
-                              '49 из 50',
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .color,
-                                  fontSize: 13),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  _buildRateCard(
+                    context,
+                    name: 'Модуль 1',
+                    overage: '49 из 50',
+                    ovgColor: Color(0xFF4AA552).withOpacity(0.5),
                   ),
-                  Card(
-                    color: Theme.of(context).appBarTheme.color,
-                    elevation: 2.0,
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Модуль 2',
-                            style: TextStyle(
-                                color:
-                                    Theme.of(context).textTheme.bodyText2.color,
-                                fontSize: 13),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                color: Color(0xFF4AA552).withOpacity(0.5),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Text(
-                              '49 из 50',
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .color,
-                                  fontSize: 13),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  _buildRateCard(
+                    context,
+                    name: 'Модуль 2',
+                    overage: '49 из 50',
+                    ovgColor: Color(0xFF4AA552).withOpacity(0.5),
                   ),
-                  Card(
-                    color: Theme.of(context).appBarTheme.color,
-                    elevation: 2.0,
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Пропущено',
-                            style: TextStyle(
-                                color:
-                                    Theme.of(context).textTheme.bodyText2.color,
-                                fontSize: 13),
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                color: Color(0xFF4AA552).withOpacity(0.5),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Text(
-                              '1 из 20ч',
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .color,
-                                  fontSize: 13),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  _buildRateCard(
+                    context,
+                    name: 'Пропущено',
+                    overage: '1 из 20ч',
+                    ovgColor: Color(0xFF4AA552).withOpacity(0.5),
                   ),
                 ],
               ),
@@ -236,73 +192,19 @@ class Progress extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: Card(
-                color: Theme.of(context).appBarTheme.color,
-                elevation: 2.0,
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Отметка 5',
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText2.color,
-                            fontSize: 14),
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        decoration: BoxDecoration(
-                            color: Color(0xFFA5D631).withOpacity(0.5),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: Text(
-                          '60%',
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText2.color,
-                              fontSize: 13),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              child: _buildRateCard(
+                context,
+                name: 'Отметка 5',
+                overage: '60%',
+                ovgColor: Color(0xFFA5D631).withOpacity(0.5),
               ),
             ),
             Expanded(
-              child: Card(
-                color: Theme.of(context).appBarTheme.color,
-                elevation: 2.0,
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Отметка 4',
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText2.color,
-                            fontSize: 14),
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        decoration: BoxDecoration(
-                            color: Color(0xFFF7E642).withOpacity(0.8),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: Text(
-                          '30%',
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText2.color,
-                              fontSize: 13),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              child: _buildRateCard(
+                context,
+                name: 'Отметка 4',
+                overage: '30%',
+                ovgColor: Color(0xFFF7E642).withOpacity(0.8),
               ),
             ),
           ],
@@ -310,73 +212,19 @@ class Progress extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: Card(
-                color: Theme.of(context).appBarTheme.color,
-                elevation: 2.0,
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Отметка 3',
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText2.color,
-                            fontSize: 14),
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        decoration: BoxDecoration(
-                            color: Color(0xFFFFAD31).withOpacity(0.8),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: Text(
-                          '10%',
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText2.color,
-                              fontSize: 13),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              child: _buildRateCard(
+                context,
+                name: 'Отметка 3',
+                overage: '10%',
+                ovgColor: Color(0xFFFFAD31).withOpacity(0.8),
               ),
             ),
             Expanded(
-              child: Card(
-                color: Theme.of(context).appBarTheme.color,
-                elevation: 2.0,
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Отметка 2',
-                        style: TextStyle(
-                            color: Theme.of(context).textTheme.bodyText2.color,
-                            fontSize: 14),
-                      ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 12),
-                        decoration: BoxDecoration(
-                            color: Color(0xFFEE3A19).withOpacity(0.8),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: Text(
-                          '0%',
-                          style: TextStyle(
-                              color:
-                                  Theme.of(context).textTheme.bodyText2.color,
-                              fontSize: 13),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              child: _buildRateCard(
+                context,
+                name: 'Отметка 2',
+                overage: '0%',
+                ovgColor: Color(0xFFEE3A19).withOpacity(0.8),
               ),
             ),
           ],
@@ -384,12 +232,4 @@ class Progress extends StatelessWidget {
       ],
     );
   }
-}
-
-class Task {
-  String task;
-  double taskvalue;
-  Color colorval;
-
-  Task(this.task, this.taskvalue, this.colorval);
 }

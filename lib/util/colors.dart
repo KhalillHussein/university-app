@@ -6,7 +6,10 @@ const Color kAltLightColor = Color(0xFFF5F5F5);
 
 const Color kLightErrorColor = Color(0xFFB00020);
 const Color kLightSecondaryColor = Color(0xFF00999b);
-const Color kLightPrimaryColor = Color(0xFF1976D2);
+final Color kLightPrimaryColor = Colors.blue[800];
+
+const Color kLightYellowColor = Color(0xFFFFB600);
+const Color kLightGreenColor = Color(0xFF38C05D);
 
 //DARK THEME
 const Color k00dp = Color(0xFF121212);
@@ -19,8 +22,12 @@ const Color k08dp = Color(0xFF2D2D2D);
 const Color k12dp = Color(0xFF323232);
 const Color k16dp = Color(0xFF353535);
 const Color k24dp = Color(0xFF373737);
+
 const Color kDarkErrorColor = Color(0xFFCF6679);
 const Color kDarkSecondaryColor = Color(0xFF19d2d2);
-const Color kDarkPrimaryColor = Color(0xFF64b5f6);
+final Color kDarkPrimaryColor = Color(0xFF2C9ED4);
+
+const Color kDarkYellowColor = Color(0xFFFFD76F);
+const Color kDarkGreenColor = Color(0xFF89ED5B);
 
 //GENERAL

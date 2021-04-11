@@ -21,13 +21,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
       'title': 'Новости',
       'page': NewsTab(),
     },
-    {
-      'title': 'Расписание',
-      'page': TimetablePage(),
-    },
+    // {
+    //   'title': 'Расписание',
+    //   'page': TimetablePage(),
+    // },
     {
       'title': 'Авторизация',
-      'page': AuthorizationPage(),
+      'page': AuthTab(),
     },
     {
       'title': 'Основные сведения',
@@ -53,7 +53,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
           ],
           offset: IDOffset.horizontal(0.6),
           colorTransitionChild: Colors.white30,
-          colorTransitionScaffold: Theme.of(context).splashColor,
+          colorTransitionScaffold:
+              Theme.of(context).brightness == Brightness.light
+                  ? Colors.white30
+                  : Colors.grey[900].withOpacity(0.4),
           leftAnimationType: InnerDrawerAnimation.linear,
           leftChild: AppDrawer(),
           scaffold: Scaffold(
@@ -75,7 +78,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       ),
       title: Consumer2<NavigationProvider, AuthRepository>(
           builder: (ctx, tabData, auth, _) {
-        _pages[2]['title'] = auth.isAuth ? 'Аккаунт' : 'Авторизация';
+        _pages[1]['title'] = auth.isAuth ? 'Аккаунт' : 'Авторизация';
         return Text(
           _pages[tabData.currentIndex]['title'],
         );
@@ -85,7 +88,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         IconButton(
           splashRadius: 20,
           icon: const Icon(MdiIcons.cogOutline),
-          onPressed: () {},
+          onPressed: null,
         ),
       ],
     );
@@ -94,7 +97,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Widget _buildBody() {
     return Consumer2<NavigationProvider, AuthRepository>(
         builder: (ctx, tabData, auth, _) {
-      _pages[2]['page'] = auth.isAuth ? AccountPage() : AuthorizationPage();
+      _pages[1]['page'] = auth.isAuth ? AccountPage() : AuthTab();
       return _pages[tabData.currentIndex]['page'];
     });
   }
@@ -102,34 +105,37 @@ class _NavigationScreenState extends State<NavigationScreen> {
   Widget _buildBottomNavigationBar(BuildContext context) {
     return Consumer<NavigationProvider>(
       builder: (ctx, tabsData, _) => BottomNavigationBar(
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        selectedFontSize: 0,
         onTap: (index) => tabsData.currentIndex = index,
         currentIndex: tabsData.currentIndex,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
               MdiIcons.newspaperVariantOutline,
-              size: 28,
+              size: 30,
             ),
             label: 'Новости',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              MdiIcons.calendarTextOutline,
-              size: 28,
-            ),
-            label: 'Расписание',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     MdiIcons.calendarTextOutline,
+          //     size: 28,
+          //   ),
+          //   label: 'Расписание',
+          // ),
           BottomNavigationBarItem(
             icon: Icon(
               MdiIcons.account,
-              size: 28,
+              size: 30,
             ),
             label: 'Аккаунт',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               MdiIcons.accessPoint,
-              size: 28,
+              size: 30,
             ),
             label: 'О нас',
           ),

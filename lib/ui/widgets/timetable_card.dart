@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class TimetableCard extends StatelessWidget {
@@ -11,7 +12,7 @@ class TimetableCard extends StatelessWidget {
   final String subjectType;
 
   const TimetableCard({
-    this.id,
+    @required this.id,
     @required this.lesson,
     @required this.aud,
     @required this.name,
@@ -28,8 +29,13 @@ class TimetableCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
         child: Row(
           children: [
-            _buildLeading(context),
-            const SizedBox(width: 20),
+            Text(
+              lesson,
+              style: GoogleFonts.rubikTextTheme(
+                Theme.of(context).textTheme,
+              ).headline5,
+            ),
+            const SizedBox(width: 25),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -45,7 +51,9 @@ class TimetableCard extends StatelessWidget {
                           flex: 10,
                           child: AutoSizeText(
                             subject,
-                            style: Theme.of(context).textTheme.headline6,
+                            style: GoogleFonts.rubikTextTheme(
+                              Theme.of(context).textTheme,
+                            ).headline6,
                             maxLines: 1,
                             softWrap: true,
                             textScaleFactor: 0.9,
@@ -54,7 +62,9 @@ class TimetableCard extends StatelessWidget {
                         Spacer(),
                         Text(
                           aud,
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: GoogleFonts.rubikTextTheme(
+                            Theme.of(context).textTheme,
+                          ).subtitle1,
                         ),
                       ],
                     ),
@@ -92,28 +102,20 @@ class TimetableCard extends StatelessWidget {
                 child: Icon(
                   icon,
                   size: 18,
-                  color: Theme.of(context).iconTheme.color,
+                  color: Theme.of(context).disabledColor,
                 ),
               ),
             ),
             TextSpan(
               text: text,
-              style: Theme.of(context)
-                  .textTheme
-                  .subtitle1
-                  .copyWith(height: 1.3, fontWeight: FontWeight.w500),
+              style: GoogleFonts.rubikTextTheme(
+                Theme.of(context).textTheme,
+              ).caption,
             ),
           ],
         ),
-        textScaleFactor: 0.95,
+        textScaleFactor: 1.15,
       ),
-    );
-  }
-
-  Widget _buildLeading(BuildContext context) {
-    return Text(
-      lesson,
-      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
     );
   }
 }

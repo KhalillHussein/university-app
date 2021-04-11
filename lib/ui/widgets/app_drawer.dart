@@ -1,10 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mtusiapp/providers/index.dart';
 import 'package:mtusiapp/repositories/auth.dart';
 import 'package:mtusiapp/util/index.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class AppDrawer extends StatelessWidget {
   final List<Map<String, String>> kafedru = [
@@ -31,8 +32,9 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isAuth = context.watch<AuthRepository>().isAuth;
     final Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: SingleChildScrollView(
+    return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -76,18 +78,23 @@ class AppDrawer extends StatelessWidget {
               Flexible(
                 child: Text(
                   'Авторизация',
-                  textScaleFactor: 1.4,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: 10),
               Flexible(
                 child: Text(
-                  'Откройте доступ ко всем функциям приложения',
-                  style: TextStyle(fontWeight: FontWeight.w400, height: 1.4),
+                  'Студент или преподаватель? Выполните вход для использования всех функций',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      .copyWith(height: 1.4),
                   overflow: TextOverflow.ellipsis,
                   softWrap: true,
-                  maxLines: 2,
+                  maxLines: 3,
                 ),
               ),
             ],
@@ -95,20 +102,23 @@ class AppDrawer extends StatelessWidget {
         ),
         ListTile(
           leading: Icon(
-            MdiIcons.exitToApp,
+            MdiIcons.loginVariant,
             color: Theme.of(context).accentColor,
           ),
           title: Transform.translate(
             offset: Offset(-15, 2),
             child: Text(
               'Войти',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2
-                  .copyWith(color: Theme.of(context).accentColor),
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
+                  color: Theme.of(context).accentColor,
+                  fontWeight: FontWeight.bold),
+              textScaleFactor: 1.2,
             ),
           ),
-          onTap: () {},
+          onTap: () {
+            context.read<NavigationProvider>().currentIndex = Tabs.auth.index;
+            context.select((value) => value.onTapToClose);
+          },
         ),
       ],
     );
@@ -119,30 +129,32 @@ class AppDrawer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
           child: Text(
             'Основные сведения',
             textAlign: TextAlign.start,
-            style: Theme.of(context).textTheme.subtitle1,
+            style: GoogleFonts.rubikTextTheme(
+              Theme.of(context).textTheme,
+            ).caption,
+            textScaleFactor: 1.1,
           ),
         ),
         _buildSection(
           context,
           label: 'Научно-педагогический состав',
-          icon: MdiIcons.accountTieOutline,
+          icon: MdiIcons.accountTie,
           color: Theme.of(context).accentIconTheme.color,
           children: [
             for (final item in kafedru)
               ListTile(
                 title: Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
+                  padding: const EdgeInsets.only(left: 60.0),
                   child: AutoSizeText(
                     item['name'],
                     textScaleFactor: 0.8,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .copyWith(fontWeight: FontWeight.w400),
+                    // style: GoogleFonts.rubikTextTheme(
+                    //   Theme.of(context).textTheme,
+                    // ).subtitle1,
                     maxLines: 3,
                   ),
                 ),
@@ -155,9 +167,9 @@ class AppDrawer extends StatelessWidget {
         ),
         _buildSection(
           context,
-          onTap: () {},
+          onTap: () => Navigator.of(context).pushNamed(Routes.phoneBook),
           label: 'Телефонный справочник',
-          icon: MdiIcons.cardAccountPhoneOutline,
+          icon: MdiIcons.cardAccountPhone,
           color: Theme.of(context).accentIconTheme.color,
         ),
         if (isAuth)
@@ -165,7 +177,7 @@ class AppDrawer extends StatelessWidget {
             context,
             onTap: () => Navigator.of(context).pushNamed(Routes.inquiries),
             label: 'Заказ справок',
-            icon: MdiIcons.fileDocumentEditOutline,
+            icon: MdiIcons.fileDocumentEdit,
             color: Theme.of(context).accentIconTheme.color,
           ),
       ],
@@ -177,11 +189,14 @@ class AppDrawer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
           child: Text(
             'Загружаемые ресурсы',
             textAlign: TextAlign.start,
-            style: Theme.of(context).textTheme.subtitle1,
+            style: GoogleFonts.rubikTextTheme(
+              Theme.of(context).textTheme,
+            ).caption,
+            textScaleFactor: 1.1,
           ),
         ),
         _buildSection(
@@ -189,7 +204,7 @@ class AppDrawer extends StatelessWidget {
           onTap: () =>
               showUrl('http://www.skf-mtusi.ru/files/info/docs/pps-20_21.pdf'),
           label: 'График консультаций ППС',
-          icon: MdiIcons.downloadOutline,
+          icon: MdiIcons.download,
           color: Theme.of(context).accentIconTheme.color,
         ),
       ],
@@ -201,11 +216,14 @@ class AppDrawer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
           child: Text(
             'Внешние ресурсы',
             textAlign: TextAlign.start,
-            style: Theme.of(context).textTheme.subtitle1,
+            style: GoogleFonts.rubikTextTheme(
+              Theme.of(context).textTheme,
+            ).caption,
+            textScaleFactor: 1.1,
           ),
         ),
         _buildSection(
@@ -236,44 +254,58 @@ class AppDrawer extends StatelessWidget {
     Widget trailing,
   }) {
     return children != null
-        ? ExpansionTile(
-            leading: Icon(
-              icon,
-              size: 23,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            // backgroundColor: Theme.of(context).cardTheme.color,
-            title: Transform.translate(
-              offset: Offset(-15, 0),
-              child: AutoSizeText(
-                label,
-                style: Theme.of(context).textTheme.bodyText1,
-                textScaleFactor: 0.95,
-                maxLines: 1,
-                softWrap: true,
+        ? Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              child: ExpansionTile(
+                leading: Icon(
+                  icon,
+                  size: 24,
+                ),
+                childrenPadding: const EdgeInsets.only(bottom: 10),
+                backgroundColor:
+                    Theme.of(context).brightness == Brightness.light
+                        ? Theme.of(context).accentColor.withOpacity(0.1)
+                        : Colors.white10,
+                title: AutoSizeText(
+                  label,
+                  style: GoogleFonts.rubikTextTheme(
+                    Theme.of(context).textTheme,
+                  ).bodyText1,
+                  maxLines: 2,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  textScaleFactor: 1.1,
+                ),
+                trailing: trailing,
+                children: children,
               ),
             ),
-            trailing: trailing,
-            children: children,
           )
-        : ListTile(
-            leading: Icon(
-              icon,
-              size: 23,
-              color: Theme.of(context).iconTheme.color,
+        : ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(32),
+              bottomLeft: Radius.circular(32),
             ),
-            title: Transform.translate(
-              offset: Offset(-15, 0),
-              child: AutoSizeText(
+            child: ListTile(
+              leading: Icon(
+                icon,
+                size: 24,
+              ),
+              title: AutoSizeText(
                 label,
-                style: Theme.of(context).textTheme.bodyText1,
-                textScaleFactor: 0.95,
+                style: GoogleFonts.rubikTextTheme(
+                  Theme.of(context).textTheme,
+                ).bodyText1,
                 maxLines: 1,
                 softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                textScaleFactor: 1.1,
               ),
+              trailing: trailing,
+              onTap: onTap,
             ),
-            trailing: trailing,
-            onTap: onTap,
           );
   }
 }

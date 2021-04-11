@@ -45,6 +45,7 @@
 import 'package:flutter/material.dart';
 import 'package:mtusiapp/ui/pages/index.dart';
 import 'package:mtusiapp/ui/screens/inquiries.dart';
+import 'package:mtusiapp/ui/screens/phone_book.dart';
 import 'package:mtusiapp/ui/tabs/index.dart';
 
 import '../ui/screens/error.dart';
@@ -61,6 +62,7 @@ class Routes {
   static const about = '/about';
   static const lecturers = '/lecturers';
   static const inquiries = '/inquiries';
+  static const phoneBook = '/phone_book';
 
   /// Methods that generate all routes
   static Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -84,7 +86,7 @@ class Routes {
         case account:
           return MaterialPageRoute(
             settings: routeSettings,
-            builder: (_) => AuthorizationPage(),
+            builder: (_) => AuthTab(),
           );
         case about:
           return MaterialPageRoute(
@@ -100,6 +102,11 @@ class Routes {
           return MaterialPageRoute(
             settings: routeSettings,
             builder: (_) => InquiriesScreen(),
+          );
+        case phoneBook:
+          return MaterialPageRoute(
+            settings: routeSettings,
+            builder: (_) => PhoneBookScreen(),
           );
         default:
           return errorRoute(routeSettings);

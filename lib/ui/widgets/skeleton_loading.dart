@@ -7,7 +7,7 @@ class SkeletonLoading extends StatelessWidget {
     final double width = MediaQuery.of(context).size.width;
     return Container(
       width: double.infinity,
-      color: Theme.of(context).appBarTheme.color,
+      color: Theme.of(context).cardColor,
       margin: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
       child: ListView.builder(
         itemCount: 4,

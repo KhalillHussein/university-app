@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mtusiapp/util/index.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../repositories/index.dart';
 import 'index.dart';
@@ -30,7 +30,6 @@ Future<void> _onRefresh(BuildContext context, BaseRepository repository) {
             backgroundColor: Theme.of(context).errorColor,
             content: Text(
               repository.errorMessage,
-              style: Theme.of(context).snackBarTheme.contentTextStyle,
             ),
             duration: const Duration(seconds: 1),
           ),
@@ -71,16 +70,14 @@ class SimplePage extends StatelessWidget {
 
 /// Basic page which has reloading properties.
 /// It uses the [BlankPage] widget inside it.
-class ReloadablePage<T extends BaseRepository> extends StatelessWidget {
+class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
   final String title;
   final Widget body, fab;
-  final List<Widget> actions;
 
-  const ReloadablePage({
+  const ReloadableSimplePage({
     @required this.title,
     @required this.body,
     this.fab,
-    this.actions,
   });
 
   @override
@@ -94,11 +91,9 @@ class ReloadablePage<T extends BaseRepository> extends StatelessWidget {
           child: model.isLoading
               ? _loadingIndicator
               : model.loadingFailed
-                  ? SliverFillRemaining(
-                      child: ChangeNotifierProvider.value(
-                        value: model,
-                        child: ConnectionError<T>(),
-                      ),
+                  ? ChangeNotifierProvider.value(
+                      value: model,
+                      child: ConnectionError<T>(),
                     )
                   : SafeArea(bottom: false, child: body),
         ),
@@ -107,40 +102,52 @@ class ReloadablePage<T extends BaseRepository> extends StatelessWidget {
   }
 }
 
-///
-class BasicPage<T extends BaseRepository> extends StatelessWidget {
-  final String title;
-  final Widget body, fab;
+///Do refactoring
+class ReloadableScreen<T extends BaseRepository> extends StatelessWidget {
+  final Widget body;
 
-  const BasicPage({
-    @required this.title,
+  const ReloadableScreen({
     @required this.body,
-    this.fab,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SimplePage(
-      title: title,
-      fab: fab,
-      body: Consumer<T>(
-        builder: (context, model, child) => model.isLoading
-            ? _loadingIndicator
+    return Consumer<T>(
+      builder: (context, model, child) => RefreshIndicator(
+        onRefresh: () => _onRefresh(context, model),
+        child: model.isLoading
+            ? _skeletonLoading
             : model.loadingFailed
                 ? ChangeNotifierProvider.value(
                     value: model,
                     child: ConnectionError<T>(),
                   )
-                : SafeArea(bottom: false, child: body),
+                : model.databaseFetch
+                    ? Stack(
+                        children: [
+                          body,
+                          Positioned(
+                            bottom: 0.0,
+                            left: 0.0,
+                            right: 0.0,
+                            child: ChangeNotifierProvider.value(
+                              value: model,
+                              child: Message<T>(),
+                            ),
+                          ),
+                        ],
+                      )
+                    : body,
       ),
     );
   }
 }
 
-class BasicPageNoScaffold<T extends BaseRepository> extends StatelessWidget {
+///Do refactoring
+class Screen<T extends BaseRepository> extends StatelessWidget {
   final Widget body;
 
-  const BasicPageNoScaffold({
+  const Screen({
     @required this.body,
   });
 
@@ -154,45 +161,22 @@ class BasicPageNoScaffold<T extends BaseRepository> extends StatelessWidget {
                   value: model,
                   child: ConnectionError<T>(),
                 )
-              : SafeArea(bottom: false, child: body),
-    );
-  }
-}
-
-class ListViewPage<T extends BaseRepository> extends StatelessWidget {
-  final String title;
-  final int itemCount;
-  final Object buildFunction;
-
-  const ListViewPage({
-    this.title,
-    @required this.itemCount,
-    @required this.buildFunction,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<T>(
-      builder: (context, model, child) => RefreshIndicator(
-        onRefresh: () => _onRefresh(context, model),
-        child: model.isLoading
-            ? _skeletonLoading
-            : model.loadingFailed && itemCount <= 1
-                ? ChangeNotifierProvider.value(
-                    value: model,
-                    child: ConnectionError<T>(),
-                  )
-                : Scrollbar(
-                    thickness: 3.0,
-                    child: ScrollablePositionedList.builder(
-                      // physics: BouncingScrollPhysics(),
-                      // key: PageStorageKey(title),
-                      addAutomaticKeepAlives: false,
-                      itemCount: itemCount,
-                      itemBuilder: buildFunction,
-                    ),
-                  ),
-      ),
+              : model.databaseFetch
+                  ? Stack(
+                      children: [
+                        body,
+                        Positioned(
+                          bottom: 0.0,
+                          left: 0.0,
+                          right: 0.0,
+                          child: ChangeNotifierProvider.value(
+                            value: model,
+                            child: Message<T>(),
+                          ),
+                        ),
+                      ],
+                    )
+                  : body,
     );
   }
 }
@@ -209,18 +193,19 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
           children: [
             Text(
               'При загрузке данных что-то пошло не так',
-              style: Theme.of(context).textTheme.headline6,
-              textScaleFactor: 0.85,
+              style: Theme.of(context).textTheme.subtitle1,
             ),
             const SizedBox(height: 5),
             TextButton(
               onPressed: () async => _onRefresh(context, model),
               style: TextButton.styleFrom(
                 primary: Theme.of(context).accentColor,
+                textStyle: Theme.of(context).textTheme.button.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               child: const Text(
                 'Повторить попытку',
-                textScaleFactor: 1.1,
               ),
             ),
           ],
@@ -230,78 +215,59 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
   }
 }
 
-class BasicPageNoScaffoldWithMessage<T extends BaseRepository>
-    extends StatelessWidget {
-  final Widget body;
-
-  const BasicPageNoScaffoldWithMessage({
-    @required this.body,
-  });
-
+class Message<T extends BaseRepository> extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Consumer<T>(
-      builder: (context, model, child) => RefreshIndicator(
-        onRefresh: () => _onRefresh(context, model),
-        child: model.isLoading
-            ? _loadingIndicator
-            : model.loadingFailed
-                ? ChangeNotifierProvider.value(
-                    value: model,
-                    child: ConnectionError<T>(),
-                  )
-                : model.databaseFetch
-                    ? Column(
-                        children: [
-                          ChangeNotifierProvider.value(
-                            value: model,
-                            child: Message<T>(),
-                          ),
-                          Expanded(
-                            child: SafeArea(bottom: false, child: body),
-                          ),
-                        ],
-                      )
-                    : SafeArea(bottom: false, child: body),
-      ),
-    );
-  }
+  _MessageState<T> createState() => _MessageState<T>();
 }
 
-class Message<T extends BaseRepository> extends StatelessWidget {
+class _MessageState<T extends BaseRepository> extends State<Message<T>> {
+  bool isShowing = true;
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<T>(
-      builder: (ctx, model, _) => Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(15.0),
-        color: Theme.of(context).cardTheme.color,
-        alignment: Alignment.center,
-        child: RichText(
-          text: TextSpan(
-            children: [
-              WidgetSpan(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 5.0),
-                  child: Icon(
-                    MdiIcons.alertOutline,
-                    size: 20,
-                    color: Theme.of(context).primaryIconTheme.color,
+    return isShowing
+        ? Consumer<T>(
+            builder: (ctx, model, _) => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.blue[50]
+                  : k04dp,
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        WidgetSpan(
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              MdiIcons.cloudOffOutline,
+                              size: 18,
+                              color: Theme.of(context).disabledColor,
+                            ),
+                          ),
+                        ),
+                        TextSpan(
+                            text:
+                                'Сохраненная копия за ${DateFormat('yyyy.MM.dd - HH:mm', 'Ru').format(model.timestamp)}',
+                            style: Theme.of(context).textTheme.caption),
+                      ],
+                    ),
                   ),
-                ),
+                  TextButton(
+                    onPressed: () => setState(
+                      () => isShowing = false,
+                    ),
+                    child: Text(
+                      'Скрыть',
+                    ),
+                  ),
+                ],
               ),
-              TextSpan(
-                text:
-                    'Сохраненная копия за ${DateFormat('yyyy.MM.dd - HH:mm', 'Ru').format(model.timestamp)}',
-                style: TextStyle(
-                  color: Theme.of(context).primaryIconTheme.color,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          )
+        : SizedBox();
   }
 }

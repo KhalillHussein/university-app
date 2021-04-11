@@ -5,26 +5,21 @@ import '../../providers/index.dart';
 import '../../repositories/index.dart';
 import '../../util/index.dart';
 
-class AuthorizationPage extends StatelessWidget {
+class AuthTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        primaryColor: kLightPrimaryColor,
-        accentColor: kLightPrimaryColor,
-      ),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 50.0),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 50.0),
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            primaryColor: Theme.of(context).brightness == Brightness.light
+                ? kLightPrimaryColor
+                : kDarkPrimaryColor,
+          ),
           child: Column(
-            children: <Widget>[
-              const Text(
-                'Авторизация',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.14),
               _buildTextFieldEmail(context),
               _buildTextFieldPwd(context),
               _buildAuthButton(context),
@@ -81,8 +76,9 @@ class AuthorizationPage extends StatelessWidget {
         margin: const EdgeInsets.only(top: 10),
         child: MaterialButton(
           elevation: 2,
-          disabledColor: Theme.of(context).disabledColor,
-          disabledTextColor: Theme.of(context).textTheme.button.color,
+          disabledColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.black12
+              : Colors.white12,
           textColor: Colors.white,
           color: Theme.of(context).accentColor,
           shape: const StadiumBorder(),

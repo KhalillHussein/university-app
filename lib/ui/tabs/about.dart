@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../util/index.dart';
@@ -28,10 +28,14 @@ class AboutTab extends StatelessWidget {
         child: SelectableText(
           Doc.organizationText,
           textAlign: TextAlign.center,
-          style: Theme.of(context)
-              .textTheme
-              .bodyText1
-              .copyWith(height: 1.3, fontWeight: FontWeight.w600),
+          style: GoogleFonts.rubikTextTheme(
+            Theme.of(context).textTheme,
+          ).subtitle2.copyWith(
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.black87
+                    : Colors.white70,
+              ),
+          textScaleFactor: 1.1,
           scrollPhysics: NeverScrollableScrollPhysics(),
         ),
       ),
@@ -53,10 +57,12 @@ class AboutTab extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 15.0, left: 6, top: 10.0),
               child: FittedBox(
                 fit: BoxFit.scaleDown,
-                child: const Text(
+                child: Text(
                   'КОНТАКТНАЯ ИНФОРМАЦИЯ СКФ МТУСИ',
-                  style: TextStyle(letterSpacing: 0.6),
-                  textScaleFactor: 0.8,
+                  style: GoogleFonts.rubikTextTheme(
+                    Theme.of(context).textTheme,
+                  ).overline,
+                  textScaleFactor: 1.1,
                 ),
               ),
             ),
@@ -83,60 +89,44 @@ class AboutTab extends StatelessWidget {
     return [
       for (final Map item in Doc.info)
         Card(
-          color: Theme.of(context).cardColor,
           elevation: 2,
+          color: Theme.of(context).brightness == Brightness.light
+              ? Colors.white
+              : k04dp,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),
           ),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(2.0),
-            onTap: item['url'] != null ? () => launchUrl(item['url']) : null,
-            child: SizedBox(
-              height: 70,
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(top: 15.0, bottom: 15.0, right: 8.0),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15.0, left: 15.0),
-                      child: Icon(item['icon']),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            item['name'],
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText2
-                                .copyWith(fontWeight: FontWeight.w600),
-                            textScaleFactor: 0.85,
-                          ),
-                          const SizedBox(height: 5),
-                          Expanded(
-                            child: AutoSizeText(
-                              item['desc'],
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true,
-                              maxLines: 1,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1
-                                  .copyWith(
-                                    height: 1.2,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+          child: ListTile(
+            leading: SizedBox(
+                height: double.infinity,
+                child: Icon(
+                  item['icon'],
+                  size: 25,
+                )),
+            title: Transform.translate(
+              offset: Offset(-13, 0),
+              child: Text(
+                item['name'],
+                style: GoogleFonts.rubikTextTheme(
+                  Theme.of(context).textTheme,
+                ).bodyText1,
+                textScaleFactor: 1,
               ),
             ),
+            subtitle: Transform.translate(
+              offset: Offset(-13, 0),
+              child: Text(
+                item['desc'],
+                maxLines: 1,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.rubikTextTheme(
+                  Theme.of(context).textTheme,
+                ).caption,
+                textScaleFactor: 1,
+              ),
+            ),
+            onTap: item['url'] != null ? () => launchUrl(item['url']) : null,
           ),
         ),
     ];

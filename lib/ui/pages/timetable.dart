@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -11,14 +12,7 @@ import '../../ui/widgets/index.dart';
 class TimetablePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return _GroupList();
-  }
-}
-
-class _GroupList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BasicPageNoScaffoldWithMessage<TimetableRepository>(
+    return ReloadableScreen<TimetableRepository>(
       body: Consumer<TimetableRepository>(
         builder: (ctx, model, _) => ListView.separated(
           itemBuilder: (ctx, index) => ListTile(
@@ -43,9 +37,10 @@ class _GroupList extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => BasicPage<TimetableRepository>(
-                        title: model.groups[index],
-                        body: TimetableList(model.groups[index]))),
+                    builder: (context) =>
+                        ReloadableSimplePage<TimetableRepository>(
+                            title: model.groups[index],
+                            body: TimetableList(model.groups[index]))),
               );
             },
           ),
@@ -69,12 +64,10 @@ class TimetableList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BasicPageNoScaffold<TimetableRepository>(
-      body: Consumer<TimetableRepository>(
-        builder: (ctx, model, _) => _buildListView(
-          context,
-          model.getByGroup(groupName),
-        ),
+    return Consumer<TimetableRepository>(
+      builder: (ctx, model, _) => _buildListView(
+        context,
+        model.getByGroup(groupName),
       ),
     );
   }
@@ -116,7 +109,10 @@ class TimetableList extends StatelessWidget {
         Text(
           '${toBeginningOfSentenceCase(DateFormat.EEEE('Ru').format(date))}, ${DateFormat.MMMMd('Ru').format(date)}',
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.subtitle1,
+          style: GoogleFonts.rubikTextTheme(
+            Theme.of(context).textTheme,
+          ).caption,
+          textScaleFactor: 1.2,
         ),
         Expanded(
           child: Container(

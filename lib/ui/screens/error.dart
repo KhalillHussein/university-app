@@ -47,10 +47,8 @@ class ErrorScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            RaisedButton(
+            ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              color: Theme.of(context).accentColor,
-              textColor: Theme.of(context).textTheme.headline5.color,
               child: Text('Go Back to Home'),
             ),
           ],

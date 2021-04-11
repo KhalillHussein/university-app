@@ -1,14 +1,17 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:expandable/expandable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:mtusiapp/providers/index.dart';
 
 import 'package:mtusiapp/providers/radio.dart';
 import 'package:mtusiapp/repositories/auth.dart';
 import 'package:mtusiapp/ui/widgets/custom_page.dart';
 import 'package:mtusiapp/ui/widgets/dialogs.dart';
+import 'package:mtusiapp/ui/widgets/header_text.dart';
 import 'package:mtusiapp/ui/widgets/radio_cell.dart';
+import 'package:mtusiapp/util/colors.dart';
 import 'package:mtusiapp/util/doc.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,138 +26,76 @@ class InquiriesScreen extends StatelessWidget {
         tooltip: 'Моя справка',
         child: Icon(Icons.edit_outlined),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Text(
-                'Отдел кадров',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    .copyWith(fontWeight: FontWeight.w800),
-                textScaleFactor: 1.1,
+      body: GroupedListView<Map, String>(
+          separator: Divider(height: 1, indent: 15),
+          addAutomaticKeepAlives: false,
+          elements: Doc.doc.inquiries,
+          groupBy: (element) => element['department'],
+          groupSeparatorBuilder: (groupByValue) => HeaderText(
+                groupByValue,
+                head: true,
               ),
-            ),
-            const SizedBox(height: 8),
-            _buildList(context, Doc.inquiriesOtdelKadrov),
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Text(
-                'Деканат',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    .copyWith(fontWeight: FontWeight.w800),
-                textScaleFactor: 1.1,
+          itemBuilder: (context, record) {
+            return ExpansionTile(
+              title: Padding(
+                padding: const EdgeInsets.only(right: 50, top: 8, bottom: 8),
+                child: Text(
+                  record['title'],
+                  style: GoogleFonts.rubikTextTheme(
+                    Theme.of(context).textTheme,
+                  ).bodyText2.copyWith(height: 1.4),
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            _buildList(context, Doc.inquiriesDekanat),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildList(BuildContext context, List<Map> docs) {
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: docs.length,
-      itemBuilder: (ctx, index) => ExpandableNotifier(
-        child: ScrollOnExpand(
-          child: Card(
-            child: ExpandablePanel(
-              theme: ExpandableThemeData(
-                hasIcon: false,
-                tapBodyToCollapse: true,
-                useInkWell: false,
+              trailing: Icon(
+                Icons.arrow_forward_ios_outlined,
+                size: 16,
               ),
-              collapsed: SizedBox(),
-              header: Builder(builder: (context) {
-                final controller = ExpandableController.of(context);
-                return InkWell(
-                  onTap: () => controller.toggle(),
-                  borderRadius: BorderRadius.circular(2.0),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 20.0),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 250,
-                          height: 60,
-                          alignment: Alignment.centerLeft,
-                          child: AutoSizeText(
-                            docs[index]['title'],
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                .copyWith(fontWeight: FontWeight.w500),
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                            textScaleFactor: 0.95,
-                          ),
+              childrenPadding: const EdgeInsets.only(left: 10.0, right: 35),
+              children: [
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (record['fullName'] != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          record['fullName'],
+                          style: Theme.of(context).textTheme.bodyText1.copyWith(
+                              fontWeight: FontWeight.w400, height: 1.4),
+                          textScaleFactor: 0.9,
                         ),
-                        Spacer(),
-                        Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          size: 20,
+                      ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton(
+                        onPressed: () {
+                          context
+                              .read<ValidationProvider>()
+                              .changeCompanyName(record['title']);
+                          _showForm(context, record['title']);
+                        },
+                        child: Text(
+                          'ЗАКАЗАТЬ',
+                          style: GoogleFonts.rubikTextTheme(
+                            Theme.of(context).textTheme,
+                          ).overline.copyWith(
+                              color: Theme.of(context).accentColor,
+                              fontWeight: FontWeight.w600),
+                          textScaleFactor: 1.4,
+                          // style: TextStyle(
+                          //   letterSpacing: 0.9,
+                          //   fontSize: 15,
+                          //   fontWeight: FontWeight.w600,
+                          // ),
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              }),
-              expanded: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (docs[index]['fullName'] != null)
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 20.0, right: 35, bottom: 15),
-                      child: Text(
-                        docs[index]['fullName'],
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            .copyWith(fontWeight: FontWeight.w400),
-                        textScaleFactor: 0.85,
                       ),
                     ),
-                  Divider(height: 1.0, thickness: 1.2),
-                  FlatButton(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 20),
-                    onPressed: () {
-                      context
-                          .read<ValidationProvider>()
-                          .changeCompanyName(docs[index]['title']);
-                      _showForm(context, docs[index]['title']);
-                    },
-                    textColor: Theme.of(context).primaryColor,
-                    child: Text(
-                      'ЗАКАЗАТЬ',
-                      style: TextStyle(
-                        letterSpacing: 0.9,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-      separatorBuilder: (ctx, index) => const SizedBox(height: 2),
+                  ],
+                ),
+              ],
+            );
+          }),
     );
   }
 
@@ -178,19 +119,53 @@ class InquiriesScreen extends StatelessWidget {
                 color: Theme.of(context).dividerColor,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    const SizedBox(height: 15),
-                    if (isUserInquiry)
+            Theme(
+              data: Theme.of(context).copyWith(
+                primaryColor: Theme.of(context).brightness == Brightness.light
+                    ? kLightPrimaryColor
+                    : kDarkPrimaryColor,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      const SizedBox(height: 15),
+                      if (isUserInquiry)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 15.0),
+                          child: Consumer<ValidationProvider>(
+                            builder: (ctx, validate, _) => TextFormField(
+                              initialValue: validate.organizationName.value,
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      .color),
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                labelText: 'Наименование учреждения *',
+                                filled: true,
+                                errorText: validate.organizationName.error,
+                                helperText:
+                                    'Название учреждения, которому требуется предоставить документ',
+                                helperMaxLines: 2,
+                                errorMaxLines: 2,
+                              ),
+                              onChanged: (value) =>
+                                  validate.changeCompanyName(value),
+                            ),
+                          ),
+                        ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: Consumer<ValidationProvider>(
                           builder: (ctx, validate, _) => TextFormField(
-                            initialValue: validate.organizationName.value,
+                            initialValue: validate.location.value,
                             style: TextStyle(
                                 fontSize: 17,
                                 color: Theme.of(context)
@@ -201,130 +176,140 @@ class InquiriesScreen extends StatelessWidget {
                             decoration: InputDecoration(
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
-                              labelText: 'Наименование учреждения *',
+                              labelText: 'Район, город, область *',
                               filled: true,
-                              errorText: validate.organizationName.error,
+                              errorText: validate.location.error,
                               helperText:
-                                  'Название учреждения, которому требуется предоставить документ',
+                                  'Территориальное расположение организации, для которой требуется документ',
                               helperMaxLines: 2,
                               errorMaxLines: 2,
                             ),
                             onChanged: (value) =>
-                                validate.changeCompanyName(value),
+                                validate.changeLocation(value),
                           ),
                         ),
                       ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 15.0),
-                      child: Consumer<ValidationProvider>(
+                      Consumer<ValidationProvider>(
                         builder: (ctx, validate, _) => TextFormField(
-                          initialValue: validate.location.value,
+                          keyboardType: TextInputType.phone,
+                          initialValue: validate.phoneNumber.value,
                           style: TextStyle(
                               fontSize: 17,
                               color:
                                   Theme.of(context).textTheme.bodyText1.color),
-                          keyboardType: TextInputType.text,
+                          inputFormatters: [validate.maskFormatter],
                           decoration: InputDecoration(
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            labelText: 'Район, город, область *',
+                            hintText: '+7 (___) ___-__-__',
+                            labelText: 'Номер мобильного телефона *',
                             filled: true,
-                            errorText: validate.location.error,
+                            errorText: validate.phoneNumber.error,
                             helperText:
-                                'Территориальное расположение организации, для которой требуется документ',
+                                'На указанный номер придет оповещение, когда документ будет готов',
                             helperMaxLines: 2,
                             errorMaxLines: 2,
                           ),
-                          onChanged: (value) => validate.changeLocation(value),
+                          onChanged: (value) =>
+                              validate.changePhoneNumber(value),
                         ),
                       ),
-                    ),
-                    Consumer<ValidationProvider>(
-                      builder: (ctx, validate, _) => TextFormField(
-                        initialValue: validate.phoneNumber.value,
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: Theme.of(context).textTheme.bodyText1.color),
-                        inputFormatters: [validate.maskFormatter],
-                        decoration: InputDecoration(
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          hintText: '+7 (___) ___-__-__',
-                          labelText: 'Номер мобильного телефона *',
-                          filled: true,
-                          errorText: validate.phoneNumber.error,
-                          helperText:
-                              'На указанный номер придет оповещение, когда документ будет готов',
-                          helperMaxLines: 2,
-                          errorMaxLines: 2,
-                        ),
-                        onChanged: (value) => validate.changePhoneNumber(value),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                          child: Text(
-                            'Способ получения',
-                            style: Theme.of(context).textTheme.bodyText2,
-                            textScaleFactor: 0.9,
+                      const SizedBox(height: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 10.0, top: 10.0),
+                            child: Text(
+                              'Способ получения',
+                              style: Theme.of(context).textTheme.bodyText2,
+                            ),
                           ),
-                        ),
-                        Row(
-                          children: [
-                            Consumer<RadioProvider>(
-                              builder: (ctx, radioState, _) =>
-                                  RadioCell<DocType>(
-                                value: DocType.realDoc,
-                                groupValue: radioState.doc,
-                                onChanged: (value) => radioState.doc = value,
-                                label: 'Лично',
+                          Row(
+                            children: [
+                              Consumer<RadioProvider>(
+                                builder: (ctx, radioState, _) =>
+                                    RadioCell<DocType>(
+                                  value: DocType.realDoc,
+                                  groupValue: radioState.doc,
+                                  onChanged: (value) => radioState.doc = value,
+                                  label: 'Лично',
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 20),
-                            Consumer<RadioProvider>(
-                              builder: (ctx, radioState, _) =>
-                                  RadioCell<DocType>(
-                                value: DocType.eDoc,
-                                groupValue: radioState.doc,
-                                onChanged: (value) => radioState.doc = value,
-                                label: 'По электронной почте',
+                              const SizedBox(width: 20),
+                              Consumer<RadioProvider>(
+                                builder: (ctx, radioState, _) =>
+                                    RadioCell<DocType>(
+                                  value: DocType.eDoc,
+                                  groupValue: radioState.doc,
+                                  onChanged: (value) => radioState.doc = value,
+                                  label: 'По электронной почте',
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Consumer2<ValidationProvider, RadioProvider>(
-                      builder: (ctx, validate, radio, _) => ElevatedButton(
-                        onPressed: validate.isInquiryFormValid
-                            ? () async {
-                                _launchURL(
-                                  context,
-                                  Doc.doc
-                                      .emailForm(
-                                        group: 'ДИ-11',
-                                        userName: context
-                                            .read<AuthRepository>()
-                                            .user
-                                            .userName,
-                                        location: validate.location.value,
-                                        inquiry: inquiry,
-                                        phoneNumber: validate.phoneNumber.value,
-                                        docType: radio.doc,
-                                      )
-                                      .toString()
-                                      .replaceAll("+", "%20"),
-                                );
-                                Navigator.pop(context);
-                              }
-                            : null,
-                        child: const Text('Подтвердить'),
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                  ]),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                Theme.of(context).accentColor,
+                              ),
+                            ),
+                            child: const Text('Отмена'),
+                          ),
+                          const SizedBox(width: 15),
+                          Consumer2<ValidationProvider, RadioProvider>(
+                            builder: (ctx, validate, radio, _) =>
+                                ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.resolveWith(
+                                  (states) {
+                                    if (!states
+                                        .contains(MaterialState.disabled)) {
+                                      return Theme.of(context).accentColor;
+                                    }
+                                  },
+                                ),
+                              ),
+                              onPressed: validate.isInquiryFormValid
+                                  ? () async {
+                                      _launchURL(
+                                        context,
+                                        Doc.doc
+                                            .emailForm(
+                                              group: 'ДИ-11',
+                                              userName: context
+                                                  .read<AuthRepository>()
+                                                  .user
+                                                  .userName,
+                                              location: validate.location.value,
+                                              inquiry: inquiry ??
+                                                  validate
+                                                      .organizationName.value,
+                                              phoneNumber:
+                                                  validate.phoneNumber.value,
+                                              docType: radio.doc,
+                                            )
+                                            .toString()
+                                            .replaceAll("+", "%20"),
+                                      );
+                                      Navigator.pop(context);
+                                    }
+                                  : null,
+                              child: const Text('Подтвердить'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ]),
+              ),
             ),
           ],
         ),

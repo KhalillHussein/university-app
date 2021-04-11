@@ -1,3 +1,6 @@
+import 'package:dio/dio.dart';
+import 'package:mtusiapp/util/exception.dart';
+
 import '../models/lecturer.dart';
 import '../services/lecturers.dart';
 import 'index.dart';
@@ -16,8 +19,10 @@ class LecturersRepository extends BaseRepository<LecturersService> {
         for (final item in lecturersResponse.data) Lecturer.fromJson(item)
       ];
       finishLoading();
-    } catch (e) {
-      receivedError(e.toString());
+    } on DioError catch (dioError) {
+      receivedError(ApiException.fromDioError(dioError).message);
+    } catch (_) {
+      receivedError('[PARSER ERROR]');
     }
   }
 

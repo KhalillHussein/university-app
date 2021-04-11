@@ -4,10 +4,14 @@ class Badge extends StatelessWidget {
   final Widget child;
   final String value;
   final Color color;
+  final double rightPosition;
+  final BorderRadiusGeometry borderRadius;
 
   const Badge({
     @required this.child,
     @required this.value,
+    this.rightPosition = 10,
+    this.borderRadius,
     this.color,
   });
 
@@ -21,26 +25,28 @@ class Badge extends StatelessWidget {
           child: child,
         ),
         Positioned(
-          right: 1,
-          top: 8,
+          right: rightPosition,
+          top: 13,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
             // color: Theme.of(context).accentColor,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
+              // borderRadius: borderRadius ?? BorderRadius.circular(10.0),
               color: color ?? Theme.of(context).accentColor,
+              shape: BoxShape.circle,
             ),
-            constraints: BoxConstraints(
-              minWidth: 12,
-              minHeight: 12,
-            ),
-            child: Text(
-              value,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500),
+            // constraints: BoxConstraints(
+            //   minWidth: 15,
+            //   minHeight: 15,
+            // ),
+            child: Padding(
+              padding: const EdgeInsets.all(0.2),
+              child: Text(
+                value,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.subtitle2,
+                textScaleFactor: 0.7,
+              ),
             ),
           ),
         )

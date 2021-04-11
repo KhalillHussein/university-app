@@ -7,35 +7,36 @@ class CacheImage extends StatelessWidget {
   final String url;
   final Size size;
   final BoxFit fit;
+  final int cacheWidth;
 
-  const CacheImage(this.url, this.size, this.fit);
+  const CacheImage(this.url, {this.size, this.fit, this.cacheWidth});
 
-  static const Size _smallSize = Size(120, 220.0),
-      _bigSize = Size(double.infinity, 209);
+  static const Size _bigSize = Size(double.infinity, 209);
 
   factory CacheImage.teacher({String url}) {
-    return CacheImage(url, _smallSize, BoxFit.cover);
+    return CacheImage(url);
   }
 
   factory CacheImage.news({String url}) {
-    return CacheImage(url, _bigSize, BoxFit.cover);
+    return CacheImage(url, size: _bigSize, cacheWidth: 400);
   }
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      alignment: Alignment(0.0, -0.8),
+      alignment: Alignment(0.0, -0.4),
       useOldImageOnUrlChange: true,
       fadeInDuration: const Duration(milliseconds: 200),
       fadeOutDuration: const Duration(milliseconds: 200),
-      height: size.height,
-      width: size.width,
+      height: size?.height ?? double.infinity,
+      width: size?.width ?? double.infinity,
       imageUrl: url,
-      fit: fit,
-      memCacheWidth: 400,
+      fit: fit ?? BoxFit.cover,
+      memCacheWidth: cacheWidth ?? 3600,
+      filterQuality: FilterQuality.high,
       placeholder: (context, url) => Container(
-        height: size.height,
-        width: size.width,
+        height: size?.height ?? double.infinity,
+        width: size?.width ?? double.infinity,
         color: Theme.of(context).canvasColor,
         child: const Center(
           child: CircularProgressIndicator(
@@ -46,8 +47,8 @@ class CacheImage extends StatelessWidget {
         ),
       ),
       errorWidget: (context, url, error) => PlaceholderImage(
-        height: size.height,
-        width: size.width,
+        height: size?.height ?? double.infinity,
+        width: size?.width ?? double.infinity,
       ),
     );
   }

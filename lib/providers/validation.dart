@@ -30,7 +30,7 @@ class ValidationProvider with ChangeNotifier {
 
   final MaskTextInputFormatter maskFormatter = MaskTextInputFormatter(
     mask: '+# (###) ###-##-##',
-    filter: {"#": RegExp('[0-9]')},
+    // filter: {"#": RegExp('[0-9]')},
   );
 
   bool get isInquiryFormValid {
@@ -66,7 +66,7 @@ class ValidationProvider with ChangeNotifier {
       _password = ValidationItem(value, null);
     } else {
       _password =
-          ValidationItem(null, 'Пароль должен содержать не менее 5 символов');
+          ValidationItem(null, 'Пароль должен быть не менее 5 символов');
     }
     notifyListeners();
   }

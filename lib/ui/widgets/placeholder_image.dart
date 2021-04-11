@@ -18,7 +18,7 @@ class PlaceholderImage extends StatelessWidget {
       child: Center(
         child: Icon(
           Icons.photo,
-          color: Theme.of(context).accentIconTheme.color,
+          color: Theme.of(context).disabledColor,
           size: 80.0,
         ),
       ),

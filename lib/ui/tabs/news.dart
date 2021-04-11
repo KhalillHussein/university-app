@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../models/index.dart';
 import '../../repositories/index.dart';
@@ -9,15 +11,21 @@ class NewsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<NewsRepository>(
-      builder: (ctx, model, _) => ListViewPage<NewsRepository>(
-        buildFunction: (BuildContext context, int index) {
-          model.handleScrollWithIndex(index);
-          return index >= model.itemCount
-              ? BottomLoader<NewsRepository>()
-              : _buildNewsCard(context, index);
-        },
-        itemCount:
-            model.hasReachedMax() ? model.itemCount : model.itemCount + 1,
+      builder: (ctx, model, _) => ReloadableScreen<NewsRepository>(
+        body: Scrollbar(
+          thickness: 3.0,
+          child: ScrollablePositionedList.builder(
+            addAutomaticKeepAlives: false,
+            itemCount:
+                model.hasReachedMax() ? model.itemCount : model.itemCount + 1,
+            itemBuilder: (BuildContext context, int index) {
+              model.handleScrollWithIndex(index);
+              return index >= model.itemCount
+                  ? BottomLoader<NewsRepository>()
+                  : _buildNewsCard(context, index);
+            },
+          ),
+        ),
       ),
     );
   }
@@ -28,20 +36,27 @@ class NewsTab extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            radius: 23,
+            radius: 22,
             backgroundColor: Colors.blueGrey.withOpacity(0.2),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'СКФ МТУСИ',
-                style: Theme.of(context).textTheme.bodyText2,
+                style: GoogleFonts.rubikTextTheme(
+                  Theme.of(context).textTheme,
+                ).bodyText1,
+                textScaleFactor: 1.2,
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 3),
               Text(
                 date,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: GoogleFonts.rubikTextTheme(
+                  Theme.of(context).textTheme,
+                ).caption,
+                textScaleFactor: 1.2,
               ),
             ],
           ),
