@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mtusiapp/ui/widgets/custom_page.dart';
+import 'package:mtusiapp/ui/widgets/index.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../util/index.dart';
@@ -7,12 +11,28 @@ import '../../util/index.dart';
 class AboutTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _buildAboutCard(context),
-          _buildCardBody(context),
-        ],
+    return SimplePage(
+      title: 'О нас',
+      leading: IconButton(
+        splashRadius: 20,
+        icon: const Icon(MdiIcons.menu),
+        onPressed: Scaffold.of(context).openDrawer,
+      ),
+      actions: [
+        ThemeSwitchIcon(),
+        IconButton(
+          splashRadius: 20,
+          icon: const Icon(MdiIcons.cogOutline),
+          onPressed: null,
+        ),
+      ],
+      body: Scrollbar(
+        child: ListView(
+          children: [
+            _buildAboutCard(context),
+            _buildCardBody(context),
+          ],
+        ),
       ),
     );
   }
@@ -35,7 +55,6 @@ class AboutTab extends StatelessWidget {
                     ? Colors.black87
                     : Colors.white70,
               ),
-          textScaleFactor: 1.1,
           scrollPhysics: NeverScrollableScrollPhysics(),
         ),
       ),
@@ -110,22 +129,32 @@ class AboutTab extends StatelessWidget {
                 style: GoogleFonts.rubikTextTheme(
                   Theme.of(context).textTheme,
                 ).bodyText1,
-                textScaleFactor: 1,
               ),
             ),
             subtitle: Transform.translate(
               offset: Offset(-13, 0),
-              child: Text(
-                item['desc'],
-                maxLines: 1,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.rubikTextTheme(
-                  Theme.of(context).textTheme,
-                ).caption,
-                textScaleFactor: 1,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  item['desc'],
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.rubikTextTheme(
+                    Theme.of(context).textTheme,
+                  ).caption,
+                ),
               ),
             ),
+            trailing: item['url'] != null
+                ? Transform.translate(
+                    offset: Offset(3, -13),
+                    child: Icon(
+                      MdiIcons.openInNew,
+                      size: 18,
+                      color: Theme.of(context).disabledColor,
+                    ),
+                  )
+                : null,
             onTap: item['url'] != null ? () => launchUrl(item['url']) : null,
           ),
         ),

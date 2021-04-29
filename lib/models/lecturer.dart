@@ -62,4 +62,9 @@ class Lecturer {
       ((DateTime.now().difference(lengthWorkOfSpeciality).inDays) / 365)
           .floor()
           .toString();
+
+  String get getTotalLengthOfService =>
+      ((DateTime.now().difference(totalLengthOfService).inDays) / 365)
+          .floor()
+          .toString();
 }

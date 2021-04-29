@@ -13,7 +13,7 @@ class Timetable {
   final String cafedra;
   final int timestamp;
 
-  Timetable({
+  const Timetable({
     @required this.id,
     @required this.group,
     @required this.lesson,

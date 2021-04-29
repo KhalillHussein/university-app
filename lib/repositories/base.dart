@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 import '../services/base.dart';
 
@@ -9,8 +8,10 @@ enum Status { loading, error, loaded, databaseFetch }
 ///
 /// A repository has the purpose to load and parse the data
 
-abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
+abstract class BaseRepository<M, T extends BaseService> with ChangeNotifier {
   DateTime timestamp;
+
+  List<M> list = [];
 
   /// System to perform data manipulation operations
   final T service;

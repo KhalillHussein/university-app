@@ -8,11 +8,5 @@ Future<T> showBottomRoundDialog<T>({
     context: context,
     isScrollControlled: true,
     builder: (context) => child,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: const Radius.circular(10.0),
-        topRight: const Radius.circular(10.0),
-      ),
-    ),
   );
 }

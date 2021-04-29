@@ -27,6 +27,20 @@ class ApiException implements Exception {
     }
   }
 
+  ApiException.authError(String error) {
+    switch (error) {
+      case 'WRONG_PASSWORD':
+        message = 'Неверный пароль';
+        break;
+      case 'USER_DOES_NOT_EXIST':
+        message = 'Пользователя с таким именем не существует';
+        break;
+      default:
+        message = 'Ошибка авторизации. Повторите попытку позже';
+        break;
+    }
+  }
+
   String message;
 
   String _handleError(int statusCode) {

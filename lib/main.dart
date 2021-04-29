@@ -1,8 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:mtusiapp/providers/radio.dart';
-import 'package:mtusiapp/repositories/phone_book.dart';
-import 'package:mtusiapp/services/phone_book.dart';
+
+import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
@@ -38,8 +36,7 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
         ChangeNotifierProvider(create: (ctx) => RadioProvider()),
         ChangeNotifierProvider(
-            create: (ctx) => AuthRepository(AuthService(httpClient)),
-            lazy: false),
+            create: (ctx) => AuthRepository(AuthService(httpClient))),
         ChangeNotifierProvider(
             create: (ctx) => LecturersRepository(LecturersService(httpClient))),
         ChangeNotifierProvider(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
+import 'package:row_collection/row_collection.dart';
 
 import '../../repositories/index.dart';
 
@@ -10,16 +12,27 @@ class BottomLoader<T extends BaseRepository> extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(4),
       ),
-      elevation: 1,
+      elevation: 3,
       margin: const EdgeInsets.all(10.0),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(18.0),
+          padding: const EdgeInsets.all(5.0),
           child: Consumer<T>(
             builder: (ctx, model, child) => model.loadingFailed
-                ? GestureDetector(
-                    onTap: () => model.loadData(),
-                    child: const Text('Повторите попытку'),
+                ? TextButton(
+                    onPressed: () async {
+                      await model.loadData();
+                      if (model.loadingFailed) {
+                        _showSnackBar(context, model.errorMessage);
+                      }
+                    },
+                    child: Text(
+                      'Повторите попытку',
+                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                            color: Theme.of(context).accentColor,
+                          ),
+                      textScaleFactor: 1.2,
+                    ),
                   )
                 : child,
             child: const SizedBox(
@@ -35,5 +48,35 @@ class BottomLoader<T extends BaseRepository> extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Theme.of(context).errorColor,
+          content: Row(
+            children: [
+              Icon(
+                Icons.error,
+                color: Theme.of(context).primaryColor,
+              ),
+              Separator.spacer(),
+              Expanded(
+                child: Text(
+                  message,
+                  softWrap: true,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          duration: const Duration(seconds: 1),
+        ),
+      );
   }
 }

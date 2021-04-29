@@ -1,31 +1,28 @@
 import 'package:dio/dio.dart';
-import 'package:mtusiapp/models/phone_book.dart';
-import 'package:mtusiapp/services/phone_book.dart';
-import 'package:mtusiapp/util/exception.dart';
+
+import '../models/index.dart';
+import '../services/index.dart';
+import '../util/index.dart';
 import 'index.dart';
 
 /// Repository that holds lecturers data.
-class PhoneBookRepository extends BaseRepository<PhoneBookService> {
-  List<PhoneBook> _recordings;
-
+class PhoneBookRepository extends BaseRepository<PhoneBook, PhoneBookService> {
   PhoneBookRepository(PhoneBookService service) : super(service);
 
   @override
   Future<void> loadData() async {
     try {
       final response = await service.getRecordings();
-      _recordings = [
-        for (final item in response.data) PhoneBook.fromJson(item)
-      ];
+      list = [for (final item in response.data) PhoneBook.fromJson(item)];
       finishLoading();
     } on DioError catch (dioError) {
       receivedError(ApiException.fromDioError(dioError).message);
     } catch (_) {
-      receivedError('[PARSER ERROR]');
+      receivedError('Internal error');
     }
   }
 
-  List<PhoneBook> get recordings => _recordings;
+  List<PhoneBook> get recordings => list;
 
-  int get itemCount => _recordings?.length;
+  int get itemCount => list?.length;
 }

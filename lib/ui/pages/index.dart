@@ -1,3 +1,3 @@
-export 'account.dart';
+export 'personal.dart';
 export 'progress.dart';
-export 'timetable.dart';
+export 'record_book.dart';

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
 
 import '../../providers/index.dart';
 import '../../util/style.dart';
 
-class ThemeSwitch extends StatelessWidget {
+class ThemeSwitchIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = ThemeProvider.of(context);

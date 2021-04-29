@@ -1,17 +1,16 @@
 import 'package:dio/dio.dart';
-import 'package:mtusiapp/helpers/db_helper.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'package:mtusiapp/util/exception.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../helpers/db_helper.dart';
 import '../models/index.dart';
 import '../services/index.dart';
-
+import '../util/index.dart';
 import 'index.dart';
 
 /// Repository that holds timetable data.
-class TimetableRepository extends BaseRepository<TimetableService> {
-  List<Timetable> _timetable;
+class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
   Database db;
 
   TimetableRepository(TimetableService service) : super(service);
@@ -20,7 +19,7 @@ class TimetableRepository extends BaseRepository<TimetableService> {
   Future<void> loadData() async {
     try {
       final timetableResponse = await service.getTimetable();
-      _timetable = [
+      list = [
         for (final item in timetableResponse.data['result'])
           Timetable.fromJson(item)
       ];
@@ -43,33 +42,52 @@ class TimetableRepository extends BaseRepository<TimetableService> {
     try {
       final dbResult = await service.getRecords();
       if (dbResult.isEmpty) throw errorMessage;
-      _timetable = [for (final item in dbResult) Timetable.fromJson(item)];
-      timestamp =
-          DateTime.fromMillisecondsSinceEpoch(_timetable.last.timestamp);
+      list = [for (final item in dbResult) Timetable.fromJson(item)];
+      timestamp = DateTime.fromMillisecondsSinceEpoch(list.last.timestamp);
       databaseFetching();
     } catch (e) {
       receivedError(e.toString());
     }
   }
 
-  List<Timetable> get timetable => _timetable;
+  List<Timetable> get timetable => list;
 
-  int get itemCount => _timetable?.length;
+  int get itemCount => list?.length;
 
-  List<Timetable> getByGroup(String group) {
-    return [..._timetable]
-        ?.where((element) => element.group == group)
+  List<Timetable> getBy(String keyword) {
+    return [...list]
+        ?.where((element) =>
+            element.group == keyword ||
+            element.aud == keyword ||
+            element.name == keyword)
         ?.toList();
+  }
+
+  List<Map<String, dynamic>> searchCategories() {
+    final List<Map<String, dynamic>> lec = [
+      for (final item in lecturers)
+        {'name': item, 'category': 'Преподаватель', 'icon': MdiIcons.accountTie}
+    ];
+    final List<Map> gr = {
+      for (final item in groups)
+        {'name': item, 'category': 'Группа', 'icon': MdiIcons.accountGroup}
+    }?.toList();
+    final List<Map> au = {
+      for (final item in aud)
+        {'name': item, 'category': 'Аудитория', 'icon': MdiIcons.domain}
+    }?.toList();
+    return [...lec, ...gr, ...au];
   }
 
   List<String> get groups {
     return {for (final item in timetable) item.group}?.toList();
   }
 
-  List<String> get course {
-    return [
-      for (final item in groups)
-        item.substring(item.length - 2, item.length - 1)
-    ]?.toList();
+  List<String> get lecturers {
+    return {for (final item in timetable) item.name}?.toList();
+  }
+
+  List<String> get aud {
+    return {for (final item in timetable) item.aud}?.toList();
   }
 }

@@ -1,11 +1,14 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mtusiapp/providers/index.dart';
-import 'package:mtusiapp/repositories/auth.dart';
-import 'package:mtusiapp/util/index.dart';
-import 'package:provider/provider.dart';
+import 'package:row_collection/row_collection.dart';
+
+import '../../providers/index.dart';
+import '../../repositories/auth.dart';
+import '../../util/index.dart';
+import '../screens/index.dart';
 
 class AppDrawer extends StatelessWidget {
   final List<Map<String, String>> kafedru = [
@@ -32,34 +35,23 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isAuth = context.watch<AuthRepository>().isAuth;
     final Size size = MediaQuery.of(context).size;
-    return Material(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (!isAuth) _buildDrawerHeader(context),
-            if (isAuth) SizedBox(height: size.height * 0.15),
-            const SizedBox(height: 10),
-            const Divider(
-              height: 1,
-              thickness: 1.1,
+    return Drawer(
+      child: ListView(
+        children: <Widget>[
+          if (!isAuth) _buildDrawerHeader(context),
+          if (isAuth)
+            Separator.spacer(
+              space: size.height * 0.15,
             ),
-            _buildMainInfo(context, isAuth),
-            const SizedBox(height: 10),
-            const Divider(
-              height: 1,
-              thickness: 1.1,
-            ),
-            _buildDownloadableResources(context),
-            const SizedBox(height: 10),
-            const Divider(
-              height: 1,
-              thickness: 1.1,
-            ),
-            _buildExternalResources(context),
-          ],
-        ),
+          Separator.divider(),
+          _buildMainInfo(context, isAuth),
+          const SizedBox(height: 10),
+          Separator.divider(),
+          _buildDownloadableResources(context),
+          const SizedBox(height: 10),
+          Separator.divider(),
+          _buildExternalResources(context),
+        ],
       ),
     );
   }
@@ -76,22 +68,15 @@ class AppDrawer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Flexible(
-                child: Text(
-                  'Авторизация',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
+                child: Text('Авторизация',
+                    style: Theme.of(context).textTheme.headline6),
               ),
               const SizedBox(height: 10),
               Flexible(
                 child: Text(
                   'Студент или преподаватель? Выполните вход для использования всех функций',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      .copyWith(height: 1.4),
+                  style:
+                      Theme.of(context).textTheme.caption.copyWith(height: 1.4),
                   overflow: TextOverflow.ellipsis,
                   softWrap: true,
                   maxLines: 3,
@@ -110,14 +95,13 @@ class AppDrawer extends StatelessWidget {
             child: Text(
               'Войти',
               style: Theme.of(context).textTheme.bodyText1.copyWith(
-                  color: Theme.of(context).accentColor,
-                  fontWeight: FontWeight.bold),
-              textScaleFactor: 1.2,
+                    color: Theme.of(context).accentColor,
+                  ),
             ),
           ),
           onTap: () {
             context.read<NavigationProvider>().currentIndex = Tabs.auth.index;
-            context.select((value) => value.onTapToClose);
+            Navigator.pop(context);
           },
         ),
       ],
@@ -136,7 +120,6 @@ class AppDrawer extends StatelessWidget {
             style: GoogleFonts.rubikTextTheme(
               Theme.of(context).textTheme,
             ).caption,
-            textScaleFactor: 1.1,
           ),
         ),
         _buildSection(
@@ -147,27 +130,22 @@ class AppDrawer extends StatelessWidget {
           children: [
             for (final item in kafedru)
               ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.only(left: 60.0),
-                  child: AutoSizeText(
-                    item['name'],
-                    textScaleFactor: 0.8,
-                    // style: GoogleFonts.rubikTextTheme(
-                    //   Theme.of(context).textTheme,
-                    // ).subtitle1,
-                    maxLines: 3,
-                  ),
+                title: Text(
+                  item['name'],
+                  maxLines: 3,
+                  style: Theme.of(context).textTheme.caption,
                 ),
-                onTap: () => Navigator.of(context).pushNamed(
-                  Routes.lecturers,
-                  arguments: item['abbr'],
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  LecturersScreen.route,
+                  arguments: {'kafedra': item['abbr']},
                 ),
               ),
           ],
         ),
         _buildSection(
           context,
-          onTap: () => Navigator.of(context).pushNamed(Routes.phoneBook),
+          onTap: () => Navigator.of(context).pushNamed(PhoneBookScreen.route),
           label: 'Телефонный справочник',
           icon: MdiIcons.cardAccountPhone,
           color: Theme.of(context).accentIconTheme.color,
@@ -175,9 +153,9 @@ class AppDrawer extends StatelessWidget {
         if (isAuth)
           _buildSection(
             context,
-            onTap: () => Navigator.of(context).pushNamed(Routes.inquiries),
+            onTap: () => Navigator.of(context).pushNamed(InquiriesScreen.route),
             label: 'Заказ справок',
-            icon: MdiIcons.fileDocumentEdit,
+            icon: MdiIcons.fileDocumentEditOutline,
             color: Theme.of(context).accentIconTheme.color,
           ),
       ],
@@ -196,7 +174,6 @@ class AppDrawer extends StatelessWidget {
             style: GoogleFonts.rubikTextTheme(
               Theme.of(context).textTheme,
             ).caption,
-            textScaleFactor: 1.1,
           ),
         ),
         _buildSection(
@@ -223,7 +200,6 @@ class AppDrawer extends StatelessWidget {
             style: GoogleFonts.rubikTextTheme(
               Theme.of(context).textTheme,
             ).caption,
-            textScaleFactor: 1.1,
           ),
         ),
         _buildSection(
@@ -256,31 +232,22 @@ class AppDrawer extends StatelessWidget {
     return children != null
         ? Theme(
             data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-              child: ExpansionTile(
-                leading: Icon(
-                  icon,
-                  size: 24,
-                ),
-                childrenPadding: const EdgeInsets.only(bottom: 10),
-                backgroundColor:
-                    Theme.of(context).brightness == Brightness.light
-                        ? Theme.of(context).accentColor.withOpacity(0.1)
-                        : Colors.white10,
-                title: AutoSizeText(
-                  label,
-                  style: GoogleFonts.rubikTextTheme(
-                    Theme.of(context).textTheme,
-                  ).bodyText1,
-                  maxLines: 2,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  textScaleFactor: 1.1,
-                ),
-                trailing: trailing,
-                children: children,
+            child: ExpansionTile(
+              leading: Icon(
+                icon,
               ),
+              childrenPadding: const EdgeInsets.only(bottom: 10, left: 55),
+              backgroundColor: Theme.of(context).brightness == Brightness.light
+                  ? Theme.of(context).accentColor.withOpacity(0.1)
+                  : Colors.white10,
+              title: Text(
+                label,
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: trailing,
+              children: children,
             ),
           )
         : ClipRRect(
@@ -291,17 +258,12 @@ class AppDrawer extends StatelessWidget {
             child: ListTile(
               leading: Icon(
                 icon,
-                size: 24,
               ),
-              title: AutoSizeText(
+              title: Text(
                 label,
-                style: GoogleFonts.rubikTextTheme(
-                  Theme.of(context).textTheme,
-                ).bodyText1,
                 maxLines: 1,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
-                textScaleFactor: 1.1,
               ),
               trailing: trailing,
               onTap: onTap,

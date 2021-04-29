@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../models/index.dart';
@@ -11,7 +12,10 @@ class NewsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<NewsRepository>(
-      builder: (ctx, model, _) => ReloadableScreen<NewsRepository>(
+      builder: (ctx, model, _) =>
+          ReloadableSimplePage<TimetableRepository>.tabs(
+        title: 'Новости',
+        leadingCallBack: Scaffold.of(context).openDrawer,
         body: Scrollbar(
           thickness: 3.0,
           child: ScrollablePositionedList.builder(

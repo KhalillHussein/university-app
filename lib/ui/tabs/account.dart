@@ -1,22 +1,24 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:mtusiapp/ui/pages/record_book.dart';
 
 import 'package:provider/provider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../../repositories/index.dart';
-import '../../ui/pages/index.dart';
+import '../pages/index.dart';
+import '../screens/index.dart';
+import '../tabs/index.dart';
 import '../widgets/index.dart';
-import 'index.dart';
 
-class AccountPage extends StatelessWidget {
+class AccountTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthRepository>(
-      builder: (ctx, userData, _) => Screen<TimetableRepository>(
-        body: Column(
+    return ReloadableSimplePage<TimetableRepository>.tabs(
+      title: 'Аккаунт',
+      leadingCallBack: Scaffold.of(context).openDrawer,
+      body: Consumer<AuthRepository>(
+        builder: (ctx, userData, _) => Column(
           children: <Widget>[
             _Header(userData),
             if (userData.user.role == 'student') _StudentTabs(),
@@ -114,7 +116,6 @@ class _Header extends StatelessWidget {
         backgroundColor: Theme.of(context).appBarTheme.color,
         content: Text(
           'Вы действительно хотите выйти?',
-          style: Theme.of(context).textTheme.bodyText1,
         ),
         actions: <Widget>[
           TextButton(
@@ -146,7 +147,9 @@ class _StudentTabs extends StatelessWidget {
     return [
       {
         'tab': 'РАСПИСАНИЕ ЗАНЯТИЙ',
-        'page': TimetableList(context.read<AuthRepository>().user.group),
+        'page': TimetableScreen(context
+            .watch<TimetableRepository>()
+            .getBy(context.read<AuthRepository>().user.group)),
       },
       {
         'tab': 'УСПЕВАЕМОСТЬ',
@@ -171,6 +174,8 @@ class _StudentTabs extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: TabBar(
+                labelColor: Theme.of(context).accentColor,
+                unselectedLabelColor: Theme.of(context).textTheme.caption.color,
                 isScrollable: true,
                 tabs: <Widget>[
                   for (final item in _tabs(context))
@@ -238,7 +243,7 @@ class _LecturerTabs extends StatelessWidget {
                 Expanded(
                   child: TabBarView(
                     children: <Widget>[
-                      TimetablePage(),
+                      TimetableTab(),
                       Center(child: Text('МРС')),
                     ],
                   ),

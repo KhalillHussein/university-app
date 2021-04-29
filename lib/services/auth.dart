@@ -1,5 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+
+import 'package:dio/dio.dart';
 
 import '../util/index.dart';
 import 'index.dart';
@@ -8,7 +9,7 @@ import 'index.dart';
 class AuthService extends BaseService {
   const AuthService(Dio client) : super(client);
 
-  /// Retrieves a user info.
+  /// Send a user data.
   Future<Response> getUser(
       {@required String login, @required String pwd}) async {
     return client.post(

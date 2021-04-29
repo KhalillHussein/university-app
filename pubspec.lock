@@ -56,7 +56,7 @@ packages:
       name: cached_network_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.5.1"
+    version: "3.0.0"
   characters:
     dependency: transitive
     description:
@@ -113,6 +113,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  expand_widget:
+    dependency: "direct main"
+    description:
+      name: expand_widget
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   expandable:
     dependency: "direct main"
     description:
@@ -154,21 +161,14 @@ packages:
       name: flutter_blurhash
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.0"
+    version: "0.6.0"
   flutter_cache_manager:
     dependency: transitive
     description:
       name: flutter_cache_manager
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
-  flutter_inner_drawer:
-    dependency: "direct main"
-    description:
-      name: flutter_inner_drawer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.5.8"
+    version: "3.0.1"
   flutter_local_notifications:
     dependency: "direct main"
     description:
@@ -255,7 +255,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.16.1"
+    version: "0.17.0"
   js:
     dependency: transitive
     description:
@@ -277,13 +277,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
-  mask_text_input_formatter:
-    dependency: "direct main"
-    description:
-      name: mask_text_input_formatter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.1"
   matcher:
     dependency: transitive
     description:
@@ -318,7 +311,7 @@ packages:
       name: octo_image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "1.0.0+1"
   path:
     dependency: "direct main"
     description:
@@ -416,14 +409,28 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.3"
+    version: "5.0.0"
+  row_collection:
+    dependency: "direct main"
+    description:
+      name: row_collection
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.5"
+  row_item:
+    dependency: "direct main"
+    description:
+      name: row_item
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   rxdart:
     dependency: transitive
     description:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.25.0"
+    version: "0.26.0"
   scrollable_positioned_list:
     dependency: "direct main"
     description:
@@ -486,7 +493,14 @@ packages:
       name: shimmer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.2"
+    version: "2.0.0"
+  simple_gesture_detector:
+    dependency: transitive
+    description:
+      name: simple_gesture_detector
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -538,6 +552,13 @@ packages:
     dependency: transitive
     description:
       name: synchronized
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
+  table_calendar:
+    dependency: "direct main"
+    description:
+      name: table_calendar
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0"

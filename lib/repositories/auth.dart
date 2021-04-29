@@ -6,10 +6,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/index.dart';
 import '../services/index.dart';
+import '../util/index.dart';
 import 'index.dart';
 
 ///Repository that manage authentication process
-class AuthRepository extends BaseRepository<AuthService> {
+class AuthRepository extends BaseRepository<User, AuthService> {
   String _token;
   User _user;
   SharedPreferences _prefs;
@@ -38,7 +39,7 @@ class AuthRepository extends BaseRepository<AuthService> {
     }
   }
 
-  ///Function to perform api request
+  ///Function to perform API request
   Future<void> authenticate(String email, String password) async {
     try {
       startLoading();
@@ -49,13 +50,11 @@ class AuthRepository extends BaseRepository<AuthService> {
       final userData = _toStr(_user);
       _prefs.setString('userData', userData);
     } on DioError catch (dioError) {
-      final String e = dioError.response.data['errors']['msg'];
-      if (e.contains('WRONG_PASSWORD')) {
-        receivedError('Неверный пароль.');
-      } else if (e.contains('USER_DOES_NOT_EXIST')) {
-        receivedError('Пользователя с таким именем не существует.');
-      } else {
-        receivedError('Ошибка авторизации. Повторите попытку позже.');
+      try {
+        final String e = dioError.response.data['errors']['msg'];
+        receivedError(ApiException.authError(e).message);
+      } catch (e) {
+        receivedError(ApiException.fromDioError(dioError).message);
       }
     } catch (error) {
       receivedError(error.toString());

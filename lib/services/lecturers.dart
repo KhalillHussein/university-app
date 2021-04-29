@@ -9,7 +9,7 @@ class LecturersService extends BaseService {
   /// Retrieves a list featuring the latest news.
   Future<Response> getLecturers() async {
     return client.get(
-      'https://firebasestorage.googleapis.com/v0/b/my-flutter-f53db.appspot.com/o/lecturers_1.json?alt=media&token=4c32b3a0-88e3-4578-bc4a-f3cef093c8b6',
+      'https://firebasestorage.googleapis.com/v0/b/my-flutter-f53db.appspot.com/o/lecturers_full.json?alt=media&token=b6b92f37-600e-4f8e-814e-9823c46939a6',
     );
   }
 }

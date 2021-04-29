@@ -1,10 +1,9 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 import '../util/url.dart';
 
-class News extends Equatable {
+class News {
   final String id;
   final List<String> images;
   final String title;
@@ -41,16 +40,4 @@ class News extends Equatable {
   }
 
   String get getDate => DateFormat.yMMMd('Ru').format(createdAt);
-
-  @override
-  List<Object> get props => [
-        id,
-        images,
-        title,
-        introText,
-        fullText,
-        views,
-        createdAt,
-        updatedAt,
-      ];
 }

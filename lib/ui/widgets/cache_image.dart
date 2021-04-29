@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'index.dart';
@@ -8,16 +9,39 @@ class CacheImage extends StatelessWidget {
   final Size size;
   final BoxFit fit;
   final int cacheWidth;
+  final Widget placeholder;
 
-  const CacheImage(this.url, {this.size, this.fit, this.cacheWidth});
+  const CacheImage(
+    this.url, {
+    this.size,
+    this.fit,
+    this.cacheWidth,
+    this.placeholder,
+  });
 
   static const Size _bigSize = Size(double.infinity, 209);
 
-  factory CacheImage.teacher({String url}) {
-    return CacheImage(url);
+  static const Size _middleSize = Size(150, 200);
+
+  static const Size _smallSize = Size(50, 50);
+
+  factory CacheImage.lecturer(String url) {
+    return CacheImage(
+      url,
+      size: _middleSize,
+      fit: BoxFit.cover,
+    );
   }
 
-  factory CacheImage.news({String url}) {
+  factory CacheImage.avatar(String url) {
+    return CacheImage(
+      url,
+      size: _smallSize,
+      placeholder: Icon(Icons.person, size: 50, color: Colors.white12),
+    );
+  }
+
+  factory CacheImage.news({@required String url}) {
     return CacheImage(url, size: _bigSize, cacheWidth: 400);
   }
 
@@ -32,19 +56,13 @@ class CacheImage extends StatelessWidget {
       width: size?.width ?? double.infinity,
       imageUrl: url,
       fit: fit ?? BoxFit.cover,
-      memCacheWidth: cacheWidth ?? 3600,
+      memCacheWidth: cacheWidth ?? 800,
       filterQuality: FilterQuality.high,
       placeholder: (context, url) => Container(
         height: size?.height ?? double.infinity,
         width: size?.width ?? double.infinity,
         color: Theme.of(context).canvasColor,
-        child: const Center(
-          child: CircularProgressIndicator(
-            //  backgroundColor: Theme.of(context).canvasColor,
-            valueColor: AlwaysStoppedAnimation(Colors.grey),
-            strokeWidth: 3.0,
-          ),
-        ),
+        child: placeholder ?? _loadingIndicator,
       ),
       errorWidget: (context, url, error) => PlaceholderImage(
         height: size?.height ?? double.infinity,
@@ -52,4 +70,11 @@ class CacheImage extends StatelessWidget {
       ),
     );
   }
+
+  Widget get _loadingIndicator => const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation(Colors.grey),
+          strokeWidth: 3.0,
+        ),
+      );
 }

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
-import 'package:mtusiapp/helpers/db_helper.dart';
-import 'package:mtusiapp/models/index.dart';
 
+import '../helpers/db_helper.dart';
+import '../models/index.dart';
 import '../util/index.dart';
 import 'index.dart';
 
@@ -24,7 +24,7 @@ class TimetableService extends BaseService {
   final String _date = 'DATE';
   final String _cafedra = 'CAFEDRA';
 
-  /// Retrieves a list featuring the latest timetable.
+  /// Retrieves a list featuring the timetable.
   Future<Response> getTimetable() async {
     return client.get(Url.allScheduleUrl);
   }

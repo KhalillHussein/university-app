@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../models/index.dart';
 
@@ -27,11 +26,6 @@ class ValidationProvider with ChangeNotifier {
   ValidationItem get organizationName => _organizationName;
 
   ValidationItem get location => _location;
-
-  final MaskTextInputFormatter maskFormatter = MaskTextInputFormatter(
-    mask: '+# (###) ###-##-##',
-    // filter: {"#": RegExp('[0-9]')},
-  );
 
   bool get isInquiryFormValid {
     if (_phoneNumber.value != null &&
@@ -82,11 +76,11 @@ class ValidationProvider with ChangeNotifier {
   }
 
   void changePhoneNumber(String value) {
-    if (maskFormatter.isFill()) {
+    final phoneExp = RegExp(r'^\(\d\d\d\) \d\d\d\-\d\d\-\d\d$');
+    if (phoneExp.hasMatch(value)) {
       _phoneNumber = ValidationItem(value, null);
     } else {
-      _phoneNumber = ValidationItem(null,
-          'Неправильный формат номера. Введите номер телефона согласно маске');
+      _phoneNumber = ValidationItem(null, 'Номер указан неверно');
     }
     notifyListeners();
   }

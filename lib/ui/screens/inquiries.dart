@@ -1,101 +1,81 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grouped_list/grouped_list.dart';
-import 'package:mtusiapp/providers/index.dart';
-
-import 'package:mtusiapp/providers/radio.dart';
-import 'package:mtusiapp/repositories/auth.dart';
-import 'package:mtusiapp/ui/widgets/custom_page.dart';
-import 'package:mtusiapp/ui/widgets/dialogs.dart';
-import 'package:mtusiapp/ui/widgets/header_text.dart';
-import 'package:mtusiapp/ui/widgets/radio_cell.dart';
-import 'package:mtusiapp/util/colors.dart';
-import 'package:mtusiapp/util/doc.dart';
 import 'package:provider/provider.dart';
+import 'package:row_collection/row_collection.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../providers/index.dart';
+import '../../repositories/index.dart';
+import '../../util/index.dart';
+import '../widgets/index.dart';
+
 class InquiriesScreen extends StatelessWidget {
+  static const route = '/inquiries';
+
+  final _RuNumberTextInputFormatter _phoneNumberFormatter =
+      _RuNumberTextInputFormatter();
+
   @override
   Widget build(BuildContext context) {
     return SimplePage(
-      title: 'Справки',
+      title: 'Заказ справок',
       fab: FloatingActionButton(
         onPressed: () => _showForm(context, null, isUserInquiry: true),
         tooltip: 'Моя справка',
         child: Icon(Icons.edit_outlined),
       ),
-      body: GroupedListView<Map, String>(
-          separator: Divider(height: 1, indent: 15),
+      body: Scrollbar(
+        child: GroupedListView<Map, String>(
+          separator: Separator.divider(indent: 15),
           addAutomaticKeepAlives: false,
           elements: Doc.doc.inquiries,
           groupBy: (element) => element['department'],
-          groupSeparatorBuilder: (groupByValue) => HeaderText(
-                groupByValue,
-                head: true,
-              ),
-          itemBuilder: (context, record) {
-            return ExpansionTile(
-              title: Padding(
-                padding: const EdgeInsets.only(right: 50, top: 8, bottom: 8),
-                child: Text(
-                  record['title'],
-                  style: GoogleFonts.rubikTextTheme(
-                    Theme.of(context).textTheme,
-                  ).bodyText2.copyWith(height: 1.4),
-                ),
-              ),
-              trailing: Icon(
-                Icons.arrow_forward_ios_outlined,
-                size: 16,
-              ),
-              childrenPadding: const EdgeInsets.only(left: 10.0, right: 35),
-              children: [
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (record['fullName'] != null)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          record['fullName'],
-                          style: Theme.of(context).textTheme.bodyText1.copyWith(
-                              fontWeight: FontWeight.w400, height: 1.4),
-                          textScaleFactor: 0.9,
-                        ),
-                      ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        onPressed: () {
-                          context
-                              .read<ValidationProvider>()
-                              .changeCompanyName(record['title']);
-                          _showForm(context, record['title']);
-                        },
-                        child: Text(
-                          'ЗАКАЗАТЬ',
-                          style: GoogleFonts.rubikTextTheme(
-                            Theme.of(context).textTheme,
-                          ).overline.copyWith(
-                              color: Theme.of(context).accentColor,
-                              fontWeight: FontWeight.w600),
-                          textScaleFactor: 1.4,
-                          // style: TextStyle(
-                          //   letterSpacing: 0.9,
-                          //   fontSize: 15,
-                          //   fontWeight: FontWeight.w600,
-                          // ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          }),
+          groupSeparatorBuilder: _buildSeparator,
+          itemBuilder: _buildListTile,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSeparator(String groupByValue) {
+    return HeaderText(
+      groupByValue,
+      head: groupByValue == Doc.doc.inquiries.first['department'],
+    );
+  }
+
+  Widget _buildListTile(BuildContext context, Map record) {
+    return ListTile(
+      onTap: () {
+        context.read<ValidationProvider>().changeCompanyName(record['title']);
+        _showForm(context, record['title']);
+      },
+      title: Padding(
+        padding: const EdgeInsets.only(right: 50),
+        child: Text(
+          record['title'],
+          style: GoogleFonts.rubikTextTheme(
+            Theme.of(context).textTheme,
+          ).bodyText1,
+          textScaleFactor: 1.1,
+        ),
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios_outlined,
+        size: 16,
+      ),
+      // subtitle: record['fullName'] != null
+      //     ? Padding(
+      //         padding: const EdgeInsets.only(right: 50),
+      //         child: Text(
+      //           record['fullName'],
+      //           style: Theme.of(context).textTheme.caption,
+      //         ),
+      //       )
+      //     : null,
     );
   }
 
@@ -109,16 +89,19 @@ class InquiriesScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 20),
-            Container(
-              width: 80.0,
-              height: 5.0,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Theme.of(context).dividerColor,
+            Separator.spacer(space: 25),
+            if (isUserInquiry)
+              Text(
+                'МОЯ СПРАВКА'.toUpperCase(),
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.headline6.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
               ),
-            ),
+            Separator.spacer(space: 20),
             Theme(
               data: Theme.of(context).copyWith(
                 primaryColor: Theme.of(context).brightness == Brightness.light
@@ -126,18 +109,17 @@ class InquiriesScreen extends StatelessWidget {
                     : kDarkPrimaryColor,
               ),
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
-                      const SizedBox(height: 15),
                       if (isUserInquiry)
                         Padding(
                           padding: const EdgeInsets.only(bottom: 15.0),
                           child: Consumer<ValidationProvider>(
                             builder: (ctx, validate, _) => TextFormField(
-                              initialValue: validate.organizationName.value,
                               style: TextStyle(
                                   fontSize: 17,
                                   color: Theme.of(context)
@@ -146,13 +128,11 @@ class InquiriesScreen extends StatelessWidget {
                                       .color),
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.always,
-                                labelText: 'Наименование учреждения *',
+                                labelText: 'Наименование учреждения*',
                                 filled: true,
                                 errorText: validate.organizationName.error,
                                 helperText:
-                                    'Название учреждения, которому требуется предоставить документ',
+                                    'Название учреждения, которому требуется предоставить документ.',
                                 helperMaxLines: 2,
                                 errorMaxLines: 2,
                               ),
@@ -165,7 +145,6 @@ class InquiriesScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: Consumer<ValidationProvider>(
                           builder: (ctx, validate, _) => TextFormField(
-                            initialValue: validate.location.value,
                             style: TextStyle(
                                 fontSize: 17,
                                 color: Theme.of(context)
@@ -174,13 +153,11 @@ class InquiriesScreen extends StatelessWidget {
                                     .color),
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.always,
-                              labelText: 'Район, город, область *',
+                              labelText: 'Район, город, область*',
                               filled: true,
                               errorText: validate.location.error,
                               helperText:
-                                  'Территориальное расположение организации, для которой требуется документ',
+                                  'Территориальное расположение организации, для которой требуется документ.',
                               helperMaxLines: 2,
                               errorMaxLines: 2,
                             ),
@@ -191,26 +168,21 @@ class InquiriesScreen extends StatelessWidget {
                       ),
                       Consumer<ValidationProvider>(
                         builder: (ctx, validate, _) => TextFormField(
-                          keyboardType: TextInputType.phone,
-                          initialValue: validate.phoneNumber.value,
-                          style: TextStyle(
-                              fontSize: 17,
-                              color:
-                                  Theme.of(context).textTheme.bodyText1.color),
-                          inputFormatters: [validate.maskFormatter],
+                          textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            hintText: '+7 (___) ___-__-__',
-                            labelText: 'Номер мобильного телефона *',
                             filled: true,
+                            hintText: '(___) ___-__-__',
+                            labelText: 'Номер телефона*',
+                            prefixText: '+7 ',
                             errorText: validate.phoneNumber.error,
-                            helperText:
-                                'На указанный номер придет оповещение, когда документ будет готов',
-                            helperMaxLines: 2,
-                            errorMaxLines: 2,
                           ),
-                          onChanged: (value) =>
-                              validate.changePhoneNumber(value),
+                          keyboardType: TextInputType.phone,
+                          onChanged: validate.changePhoneNumber,
+                          maxLength: 15,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                            _phoneNumberFormatter,
+                          ],
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -340,5 +312,42 @@ class InquiriesScreen extends StatelessWidget {
           ),
         );
     }
+  }
+}
+
+/// Format incoming numeric text to fit the format of (###) ###-##-##
+class _RuNumberTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final newTextLength = newValue.text.length;
+    final newText = StringBuffer();
+    var selectionIndex = newValue.selection.end;
+    var usedSubstringIndex = 0;
+    if (newTextLength >= 1) {
+      newText.write('(');
+      if (newValue.selection.end >= 1) selectionIndex++;
+    }
+    if (newTextLength >= 4) {
+      newText.write('${newValue.text.substring(0, usedSubstringIndex = 3)}) ');
+      if (newValue.selection.end >= 3) selectionIndex += 2;
+    }
+    if (newTextLength >= 7) {
+      newText.write('${newValue.text.substring(3, usedSubstringIndex = 6)}-');
+      if (newValue.selection.end >= 6) selectionIndex++;
+    }
+    if (newTextLength >= 9) {
+      newText.write('${newValue.text.substring(6, usedSubstringIndex = 8)}-');
+      if (newValue.selection.end >= 8) selectionIndex++;
+    }
+    if (newTextLength >= usedSubstringIndex) {
+      newText.write(newValue.text.substring(usedSubstringIndex));
+    }
+    return TextEditingValue(
+      text: newText.toString(),
+      selection: TextSelection.collapsed(offset: selectionIndex),
+    );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-enum Tabs { news, auth, about }
+enum Tabs { news, timetable, auth, about }
 
 ///Provider that performs navigation between pages
 class NavigationProvider with ChangeNotifier {

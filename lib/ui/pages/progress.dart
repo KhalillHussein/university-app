@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:expandable/expandable.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mtusiapp/util/colors.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
-///TODO: REFACTORING REQUIRED
+import '../../util/index.dart';
+
 class Progress extends StatelessWidget {
   final List<Map<String, dynamic>> _disciplines = [
     {
@@ -99,8 +99,12 @@ class Progress extends StatelessWidget {
           children: [
             Expanded(
               flex: 3,
-              child: Text(
-                name,
+              child: FittedBox(
+                alignment: Alignment.topLeft,
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  name,
+                ),
               ),
             ),
             Expanded(

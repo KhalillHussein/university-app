@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 
 import 'colors.dart';
@@ -27,7 +28,7 @@ class Style {
     brightness: Brightness.light,
     errorColor: kLightErrorColor,
     pageTransitionsTheme: _pageTransitionsTheme,
-    primaryColor: kLightColor,
+    primaryColor: Colors.white,
     scaffoldBackgroundColor: kLightColor,
     textTheme: GoogleFonts.rubikTextTheme(ThemeData.light().textTheme),
   );
