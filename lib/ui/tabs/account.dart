@@ -147,9 +147,7 @@ class _StudentTabs extends StatelessWidget {
     return [
       {
         'tab': 'РАСПИСАНИЕ ЗАНЯТИЙ',
-        'page': TimetableScreen(context
-            .watch<TimetableRepository>()
-            .getBy(context.read<AuthRepository>().user.group)),
+        'page': Container(),
       },
       {
         'tab': 'УСПЕВАЕМОСТЬ',

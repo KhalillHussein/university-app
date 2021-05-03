@@ -17,9 +17,6 @@ import 'index.dart';
 Widget get _loadingIndicator =>
     const Center(child: CircularProgressIndicator());
 
-///Showing a placeholder preview of content before the data gets loaded.
-Widget get _skeletonLoading => NewsPlaceholder();
-
 /// Function which handles reloading [QueryModel] models.
 Future<void> _onRefresh(BuildContext context, BaseRepository repository) {
   final Completer<void> completer = Completer<void>();
@@ -63,12 +60,14 @@ Future<void> _onRefresh(BuildContext context, BaseRepository repository) {
 class SimplePage extends StatelessWidget {
   final String title;
   final Widget body, fab, leading;
+  final PreferredSizeWidget bottom;
   final List<Widget> actions;
 
   const SimplePage({
     @required this.title,
     @required this.body,
     this.leading,
+    this.bottom,
     this.fab,
     this.actions,
   });
@@ -78,6 +77,7 @@ class SimplePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: leading,
+        bottom: bottom,
         title: Text(
           title,
           style: GoogleFonts.rubik(fontWeight: FontWeight.w600),
@@ -96,34 +96,29 @@ class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
   final String title;
   final List<Widget> actions;
   final Widget body, fab, placeholder, leading;
+  final PreferredSizeWidget bottom;
 
   const ReloadableSimplePage({
     @required this.title,
     @required this.body,
+    this.bottom,
     this.actions,
     this.placeholder,
     this.fab,
     this.leading,
   });
 
-  factory ReloadableSimplePage.lecturers({
-    @required String title,
-    @required Widget body,
-  }) {
-    return ReloadableSimplePage(
-      title: title,
-      body: body,
-      placeholder: LecturersPlaceholder(),
-    );
-  }
-
   factory ReloadableSimplePage.tabs({
     @required String title,
     @required Widget body,
     @required VoidCallback leadingCallBack,
     Widget fab,
+    Widget placeholder,
+    PreferredSizeWidget bottom,
   }) {
     return ReloadableSimplePage(
+      bottom: bottom,
+      placeholder: placeholder,
       title: title,
       body: body,
       leading: IconButton(
@@ -146,6 +141,7 @@ class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimplePage(
+      bottom: bottom,
       actions: actions,
       title: title,
       fab: fab,
@@ -160,99 +156,27 @@ class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
                       value: model,
                       child: ConnectionError<T>(),
                     )
-                  : body,
+                  : model.databaseFetch
+                      ? Stack(
+                          children: [
+                            body,
+                            Positioned(
+                              bottom: 0.0,
+                              left: 0.0,
+                              right: 0.0,
+                              child: ChangeNotifierProvider.value(
+                                value: model,
+                                child: Message<T>(),
+                              ),
+                            ),
+                          ],
+                        )
+                      : body,
         ),
       ),
     );
   }
 }
-
-// class ReloadableTab<T extends BaseRepository> extends StatelessWidget {
-//   final Widget body;
-//   final Widget placeholder;
-//
-//   const ReloadableTab({
-//     @required this.body,
-//     this.placeholder,
-//   });
-//
-//   factory ReloadableTab.news({@required Widget body}) {
-//     return ReloadableTab(body: body, placeholder: _skeletonLoading);
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Consumer<T>(
-//         builder: (context, model, child) => RefreshIndicator(
-//           onRefresh: () => _onRefresh(context, model),
-//           child: model.isLoading
-//               ? placeholder ?? _loadingIndicator
-//               : model.list.isEmpty && model.loadingFailed
-//                   ? ChangeNotifierProvider.value(
-//                       value: model,
-//                       child: ConnectionError<T>(),
-//                     )
-//                   : model.databaseFetch
-//                       ? Stack(
-//                           children: [
-//                             body,
-//                             Positioned(
-//                               bottom: 0.0,
-//                               left: 0.0,
-//                               right: 0.0,
-//                               child: ChangeNotifierProvider.value(
-//                                 value: model,
-//                                 child: Message<T>(),
-//                               ),
-//                             ),
-//                           ],
-//                         )
-//                       : body,
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// class SimpleTab<T extends BaseRepository> extends StatelessWidget {
-//   final Widget body;
-//
-//   const SimpleTab({
-//     @required this.body,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Consumer<T>(
-//         builder: (context, model, child) => model.isLoading
-//             ? _loadingIndicator
-//             : model.loadingFailed
-//                 ? ChangeNotifierProvider.value(
-//                     value: model,
-//                     child: ConnectionError<T>(),
-//                   )
-//                 : model.databaseFetch
-//                     ? Stack(
-//                         children: [
-//                           body,
-//                           Positioned(
-//                             bottom: 0.0,
-//                             left: 0.0,
-//                             right: 0.0,
-//                             child: ChangeNotifierProvider.value(
-//                               value: model,
-//                               child: Message<T>(),
-//                             ),
-//                           ),
-//                         ],
-//                       )
-//                     : body,
-//       ),
-//     );
-//   }
-// }
 
 /// Widget used to display a connection error message.
 /// It allows user to reload the page with a simple button.
@@ -278,7 +202,7 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
                 ),
           ),
         ),
-        child: Icon(Icons.cloud_off),
+        child: const Icon(Icons.cloud_off),
       ),
     );
   }

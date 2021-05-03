@@ -9,11 +9,22 @@ import '../services/index.dart';
 import '../util/index.dart';
 import 'index.dart';
 
+enum Categories { group, auditory, lecturer }
+
 /// Repository that holds timetable data.
 class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
   Database db;
 
+  String userCategory;
+
   TimetableRepository(TimetableService service) : super(service);
+
+  bool get isUserSetCategory => userCategory != null;
+
+  void setUserCategory(String category) {
+    userCategory = category;
+    notifyListeners();
+  }
 
   @override
   Future<void> loadData() async {
@@ -23,6 +34,7 @@ class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
         for (final item in timetableResponse.data['result'])
           Timetable.fromJson(item)
       ];
+      list.removeWhere((element) => element.aud.contains('+'));
       for (final item in timetableResponse.data['result']) {
         DatabaseHelper.db
             .insert(service.tableName, service.toMap(Timetable.fromJson(item)));
@@ -60,21 +72,39 @@ class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
             element.group == keyword ||
             element.aud == keyword ||
             element.name == keyword)
-        ?.toList();
+        ?.toList()
+          ..sort((a, b) {
+            return a.lesson.compareTo(b.lesson);
+          });
   }
 
   List<Map<String, dynamic>> searchCategories() {
     final List<Map<String, dynamic>> lec = [
       for (final item in lecturers)
-        {'name': item, 'category': 'Преподаватель', 'icon': MdiIcons.accountTie}
+        {
+          'name': item,
+          'group': 'Преподаватель',
+          'icon': MdiIcons.accountTie,
+          'category': Categories.lecturer,
+        }
     ];
     final List<Map> gr = {
       for (final item in groups)
-        {'name': item, 'category': 'Группа', 'icon': MdiIcons.accountGroup}
+        {
+          'name': item,
+          'group': 'Группа',
+          'icon': MdiIcons.accountGroup,
+          'category': Categories.group,
+        }
     }?.toList();
     final List<Map> au = {
       for (final item in aud)
-        {'name': item, 'category': 'Аудитория', 'icon': MdiIcons.domain}
+        {
+          'name': item,
+          'group': 'Аудитория',
+          'icon': MdiIcons.domain,
+          'category': Categories.auditory,
+        }
     }?.toList();
     return [...lec, ...gr, ...au];
   }
@@ -84,10 +114,10 @@ class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
   }
 
   List<String> get lecturers {
-    return {for (final item in timetable) item.name}?.toList();
+    return {for (final item in timetable) item.name}?.toList()..sort();
   }
 
   List<String> get aud {
-    return {for (final item in timetable) item.aud}?.toList();
+    return {for (final item in timetable) item.aud}?.toList()..sort();
   }
 }

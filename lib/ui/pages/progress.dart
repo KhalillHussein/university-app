@@ -57,9 +57,10 @@ class Progress extends StatelessWidget {
                     padding: const EdgeInsets.all(20.0),
                     child: Text(
                       _disciplines[index]['discipline'],
-                      style: GoogleFonts.rubikTextTheme(
-                        Theme.of(context).textTheme,
-                      ).headline6,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          .copyWith(letterSpacing: 0.4),
                       textScaleFactor: 0.8,
                     ),
                   ),

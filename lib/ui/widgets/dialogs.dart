@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Future<T> showBottomRoundDialog<T>({
+Future<T> showBottomDialog<T>({
   @required BuildContext context,
   @required Widget child,
 }) {

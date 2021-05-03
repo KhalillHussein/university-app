@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:expandable/expandable.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class RecordBookPage extends StatelessWidget {
   final List<Map<String, dynamic>> _semesters = [
@@ -85,9 +84,10 @@ class RecordBookPage extends StatelessWidget {
                       children: [
                         Text(
                           'Семестр ${_semesters[index]['semester']}',
-                          style: GoogleFonts.rubikTextTheme(
-                            Theme.of(context).textTheme,
-                          ).headline6,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline6
+                              .copyWith(letterSpacing: 0.4),
                           textScaleFactor: 0.8,
                         ),
                         for (final item in _semesters[index]['disciplines'])
@@ -174,10 +174,8 @@ class RecordBookPage extends StatelessWidget {
                   maxLines: 2,
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1
-                      .copyWith(fontWeight: FontWeight.w600),
+                  style: Theme.of(context).textTheme.subtitle1.copyWith(
+                      fontWeight: FontWeight.w600, letterSpacing: 0.4),
                 )),
                 DataCell(Align(
                   alignment: Alignment.centerRight,

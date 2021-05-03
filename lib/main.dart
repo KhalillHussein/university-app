@@ -46,6 +46,11 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => NotificationsProvider()),
         ChangeNotifierProvider(
             create: (ctx) => TimetableRepository(TimetableService(httpClient))),
+        ChangeNotifierProxyProvider<TimetableRepository, TableCalendarProvider>(
+          create: (ctx) => TableCalendarProvider(),
+          update: (ctx, model, tableCalendar) => TableCalendarProvider()
+            ..timetableList = model.getBy(model.userCategory),
+        ),
       ],
       child: Consumer<ThemesProvider>(builder: (ctx, themeData, _) {
         return ThemeProvider(

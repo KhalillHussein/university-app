@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -57,10 +58,6 @@ class InquiriesScreen extends StatelessWidget {
         padding: const EdgeInsets.only(right: 50),
         child: Text(
           record['title'],
-          style: GoogleFonts.rubikTextTheme(
-            Theme.of(context).textTheme,
-          ).bodyText1,
-          textScaleFactor: 1.1,
         ),
       ),
       trailing: Icon(
@@ -83,7 +80,7 @@ class InquiriesScreen extends StatelessWidget {
   ///для ввода новых данных.
   void _showForm(BuildContext context, String inquiry,
       {bool isUserInquiry = false}) {
-    showBottomRoundDialog(
+    showBottomDialog(
       context: context,
       child: SingleChildScrollView(
         child: Column(
@@ -92,7 +89,7 @@ class InquiriesScreen extends StatelessWidget {
             Separator.spacer(space: 25),
             if (isUserInquiry)
               Text(
-                'МОЯ СПРАВКА'.toUpperCase(),
+                'МОЯ СПРАВКА',
                 maxLines: 1,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,

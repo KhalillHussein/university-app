@@ -1,34 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:mtusiapp/ui/screens/index.dart';
 
 import 'package:provider/provider.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../../providers/index.dart';
+import '../../repositories/index.dart';
 import '../tabs/index.dart';
 import '../widgets/index.dart';
 
 class NavigationScreen extends StatelessWidget {
   static const route = '/';
 
-  final List<Map<String, Object>> _tabs = [
-    {
-      'title': 'Новости',
-      'tab': NewsTab(),
-    },
-    {
-      'title': 'Расписание',
-      'tab': TimetableTab(),
-    },
-    {
-      'title': 'Авторизация',
-      'tab': AuthTab(),
-    },
-    {
-      'title': 'Основные сведения',
-      'tab': AboutTab(),
-    },
-  ];
+  List<Widget> _tabs(AuthRepository model, TimetableRepository model2) {
+    return [
+      NewsTab(),
+      if (model2.isUserSetCategory)
+        TimetableScreen(model2.getBy(model2.userCategory), Categories.lecturer),
+      if (!model2.isUserSetCategory) TimetableTab(),
+      if (model.isAuth) AccountTab(),
+      if (!model.isAuth) AuthTab(),
+      AboutTab(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +37,9 @@ class NavigationScreen extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return Consumer<NavigationProvider>(
-      builder: (ctx, tabData, _) => _tabs[tabData.currentIndex]['tab'],
+    return Consumer3<NavigationProvider, AuthRepository, TimetableRepository>(
+      builder: (ctx, tabData, model, model2, _) =>
+          _tabs(model, model2)[tabData.currentIndex],
     );
   }
 

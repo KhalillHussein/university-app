@@ -54,4 +54,25 @@ class Style {
     selectedRowColor: Colors.white.withOpacity(0.2),
     textTheme: GoogleFonts.rubikTextTheme(ThemeData.dark().textTheme),
   );
+
+  // static final ThemeData dark = ThemeData(
+  //   accentColor: kDarkPrimaryColor,
+  //   appBarTheme: AppBarTheme(titleSpacing: 0.0),
+  //   bottomNavigationBarTheme: BottomNavigationBarThemeData(
+  //     elevation: 3.0,
+  //     selectedItemColor: kDarkSecondaryColor,
+  //     type: BottomNavigationBarType.fixed,
+  //   ),
+  //   brightness: Brightness.dark,
+  //   canvasColor: Color(0xFF242424),
+  //   cardColor: Color(0xFF272727),
+  //   dialogBackgroundColor: k24dp,
+  //   dividerColor: Color(0xFF545454),
+  //   errorColor: kDarkErrorColor,
+  //   primaryColor: k04dp,
+  //   pageTransitionsTheme: _pageTransitionsTheme,
+  //   scaffoldBackgroundColor: Color(0xFF1F1F1F),
+  //   selectedRowColor: Colors.white.withOpacity(0.2),
+  //   textTheme: GoogleFonts.rubikTextTheme(ThemeData.dark().textTheme),
+  // );
 }

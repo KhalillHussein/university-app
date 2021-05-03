@@ -46,7 +46,7 @@ class AboutTab extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: SelectableText(
-          Doc.organizationText,
+          Doc.doc.organizationText,
           textAlign: TextAlign.center,
           style: GoogleFonts.rubikTextTheme(
             Theme.of(context).textTheme,
@@ -106,7 +106,7 @@ class AboutTab extends StatelessWidget {
 
   List<Widget> _listRequisites(BuildContext context) {
     return [
-      for (final Map item in Doc.info)
+      for (final Map item in Doc.doc.info)
         Card(
           elevation: 2,
           color: Theme.of(context).brightness == Brightness.light

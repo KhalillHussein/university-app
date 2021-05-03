@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/index.dart';
+import '../repositories/index.dart';
 import '../ui/pages/index.dart';
 import '../ui/screens/index.dart';
 import '../ui/screens/inquiries.dart';
@@ -42,9 +43,10 @@ class Routes {
           );
         case TimetableScreen.route:
           final timetableList = args['timetableList'] as List;
+          final category = args['category'] as Categories;
           return MaterialPageRoute(
             settings: routeSettings,
-            builder: (_) => TimetableScreen(timetableList),
+            builder: (_) => TimetableScreen(timetableList, category),
           );
         default:
           return errorRoute(routeSettings);

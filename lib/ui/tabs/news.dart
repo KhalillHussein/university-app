@@ -11,14 +11,14 @@ import '../../ui/widgets/index.dart';
 class NewsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<NewsRepository>(
-      builder: (ctx, model, _) =>
-          ReloadableSimplePage<TimetableRepository>.tabs(
-        title: 'Новости',
-        leadingCallBack: Scaffold.of(context).openDrawer,
-        body: Scrollbar(
-          thickness: 3.0,
-          child: ScrollablePositionedList.builder(
+    return ReloadableSimplePage<NewsRepository>.tabs(
+      title: 'Новости',
+      placeholder: NewsPlaceholder(),
+      leadingCallBack: Scaffold.of(context).openDrawer,
+      body: Scrollbar(
+        thickness: 3.0,
+        child: Consumer<NewsRepository>(
+          builder: (ctx, model, _) => ScrollablePositionedList.builder(
             addAutomaticKeepAlives: false,
             itemCount:
                 model.hasReachedMax() ? model.itemCount : model.itemCount + 1,

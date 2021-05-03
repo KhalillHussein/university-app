@@ -36,22 +36,25 @@ class AppDrawer extends StatelessWidget {
     final bool isAuth = context.watch<AuthRepository>().isAuth;
     final Size size = MediaQuery.of(context).size;
     return Drawer(
-      child: ListView(
-        children: <Widget>[
-          if (!isAuth) _buildDrawerHeader(context),
-          if (isAuth)
-            Separator.spacer(
-              space: size.height * 0.15,
-            ),
-          Separator.divider(),
-          _buildMainInfo(context, isAuth),
-          const SizedBox(height: 10),
-          Separator.divider(),
-          _buildDownloadableResources(context),
-          const SizedBox(height: 10),
-          Separator.divider(),
-          _buildExternalResources(context),
-        ],
+      child: Scrollbar(
+        thickness: 3.0,
+        child: ListView(
+          children: <Widget>[
+            if (!isAuth) _buildDrawerHeader(context),
+            if (isAuth)
+              Separator.spacer(
+                space: size.height * 0.15,
+              ),
+            Separator.divider(),
+            _buildMainInfo(context, isAuth),
+            const SizedBox(height: 10),
+            Separator.divider(),
+            _buildDownloadableResources(context),
+            const SizedBox(height: 10),
+            Separator.divider(),
+            _buildExternalResources(context),
+          ],
+        ),
       ),
     );
   }
@@ -245,6 +248,10 @@ class AppDrawer extends StatelessWidget {
                 maxLines: 2,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2
+                    .copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.2),
               ),
               trailing: trailing,
               children: children,
@@ -258,9 +265,14 @@ class AppDrawer extends StatelessWidget {
             child: ListTile(
               leading: Icon(
                 icon,
+                color: Theme.of(context).textTheme.caption.color,
               ),
               title: Text(
                 label,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2
+                    .copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.2),
                 maxLines: 1,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,

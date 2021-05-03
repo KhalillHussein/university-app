@@ -18,7 +18,8 @@ class LecturersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReloadableSimplePage<LecturersRepository>.lecturers(
+    return ReloadableSimplePage<LecturersRepository>(
+      placeholder: LecturersPlaceholder(),
       title: 'Коллектив $kafedra',
       body: _buildLecturerCard(context, kafedra),
     );

@@ -5,24 +5,29 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:row_collection/row_collection.dart';
 
+import '../../util/colors.dart';
+
 class TimetableCard extends StatelessWidget {
-  final String id;
-  final String lesson;
-  final String aud;
-  final String name;
-  final String subject;
+  final String lessonNumber;
+  final String title;
+  final String header;
+  final String subtitle;
   final String subjectType;
-  final String cafedra;
+  final String trailing;
+  final IconData trailingIcon;
+  final IconData subtitleIcon;
 
   const TimetableCard({
-    @required this.cafedra,
-    @required this.id,
-    @required this.lesson,
-    @required this.aud,
-    @required this.name,
-    @required this.subject,
+    Key key,
+    this.trailingIcon,
+    this.subtitleIcon,
+    @required this.lessonNumber,
+    @required this.title,
+    @required this.header,
+    @required this.subtitle,
     @required this.subjectType,
-  });
+    @required this.trailing,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +39,12 @@ class TimetableCard extends StatelessWidget {
         child: Row(
           children: [
             Text(
-              lesson,
+              lessonNumber,
               style: GoogleFonts.rubikTextTheme(
                 Theme.of(context).textTheme,
               ).headline5,
             ),
-            const SizedBox(width: 20),
+            Separator.spacer(space: 20),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -53,7 +58,7 @@ class TimetableCard extends StatelessWidget {
                         _buildScheduleInfo(
                           icon: MdiIcons.school,
                           context: context,
-                          text: cafedra,
+                          text: header,
                         ),
                         _buildBadge(context, subjectType),
                       ],
@@ -62,7 +67,7 @@ class TimetableCard extends StatelessWidget {
                     SizedBox(
                       height: 25,
                       child: AutoSizeText(
-                        subject,
+                        title,
                         style: GoogleFonts.rubikTextTheme(
                           Theme.of(context).textTheme,
                         ).bodyText2,
@@ -75,14 +80,14 @@ class TimetableCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _buildScheduleInfo(
-                          icon: MdiIcons.domain,
+                          icon: subtitleIcon ?? MdiIcons.domain,
                           context: context,
-                          text: aud,
+                          text: subtitle,
                         ),
                         _buildScheduleInfo(
-                          icon: MdiIcons.accountTie,
+                          icon: trailingIcon ?? MdiIcons.accountTie,
                           context: context,
-                          text: name,
+                          text: trailing,
                         ),
                       ],
                     ),
@@ -102,16 +107,16 @@ class TimetableCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: subjectType.toLowerCase().contains('лек')
             ? Theme.of(context).brightness == Brightness.dark
-                ? Color(0xFF2C9ED4)
-                : Color(0xFF039BE5)
+                ? kDarkLectureColor
+                : kLightLectureColor
             : subjectType.toLowerCase().contains('пз')
                 ? Theme.of(context).brightness == Brightness.dark
-                    ? Color(0xFF89B3F7)
-                    : Color(0xFF4285F4)
+                    ? kDarkPracticeColor
+                    : kLightPracticeColor
                 : subjectType.toLowerCase().contains('лр')
                     ? Theme.of(context).brightness == Brightness.dark
-                        ? Color(0xFF4AB884)
-                        : Color(0xFF009688)
+                        ? kDarkLaboratoryColor
+                        : kLightLaboratoryColor
                     : Theme.of(context).errorColor,
         borderRadius: BorderRadius.circular(2.0),
       ),

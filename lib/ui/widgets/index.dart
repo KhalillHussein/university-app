@@ -6,6 +6,7 @@ export 'card_cell.dart';
 export 'custom_page.dart';
 export 'dialogs.dart';
 export 'header_text.dart';
+export 'list_cell.dart';
 export 'news_card.dart';
 export 'placeholder_image.dart';
 export 'radio_cell.dart';
