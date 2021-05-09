@@ -4,6 +4,8 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../models/index.dart';
 
+import '../util/index.dart';
+
 class TableCalendarProvider with ChangeNotifier {
   List<Timetable> selectedEvents;
   CalendarFormat calendarFormat = CalendarFormat.week;
@@ -15,12 +17,13 @@ class TableCalendarProvider with ChangeNotifier {
   TableCalendarProvider() {
     selectedDay = focusedDay;
     selectedEvents = getEventsForDay(selectedDay);
+    // init();
   }
 
   List<Timetable> getEventsForDay(DateTime day) {
     return [
       for (final item in timetableList)
-        if (item.date.isAtSameMomentAs(day)) item
+        if (item.date.isSameDate(day)) item
     ];
   }
 
@@ -39,10 +42,19 @@ class TableCalendarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setCalendarFormat() {
+  Future<void> setCalendarFormat() async {
     calendarFormat == CalendarFormat.month
         ? calendarFormat = CalendarFormat.week
         : calendarFormat = CalendarFormat.month;
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // prefs.setInt('format', calendarFormat.index);
     notifyListeners();
   }
+  //
+  // Future<void> init() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   final int formatIndex = prefs.getInt('format') ?? CalendarFormat.week.index;
+  //   calendarFormat = CalendarFormat.values[formatIndex];
+  //   notifyListeners();
+  // }
 }

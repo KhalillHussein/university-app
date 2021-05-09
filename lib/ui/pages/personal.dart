@@ -1,16 +1,19 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:mtusiapp/repositories/index.dart';
 import 'package:row_collection/row_collection.dart';
+import 'package:provider/provider.dart';
 
-import '../../models/index.dart';
 import '../widgets/index.dart';
+import '../../util/index.dart';
 
 class PersonalPage extends StatelessWidget {
-  final Lecturer _lecturer;
+  final String name;
 
-  const PersonalPage(this._lecturer);
+  const PersonalPage(this.name);
 
   static const route = '/personal_page';
 
@@ -24,6 +27,7 @@ class PersonalPage extends StatelessWidget {
             pinned: true,
           ),
           SliverBar(
+            height: 0.3,
             header: _buildLecturerHeader(context),
           ),
           SliverSafeArea(
@@ -55,73 +59,88 @@ class PersonalPage extends StatelessWidget {
   }
 
   Widget _buildLecturerHeader(BuildContext context) {
+    final info = context.read<LecturersRepository>().getByLecturer(name);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  spreadRadius: 2,
-                  blurRadius: 7,
-                  offset: Offset(0, 0),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-              child: CacheImage.lecturer(
-                _lecturer.photo,
-              ),
-            ),
-          ),
+          Expanded(flex: 2, child: _buildLecturerAvatar(info.photo)),
           const SizedBox(width: 15),
           Expanded(
+            flex: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 3, horizontal: 4),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).accentColor.withOpacity(0.1),
-                    border: Border.all(
-                      color: Theme.of(context).accentColor,
-                    ),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    _lecturer.kafedra,
-                    style: Theme.of(context).textTheme.caption.copyWith(
-                        color: Theme.of(context).accentColor,
-                        fontWeight: FontWeight.w500),
+                _buildKafedraBadge(context, kafedra: info.kafedra),
+                Expanded(
+                  flex: 2,
+                  child: AutoSizeText(
+                    info.fullName,
+                    style: GoogleFonts.rubikTextTheme(
+                      Theme.of(context).textTheme,
+                    ).headline6,
                     textScaleFactor: 0.9,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Separator.spacer(space: 5),
-                AutoSizeText(
-                  _lecturer.fullName,
-                  style: Theme.of(context).textTheme.headline5,
-                  maxLines: 2,
+                Expanded(
+                    child:
+                        _buildLecturerInfo(context, 'Должность:', info.rank)),
+                Expanded(
+                  child: _buildLecturerInfo(
+                      context, 'Ученая степень:', info.academicDegree),
                 ),
-                Spacer(flex: 2),
-                _buildLecturerInfo(context, 'Должность:', _lecturer.rank),
-                Spacer(),
-                _buildLecturerInfo(
-                    context, 'Ученая степень:', _lecturer.academicDegree),
-                Spacer(),
-                _buildLecturerInfo(
-                    context, 'Ученое звание:', _lecturer.academicRank),
-                Spacer(),
+                Expanded(
+                    child: _buildLecturerInfo(
+                        context, 'Ученое звание:', info.academicRank)),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildKafedraBadge(BuildContext context, {String kafedra}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 4),
+      margin: const EdgeInsets.only(bottom: 5),
+      decoration: BoxDecoration(
+        color: Theme.of(context).accentColor.withOpacity(0.1),
+        border: Border.all(
+          color: Theme.of(context).accentColor,
+        ),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        kafedra,
+        style: Theme.of(context).textTheme.caption.copyWith(
+            color: Theme.of(context).accentColor, fontWeight: FontWeight.w500),
+        textScaleFactor: 0.8,
+      ).scalable(),
+    );
+  }
+
+  Widget _buildLecturerAvatar(String photo) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            spreadRadius: 2,
+            blurRadius: 7,
+            offset: Offset(0, 0),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        child: CacheImage.lecturer(
+          photo,
+        ),
       ),
     );
   }
@@ -136,91 +155,94 @@ class PersonalPage extends StatelessWidget {
           ),
           TextSpan(
               text: label,
-              style: Theme.of(context).textTheme.caption.copyWith(height: 1.4)),
+              style: Theme.of(context).textTheme.caption.copyWith(height: 1.2)),
         ],
       ),
+      // textScaleFactor: 0.92,
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
     );
   }
 
   Widget _buildMainInfoCard(BuildContext context) {
+    final info = context.read<LecturersRepository>().getByLecturer(name);
     return CardCell.body(
       context,
       title: 'Основные сведения',
       child: RowLayout(children: <Widget>[
         RowText(
           'Образование',
-          _lecturer.qualification
-              .reduce((value, element) => '$value, $element'),
+          info.qualification.reduce((value, element) => '$value, $element'),
         ),
         Separator.divider(),
         RowText(
           'Общий стаж',
-          'с ${_lecturer.totalLengthOfService.year} года',
+          'с ${info.totalLengthOfService.year} года',
         ),
         RowText(
           'Стаж работы по специальности',
-          'с ${_lecturer.lengthWorkOfSpeciality.year} года',
+          'с ${info.lengthWorkOfSpeciality.year} года',
         ),
       ]),
     );
   }
 
   Widget _buildSpecialityCard(BuildContext context) {
+    final info = context.read<LecturersRepository>().getByLecturer(name);
     return CardCell.body(
       context,
       title: 'Специальность',
       child: RowLayout(children: <Widget>[
-        for (int i = 0; i < _lecturer.specialty.length; i++)
+        for (int i = 0; i < info.specialty.length; i++)
           RichText(
             text: TextSpan(
               children: [
                 WidgetSpan(
                   child: Text(
-                    i > _lecturer.specialty.length - 1
-                        ? _lecturer.specialty[_lecturer.specialty.length - 1]
-                        : _lecturer.specialty[i],
+                    i > info.specialty.length - 1
+                        ? info.specialty[info.specialty.length - 1]
+                        : info.specialty[i],
                   ),
                 ),
                 TextSpan(
-                    text: i > _lecturer.education.length - 1
-                        ? ' (${_lecturer.education[_lecturer.education.length - 1]})'
-                        : ' (${_lecturer.education[i]})',
+                    text: i > info.education.length - 1
+                        ? ' (${info.education[info.education.length - 1]})'
+                        : ' (${info.education[i]})',
                     style: Theme.of(context)
                         .textTheme
                         .caption
                         .copyWith(fontSize: 13, height: 1.4)),
               ],
             ),
-          ),
+          ).scalable(),
       ]),
     );
   }
 
   Widget _buildDisciplinesTaughtCard(BuildContext context) {
+    final info = context.read<LecturersRepository>().getByLecturer(name);
     return CardCell.body(
       context,
       title: 'Преподаваемые дисциплины',
       child: ExpandText(
-        _lecturer.disciplinesTaught
-            .reduce((value, element) => '$value, $element'),
+        info.disciplinesTaught.reduce((value, element) => '$value, $element'),
         collapsedHint: 'Развернуть',
         expandedHint: 'Свернуть',
-        style: Theme.of(context).textTheme.bodyText2.copyWith(height: 1.4),
+        // style: Theme.of(context).textTheme.bodyText2.copyWith(height: 1.4),
         maxLines: 4,
       ),
     );
   }
 
   Widget _buildTrainingsCard(BuildContext context) {
+    final info = context.read<LecturersRepository>().getByLecturer(name);
     return CardCell.body(
       context,
       title: 'Повышение квалификации',
       child: ExpandText(
-        _lecturer.trainings.reduce((value, element) => '$value\n$element'),
+        info.trainings.reduce((value, element) => '$value\n$element'),
         maxLines: 4,
-        style: Theme.of(context).textTheme.bodyText2.copyWith(height: 1.4),
+        // style: Theme.of(context).textTheme.bodyText2.copyWith(height: 1.4),
         collapsedHint: 'Развернуть',
         expandedHint: 'Свернуть',
       ),
@@ -228,19 +250,15 @@ class PersonalPage extends StatelessWidget {
   }
 
   Widget _buildScientificInterestsCard(BuildContext context) {
+    final info = context.read<LecturersRepository>().getByLecturer(name);
     return CardCell.body(
       context,
       title: 'Научные интересы',
-      child: RowLayout(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              _lecturer.scientificInterests
-                  .reduce((value, element) => '$value, $element'),
-              style:
-                  Theme.of(context).textTheme.bodyText2.copyWith(height: 1.4),
-            ),
-          ]),
+      child: ExpandText(
+        info.scientificInterests.reduce((value, element) => '$value, $element'),
+        // style: Theme.of(context).textTheme.bodyText2.copyWith(height: 1.4),
+        maxLines: 4,
+      ),
     );
   }
 }

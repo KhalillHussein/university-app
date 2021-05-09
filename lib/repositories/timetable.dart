@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sqflite/sqflite.dart';
 
@@ -17,14 +17,11 @@ class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
 
   String userCategory;
 
-  TimetableRepository(TimetableService service) : super(service);
+  TimetableRepository(TimetableService service) : super(service) {
+    init();
+  }
 
   bool get isUserSetCategory => userCategory != null;
-
-  void setUserCategory(String category) {
-    userCategory = category;
-    notifyListeners();
-  }
 
   @override
   Future<void> loadData() async {
@@ -62,62 +59,55 @@ class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
     }
   }
 
-  List<Timetable> get timetable => list;
-
   int get itemCount => list?.length;
+
+  Future<void> setUserCategory(String category) async {
+    userCategory = category;
+    notifyListeners();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('category', userCategory);
+  }
+
+  Future<void> init() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    userCategory = prefs.getString('category');
+    notifyListeners();
+  }
 
   List<Timetable> getBy(String keyword) {
     return [...list]
-        ?.where((element) =>
+        .where((element) =>
             element.group == keyword ||
             element.aud == keyword ||
             element.name == keyword)
-        ?.toList()
+        .toList()
           ..sort((a, b) {
             return a.lesson.compareTo(b.lesson);
           });
   }
 
-  List<Map<String, dynamic>> searchCategories() {
-    final List<Map<String, dynamic>> lec = [
-      for (final item in lecturers)
-        {
-          'name': item,
-          'group': 'Преподаватель',
-          'icon': MdiIcons.accountTie,
-          'category': Categories.lecturer,
-        }
-    ];
-    final List<Map> gr = {
-      for (final item in groups)
-        {
-          'name': item,
-          'group': 'Группа',
-          'icon': MdiIcons.accountGroup,
-          'category': Categories.group,
-        }
-    }?.toList();
-    final List<Map> au = {
-      for (final item in aud)
-        {
-          'name': item,
-          'group': 'Аудитория',
-          'icon': MdiIcons.domain,
-          'category': Categories.auditory,
-        }
-    }?.toList();
-    return [...lec, ...gr, ...au];
+  Categories getCategory(String category) {
+    if (groups.contains(category)) {
+      return Categories.group;
+    }
+    if (lecturers.contains(category)) {
+      return Categories.lecturer;
+    }
+    if (aud.contains(category)) {
+      return Categories.auditory;
+    }
+    return Categories.group;
   }
 
   List<String> get groups {
-    return {for (final item in timetable) item.group}?.toList();
+    return {for (final item in list) item.group}.toList();
   }
 
   List<String> get lecturers {
-    return {for (final item in timetable) item.name}?.toList()..sort();
+    return {for (final item in list) item.name}.toList()..sort();
   }
 
   List<String> get aud {
-    return {for (final item in timetable) item.aud}?.toList()..sort();
+    return {for (final item in list) item.aud}.toList()..sort();
   }
 }

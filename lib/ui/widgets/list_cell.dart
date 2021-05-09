@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:row_collection/row_collection.dart';
 
+import '../../util/extensions.dart';
+
 /// Widget similar to [ListTile] with custom theme
 /// and constructors.
 class ListCell extends StatelessWidget {
@@ -31,13 +33,15 @@ class ListCell extends StatelessWidget {
     @required String title,
     String subtitle,
     VoidCallback onTap,
-    double iconSize,
     EdgeInsets contentPadding,
     bool dense = false,
   }) {
     return ListCell(
       key: key,
-      leading: Icon(icon, size: iconSize ?? 40),
+      leading: Transform.translate(
+        offset: Offset(0, 4),
+        child: Icon(icon, size: 25),
+      ),
       trailing: trailing,
       title: title,
       subtitle: subtitle,
@@ -57,22 +61,21 @@ class ListCell extends StatelessWidget {
           Text(
             title,
             style: Theme.of(context).textTheme.subtitle1.copyWith(
-              fontWeight: FontWeight.w400,
-            ),
+                  fontWeight: FontWeight.w600,
+                ),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
-          ),
+          ).scalable(),
           if (subtitle != null) Separator.spacer(space: 4),
         ],
       ),
       subtitle: subtitle == null
           ? null
           : Text(
-        subtitle,
-        style: Theme.of(context).textTheme.bodyText2.copyWith(
-          color: Theme.of(context).textTheme.caption.color,
-        ),
-      ),
+              subtitle,
+              style: Theme.of(context).textTheme.caption,
+              textScaleFactor: 1.05,
+            ).scalable(),
       trailing: onTap != null && trailing == null
           ? Icon(Icons.chevron_right)
           : trailing,
@@ -95,8 +98,8 @@ class TrailingText extends StatelessWidget {
     return Text(
       data,
       style: Theme.of(context).textTheme.bodyText2.copyWith(
-        color: Theme.of(context).textTheme.caption.color,
-      ),
+            color: Theme.of(context).textTheme.caption.color,
+          ),
     );
   }
 }

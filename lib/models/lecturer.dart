@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class Lecturer {
   final int id;
   final String fullName;
@@ -19,22 +17,22 @@ class Lecturer {
   final List scientificInterests;
 
   Lecturer({
-    @required this.id,
-    @required this.fullName,
-    @required this.email,
-    @required this.rank,
-    @required this.kafedra,
-    @required this.academicDegree,
-    @required this.academicRank,
-    @required this.totalLengthOfService,
-    @required this.lengthWorkOfSpeciality,
-    @required this.photo,
-    @required this.education,
-    @required this.qualification,
-    @required this.specialty,
-    @required this.trainings,
-    @required this.disciplinesTaught,
-    @required this.scientificInterests,
+    this.id,
+    this.fullName,
+    this.email,
+    this.rank,
+    this.kafedra,
+    this.academicDegree,
+    this.academicRank,
+    this.totalLengthOfService,
+    this.lengthWorkOfSpeciality,
+    this.photo,
+    this.education,
+    this.qualification,
+    this.specialty,
+    this.trainings,
+    this.disciplinesTaught,
+    this.scientificInterests,
   });
 
   factory Lecturer.fromJson(Map<String, dynamic> json) {

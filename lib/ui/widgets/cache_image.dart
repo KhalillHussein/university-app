@@ -21,7 +21,7 @@ class CacheImage extends StatelessWidget {
 
   static const Size _bigSize = Size(double.infinity, 209);
 
-  static const Size _middleSize = Size(150, 200);
+  static const Size _middleSize = Size(145, 200);
 
   static const Size _smallSize = Size(50, 50);
 
@@ -41,7 +41,7 @@ class CacheImage extends StatelessWidget {
     );
   }
 
-  factory CacheImage.news({@required String url}) {
+  factory CacheImage.news(String url) {
     return CacheImage(url, size: _bigSize, cacheWidth: 400);
   }
 

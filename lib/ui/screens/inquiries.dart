@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:google_fonts/google_fonts.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:row_collection/row_collection.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,25 +53,30 @@ class InquiriesScreen extends StatelessWidget {
         context.read<ValidationProvider>().changeCompanyName(record['title']);
         _showForm(context, record['title']);
       },
+      minLeadingWidth: 0,
+      leading: const Icon(
+        MdiIcons.fileDocumentOutline,
+      ),
       title: Padding(
         padding: const EdgeInsets.only(right: 50),
         child: Text(
           record['title'],
-        ),
+          maxLines: 2,
+          // textScaleFactor: 0.8,
+          style: Theme.of(context).textTheme.bodyText1.copyWith(
+                color: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    .color
+                    .withOpacity(0.9),
+              ),
+        ).scalable(),
       ),
       trailing: Icon(
         Icons.arrow_forward_ios_outlined,
         size: 16,
+        color: Theme.of(context).textTheme.caption.color,
       ),
-      // subtitle: record['fullName'] != null
-      //     ? Padding(
-      //         padding: const EdgeInsets.only(right: 50),
-      //         child: Text(
-      //           record['fullName'],
-      //           style: Theme.of(context).textTheme.caption,
-      //         ),
-      //       )
-      //     : null,
     );
   }
 
@@ -97,13 +101,13 @@ class InquiriesScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
-              ),
-            Separator.spacer(space: 20),
+              ).scalable(),
+            if (isUserInquiry) Separator.spacer(space: 15),
             Theme(
               data: Theme.of(context).copyWith(
                 primaryColor: Theme.of(context).brightness == Brightness.light
-                    ? kLightPrimaryColor
-                    : kDarkPrimaryColor,
+                    ? kLightAccentColor
+                    : kDarkAccentColor,
               ),
               child: Padding(
                 padding:
@@ -117,12 +121,6 @@ class InquiriesScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 15.0),
                           child: Consumer<ValidationProvider>(
                             builder: (ctx, validate, _) => TextFormField(
-                              style: TextStyle(
-                                  fontSize: 17,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      .color),
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 labelText: 'Наименование учреждения*',
@@ -142,12 +140,6 @@ class InquiriesScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: Consumer<ValidationProvider>(
                           builder: (ctx, validate, _) => TextFormField(
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    .color),
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
                               labelText: 'Район, город, область*',
@@ -205,7 +197,7 @@ class InquiriesScreen extends StatelessWidget {
                                   label: 'Лично',
                                 ),
                               ),
-                              const SizedBox(width: 20),
+                              Separator.spacer(space: 20),
                               Consumer<RadioProvider>(
                                 builder: (ctx, radioState, _) =>
                                     RadioCell<DocType>(
@@ -219,7 +211,7 @@ class InquiriesScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      Separator.spacer(space: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -230,7 +222,7 @@ class InquiriesScreen extends StatelessWidget {
                                 Theme.of(context).accentColor,
                               ),
                             ),
-                            child: const Text('Отмена'),
+                            child: const Text('Отмена').scalable(),
                           ),
                           const SizedBox(width: 15),
                           Consumer2<ValidationProvider, RadioProvider>(
@@ -272,7 +264,7 @@ class InquiriesScreen extends StatelessWidget {
                                       Navigator.pop(context);
                                     }
                                   : null,
-                              child: const Text('Подтвердить'),
+                              child: const Text('Подтвердить').scalable(),
                             ),
                           ),
                         ],

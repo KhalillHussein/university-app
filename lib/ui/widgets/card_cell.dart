@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:row_collection/row_collection.dart';
 
+import '../../util/extensions.dart';
+
 /// This widget applies a custom theme to a [Card] widget.
 /// No shadows and a little rounded border :)
 class CardCell extends StatelessWidget {
@@ -75,7 +77,7 @@ class CardCell extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
-          ),
+          ).scalable(),
         child
       ]),
     );

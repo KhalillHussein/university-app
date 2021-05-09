@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class PhoneBook {
   final int id;
   final String fullName;
@@ -8,11 +6,11 @@ class PhoneBook {
   final List<dynamic> phoneNumber;
 
   PhoneBook({
-    @required this.id,
-    @required this.fullName,
-    @required this.department,
-    @required this.post,
-    @required this.phoneNumber,
+    this.id,
+    this.fullName,
+    this.department,
+    this.post,
+    this.phoneNumber,
   });
 
   factory PhoneBook.fromJson(Map<String, dynamic> json) {

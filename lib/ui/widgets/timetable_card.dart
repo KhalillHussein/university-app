@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:row_collection/row_collection.dart';
 
-import '../../util/colors.dart';
+import '../../util/index.dart';
 
 class TimetableCard extends StatelessWidget {
   final String lessonNumber;
@@ -38,13 +37,15 @@ class TimetableCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
         child: Row(
           children: [
-            Text(
-              lessonNumber,
-              style: GoogleFonts.rubikTextTheme(
-                Theme.of(context).textTheme,
-              ).headline5,
+            SizedBox(
+              width: 35,
+              child: Text(
+                lessonNumber,
+                style: GoogleFonts.rubikTextTheme(
+                  Theme.of(context).textTheme,
+                ).headline5,
+              ).scalable(),
             ),
-            Separator.spacer(space: 20),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -63,19 +64,17 @@ class TimetableCard extends StatelessWidget {
                         _buildBadge(context, subjectType),
                       ],
                     ),
-                    Separator.spacer(space: 8),
-                    SizedBox(
-                      height: 25,
-                      child: AutoSizeText(
-                        title,
-                        style: GoogleFonts.rubikTextTheme(
-                          Theme.of(context).textTheme,
-                        ).bodyText2,
-                        maxLines: 2,
-                        softWrap: true,
-                        textScaleFactor: 1.2,
-                      ),
-                    ),
+                    Separator.spacer(space: 4),
+                    Text(
+                      title,
+                      style: GoogleFonts.rubikTextTheme(
+                        Theme.of(context).textTheme,
+                      ).bodyText2,
+                      maxLines: 2,
+                      softWrap: true,
+                      textScaleFactor: 1.2,
+                    ).scalable(),
+                    Separator.spacer(space: 2),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -101,23 +100,27 @@ class TimetableCard extends StatelessWidget {
     );
   }
 
+  Color getColor(BuildContext context, {String subjectType}) {
+    if (subjectType.toLowerCase().contains('лек')) {
+      return Theme.of(context).colorScheme.lecture;
+    }
+    if (subjectType.toLowerCase().contains('пз')) {
+      return Theme.of(context).colorScheme.practice;
+    }
+    if (subjectType.toLowerCase().contains('лр')) {
+      return Theme.of(context).colorScheme.laboratory;
+    }
+    if (subjectType.toLowerCase().contains('кон')) {
+      return Theme.of(context).colorScheme.consultation;
+    }
+    return Theme.of(context).colorScheme.exam;
+  }
+
   Widget _buildBadge(BuildContext context, String subjectType) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
       decoration: BoxDecoration(
-        color: subjectType.toLowerCase().contains('лек')
-            ? Theme.of(context).brightness == Brightness.dark
-                ? kDarkLectureColor
-                : kLightLectureColor
-            : subjectType.toLowerCase().contains('пз')
-                ? Theme.of(context).brightness == Brightness.dark
-                    ? kDarkPracticeColor
-                    : kLightPracticeColor
-                : subjectType.toLowerCase().contains('лр')
-                    ? Theme.of(context).brightness == Brightness.dark
-                        ? kDarkLaboratoryColor
-                        : kLightLaboratoryColor
-                    : Theme.of(context).errorColor,
+        color: getColor(context, subjectType: subjectType),
         borderRadius: BorderRadius.circular(2.0),
       ),
       child: FittedBox(
@@ -148,7 +151,7 @@ class TimetableCard extends StatelessWidget {
                         : Colors.white,
                   ),
               textScaleFactor: 1.1,
-            ),
+            ).scalable(),
           ],
         ),
       ),
@@ -181,7 +184,7 @@ class TimetableCard extends StatelessWidget {
           ],
         ),
         textScaleFactor: 1.15,
-      ),
+      ).scalable(),
     );
   }
 }

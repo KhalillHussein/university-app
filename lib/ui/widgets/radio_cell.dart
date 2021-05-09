@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../util/extensions.dart';
+
 class RadioCell<T> extends StatelessWidget {
   final T value;
   final T groupValue;
@@ -30,7 +32,7 @@ class RadioCell<T> extends StatelessWidget {
           label,
           style: Theme.of(context).textTheme.caption,
           textScaleFactor: 1.1,
-        ),
+        ).scalable(),
       ],
     );
   }

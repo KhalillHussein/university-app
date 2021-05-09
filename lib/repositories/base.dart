@@ -63,3 +63,35 @@ abstract class BaseRepository<M, T extends BaseService> with ChangeNotifier {
     notifyListeners();
   }
 }
+
+abstract class BasePostRepository<T extends BaseService> with ChangeNotifier {
+  /// System to perform data manipulation operations
+  final T service;
+
+  /// Status regarding data loading capabilities
+  Status _status;
+
+  /// String that saves information about the latest error
+  String errorMessage;
+
+  BasePostRepository(this.service);
+
+  /// Overridable method, used to post the model's data.
+  Future<void> postData();
+
+  bool get postingFailed => _status == Status.error;
+  bool get isPosted => _status == Status.loaded;
+
+  /// Signals that there has been an error downloading data.
+  void receivedError(String error) {
+    _status = Status.error;
+    errorMessage = error;
+    debugPrint(error);
+  }
+
+  /// Signals that information has been downloaded.
+  void finishLoading() {
+    _status = Status.loaded;
+    notifyListeners();
+  }
+}

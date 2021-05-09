@@ -7,6 +7,7 @@ import 'package:row_collection/row_collection.dart';
 import '../../models/index.dart';
 import '../../repositories/index.dart';
 import '../../ui/widgets/index.dart';
+import '../../util/index.dart';
 import '../pages/index.dart';
 
 class LecturersScreen extends StatelessWidget {
@@ -27,16 +28,17 @@ class LecturersScreen extends StatelessWidget {
 
   Widget _buildLecturerCard(BuildContext context, String kafedra) {
     return Consumer<LecturersRepository>(builder: (ctx, model, _) {
+      final List<Lecturer> lecturers = model.getByKafedra(kafedra);
       return ListView.separated(
           separatorBuilder: (ctx, index) => Separator.divider(indent: 80),
-          itemCount: model.getByKafedra(kafedra).length,
+          itemCount: lecturers.length,
           itemBuilder: (ctx, index) {
-            final Lecturer lecturer = model.getByKafedra(kafedra)[index];
-            return ListTile(
+            final Lecturer lecturer = lecturers[index];
+            return ListCell(
               onTap: () => Navigator.pushNamed(
                 context,
                 PersonalPage.route,
-                arguments: {'object': lecturer},
+                arguments: {'name': lecturer.fullName},
               ),
               leading: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(2.0)),
@@ -44,32 +46,13 @@ class LecturersScreen extends StatelessWidget {
                   lecturer.photo,
                 ),
               ),
-              title: Padding(
-                padding: EdgeInsets.only(right: 40),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    lecturer.fullName,
-                    maxLines: 1,
-                    style: GoogleFonts.rubikTextTheme(
-                      Theme.of(context).textTheme,
-                    ).bodyText1,
-                  ),
-                ),
-              ),
+              title: lecturer.fullName,
               trailing: Icon(
                 Icons.arrow_forward_ios_outlined,
                 size: 16,
+                color: Theme.of(context).textTheme.caption.color,
               ),
-              subtitle: Text(
-                lecturer.rank,
-                style: GoogleFonts.rubikTextTheme(
-                  Theme.of(context).textTheme,
-                ).caption,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+              subtitle: lecturer.rank,
             );
           });
     });

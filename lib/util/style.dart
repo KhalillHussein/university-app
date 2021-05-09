@@ -17,9 +17,9 @@ class Style {
 
   /// Light style
   static final ThemeData light = ThemeData(
-    accentColor: kLightPrimaryColor,
+    accentColor: kLightAccentColor,
     appBarTheme: AppBarTheme(titleSpacing: 0.0),
-    buttonTheme: ButtonThemeData(buttonColor: kLightPrimaryColor),
+    buttonTheme: ButtonThemeData(buttonColor: kLightAccentColor),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       elevation: 8.0,
       selectedItemColor: kLightSecondaryColor,
@@ -30,12 +30,12 @@ class Style {
     pageTransitionsTheme: _pageTransitionsTheme,
     primaryColor: Colors.white,
     scaffoldBackgroundColor: kLightColor,
-    textTheme: GoogleFonts.rubikTextTheme(ThemeData.light().textTheme),
+    // textTheme: GoogleFonts.rubikTextTheme(ThemeData.light().textTheme),
   );
 
   /// Dark style
   static final ThemeData dark = ThemeData(
-    accentColor: kDarkPrimaryColor,
+    accentColor: kDarkAccentColor,
     appBarTheme: AppBarTheme(titleSpacing: 0.0),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       elevation: 3.0,
@@ -43,7 +43,7 @@ class Style {
       type: BottomNavigationBarType.fixed,
     ),
     brightness: Brightness.dark,
-    canvasColor: k08dp,
+    canvasColor: k06dp,
     cardColor: k02dp,
     dialogBackgroundColor: k24dp,
     dividerColor: Colors.white12,
@@ -52,7 +52,7 @@ class Style {
     pageTransitionsTheme: _pageTransitionsTheme,
     scaffoldBackgroundColor: k01dp,
     selectedRowColor: Colors.white.withOpacity(0.2),
-    textTheme: GoogleFonts.rubikTextTheme(ThemeData.dark().textTheme),
+    // textTheme: GoogleFonts.rubikTextTheme(ThemeData.dark().textTheme),
   );
 
   // static final ThemeData dark = ThemeData(

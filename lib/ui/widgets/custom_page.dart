@@ -11,6 +11,7 @@ import 'package:row_collection/row_collection.dart';
 
 import '../../repositories/index.dart';
 import '../../util/index.dart';
+import '../screens/settings.dart';
 import 'index.dart';
 
 /// Centered [CircularProgressIndicator] widget.
@@ -18,7 +19,7 @@ Widget get _loadingIndicator =>
     const Center(child: CircularProgressIndicator());
 
 /// Function which handles reloading [QueryModel] models.
-Future<void> _onRefresh(BuildContext context, BaseRepository repository) {
+Future<void> onRefresh(BuildContext context, BaseRepository repository) {
   final Completer<void> completer = Completer<void>();
   repository.refreshData().then((_) {
     if (repository.loadingFailed) {
@@ -42,7 +43,7 @@ Future<void> _onRefresh(BuildContext context, BaseRepository repository) {
                     softWrap: true,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
-                  ),
+                  ).scalable(),
                 ),
               ],
             ),
@@ -59,15 +60,16 @@ Future<void> _onRefresh(BuildContext context, BaseRepository repository) {
 /// Used when the desired page doesn't have reloading.
 class SimplePage extends StatelessWidget {
   final String title;
-  final Widget body, fab, leading;
-  final PreferredSizeWidget bottom;
+  final Widget body, fab, leading, titleWidget;
   final List<Widget> actions;
+  final double elevation;
 
   const SimplePage({
-    @required this.title,
+    this.title,
     @required this.body,
+    this.elevation,
+    this.titleWidget,
     this.leading,
-    this.bottom,
     this.fab,
     this.actions,
   });
@@ -77,11 +79,13 @@ class SimplePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: leading,
-        bottom: bottom,
-        title: Text(
-          title,
-          style: GoogleFonts.rubik(fontWeight: FontWeight.w600),
-        ),
+        elevation: elevation,
+        title: titleWidget ??
+            Text(
+              title,
+              // style: GoogleFonts.rubik(fontWeight: FontWeight.w500),
+              // style: Theme.of(context).textTheme.headline6,
+            ),
         actions: actions,
       ),
       body: body,
@@ -95,60 +99,32 @@ class SimplePage extends StatelessWidget {
 class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
   final String title;
   final List<Widget> actions;
-  final Widget body, fab, placeholder, leading;
-  final PreferredSizeWidget bottom;
+  final Widget body, fab, placeholder, leading, titleWidget;
+  final double elevation;
 
   const ReloadableSimplePage({
-    @required this.title,
+    this.title,
     @required this.body,
-    this.bottom,
+    this.titleWidget,
+    this.elevation,
     this.actions,
     this.placeholder,
     this.fab,
     this.leading,
   });
 
-  factory ReloadableSimplePage.tabs({
-    @required String title,
-    @required Widget body,
-    @required VoidCallback leadingCallBack,
-    Widget fab,
-    Widget placeholder,
-    PreferredSizeWidget bottom,
-  }) {
-    return ReloadableSimplePage(
-      bottom: bottom,
-      placeholder: placeholder,
-      title: title,
-      body: body,
-      leading: IconButton(
-        splashRadius: 20,
-        icon: const Icon(MdiIcons.menu),
-        onPressed: leadingCallBack,
-      ),
-      fab: fab,
-      actions: [
-        ThemeSwitchIcon(),
-        IconButton(
-          splashRadius: 20,
-          icon: const Icon(MdiIcons.cogOutline),
-          onPressed: null,
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return SimplePage(
-      bottom: bottom,
       actions: actions,
       title: title,
+      elevation: elevation,
+      titleWidget: titleWidget,
       fab: fab,
       leading: leading,
       body: Consumer<T>(
         builder: (context, model, child) => RefreshIndicator(
-          onRefresh: () => _onRefresh(context, model),
+          onRefresh: () => onRefresh(context, model),
           child: model.isLoading
               ? placeholder ?? _loadingIndicator
               : model.loadingFailed && model.list.isEmpty
@@ -156,23 +132,120 @@ class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
                       value: model,
                       child: ConnectionError<T>(),
                     )
-                  : model.databaseFetch
-                      ? Stack(
-                          children: [
-                            body,
-                            Positioned(
-                              bottom: 0.0,
-                              left: 0.0,
-                              right: 0.0,
-                              child: ChangeNotifierProvider.value(
-                                value: model,
-                                child: Message<T>(),
-                              ),
-                            ),
-                          ],
-                        )
-                      : body,
+                  : body,
         ),
+      ),
+    );
+  }
+}
+
+class ReloadableTab<T extends BaseRepository> extends StatelessWidget {
+  final String title;
+  final List<Widget> actions;
+  final Widget body, fab, placeholder, leading, titleWidget;
+  final double elevation;
+
+  const ReloadableTab({
+    this.title,
+    @required this.body,
+    this.titleWidget,
+    this.elevation,
+    this.actions,
+    this.placeholder,
+    this.fab,
+    this.leading,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SimplePage(
+      actions: actions ??
+          [
+            ThemeSwitchIcon(),
+            IconButton(
+              splashRadius: 20,
+              tooltip: 'Настройки',
+              icon: const Icon(MdiIcons.cogOutline),
+              onPressed: () =>
+                  Navigator.pushNamed(context, SettingsScreen.route),
+            ),
+          ],
+      title: title,
+      elevation: elevation,
+      titleWidget: titleWidget,
+      fab: fab,
+      leading: IconButton(
+        splashRadius: 20,
+        tooltip: 'Меню',
+        icon: const Icon(MdiIcons.menu),
+        onPressed: Scaffold.of(context).openDrawer,
+      ),
+      body: Consumer<T>(
+        builder: (context, model, child) => RefreshIndicator(
+          onRefresh: () => onRefresh(context, model),
+          child: model.isLoading
+              ? placeholder ?? _loadingIndicator
+              : model.loadingFailed && model.list.isEmpty
+                  ? ChangeNotifierProvider.value(
+                      value: model,
+                      child: ConnectionError<T>(),
+                    )
+                  : body,
+        ),
+      ),
+    );
+  }
+}
+
+class SimpleTab<T extends BaseRepository> extends StatelessWidget {
+  final String title;
+  final List<Widget> actions;
+  final Widget body, fab, placeholder, leading, titleWidget;
+  final double elevation;
+
+  const SimpleTab({
+    this.title,
+    @required this.body,
+    this.titleWidget,
+    this.elevation,
+    this.actions,
+    this.placeholder,
+    this.fab,
+    this.leading,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SimplePage(
+      actions: actions ??
+          [
+            ThemeSwitchIcon(),
+            IconButton(
+              splashRadius: 20,
+              icon: const Icon(MdiIcons.cogOutline),
+              onPressed: () =>
+                  Navigator.pushNamed(context, SettingsScreen.route),
+            ),
+          ],
+      title: title,
+      elevation: elevation,
+      titleWidget: titleWidget,
+      fab: fab,
+      leading: IconButton(
+        splashRadius: 20,
+        tooltip: 'Меню',
+        icon: const Icon(MdiIcons.menu),
+        onPressed: Scaffold.of(context).openDrawer,
+      ),
+      body: Consumer<T>(
+        builder: (context, model, child) => model.isLoading
+            ? placeholder ?? _loadingIndicator
+            : model.loadingFailed && model.list.isEmpty
+                ? ChangeNotifierProvider.value(
+                    value: model,
+                    child: ConnectionError<T>(),
+                  )
+                : body,
       ),
     );
   }
@@ -187,20 +260,22 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
       builder: (context, model, child) => BigTip(
         title: Text(
           'При загрузке данных что-то пошло не так',
-          style:
-              GoogleFonts.rubikTextTheme(Theme.of(context).textTheme).subtitle1,
-        ),
+          style: GoogleFonts.rubikTextTheme(
+            Theme.of(context).textTheme,
+          ).headline5,
+          textScaleFactor: 0.65,
+        ).scalable(),
         subtitle: TextButton(
-          onPressed: () async => _onRefresh(context, model),
+          onPressed: () async => onRefresh(context, model),
           child: Text(
-            'Повторить попытку',
+            'ПОВТОРИТЬ',
             style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
                 .subtitle1
                 .copyWith(
                   color: Theme.of(context).accentColor,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
-          ),
+          ).scalable(),
         ),
         child: const Icon(Icons.cloud_off),
       ),
@@ -208,50 +283,43 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
   }
 }
 
-class Message<T extends BaseRepository> extends StatefulWidget {
-  @override
-  _MessageState<T> createState() => _MessageState<T>();
-}
-
-class _MessageState<T extends BaseRepository> extends State<Message<T>> {
-  bool isShowing = true;
-
+class Message<T extends BaseRepository> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<T>(
-      builder: (ctx, model, _) => isShowing
-          ? MaterialBanner(
-              backgroundColor: Theme.of(context).brightness == Brightness.light
-                  ? Colors.blue[50]
-                  : k04dp,
-              leading: Icon(
-                MdiIcons.cloudOffOutline,
-                size: 20,
-                color: Theme.of(context).disabledColor,
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => setState(() => isShowing = false),
-                  child: Text(
-                    'СКРЫТЬ',
-                    style: GoogleFonts.rubikTextTheme(
-                      Theme.of(context).textTheme,
-                    ).overline.copyWith(
-                          color: Theme.of(context).accentColor,
-                          fontWeight: FontWeight.w400,
-                        ),
-                    textScaleFactor: 1.5,
+      builder: (ctx, model, _) => MaterialBanner(
+        backgroundColor: Theme.of(context).brightness == Brightness.light
+            ? Colors.blue[50]
+            : k04dp,
+        leading: Icon(
+          MdiIcons.cloudOffOutline,
+          size: 22,
+          color: Theme.of(context).disabledColor,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => onRefresh(context, model),
+            child: Text(
+              'ОБНОВИТЬ',
+              style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                  .subtitle1
+                  .copyWith(
+                    color: Theme.of(context).accentColor,
+                    fontWeight: FontWeight.w600,
                   ),
-                ),
-              ],
-              content: FittedBox(
-                child: Text(
-                  'Сохраненная копия за ${DateFormat('yyyy.MM.dd - HH:mm', 'Ru').format(model.timestamp)}',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-              ),
-            )
-          : SizedBox(),
+              textScaleFactor: 0.85,
+            ).scalable(),
+          ),
+        ],
+        content: FittedBox(
+          child: Text(
+            'Сохраненная копия за ${DateFormat('yyyy.MM.dd - HH:mm', 'Ru').format(model.timestamp)}',
+            style:
+                GoogleFonts.rubikTextTheme(Theme.of(context).textTheme).caption,
+            textScaleFactor: 1.2,
+          ).scalable(),
+        ),
+      ),
     );
   }
 }

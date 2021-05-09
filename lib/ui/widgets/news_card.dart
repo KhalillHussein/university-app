@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:expandable/expandable.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:row_collection/row_collection.dart';
+import 'package:share/share.dart';
 
 import '../../util/index.dart';
 import '../screens/index.dart';
@@ -19,7 +21,7 @@ class BodyImages extends StatelessWidget {
       imagesList.add(
         Picture(
           imageConstructor: CacheImage.news(
-            url: images[i],
+            images[i],
           ),
           imageUrl: images[i],
           imageList: images,
@@ -114,7 +116,7 @@ class BodyImages extends StatelessWidget {
                                   fontSize: 22,
                                   fontWeight: FontWeight.w600,
                                 ),
-                              ),
+                              ).scalable(),
                             ),
                           ),
                         ],
@@ -156,7 +158,7 @@ class Picture extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(1.0),
+        padding: const EdgeInsets.all(1.04),
         child: GestureDetector(
           onTap: () {
             open(context);
@@ -188,44 +190,57 @@ class Body extends StatelessWidget {
   final String introText;
   final String fullText;
   final int views;
+  final String shareTitle;
+  final String shareImage;
 
-  const Body({
-    this.id,
-    @required this.introText,
-    @required this.fullText,
-    this.views,
-  });
+  const Body(
+      {this.id,
+      @required this.introText,
+      @required this.fullText,
+      this.views,
+      this.shareImage,
+      this.shareTitle});
 
   Widget _buildCollapsed(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Text(
         introText,
         maxLines: 3,
         textAlign: TextAlign.start,
-        style: GoogleFonts.rubikTextTheme(
-          Theme.of(context).textTheme,
-        ).bodyText2.copyWith(height: 1.4),
-        textScaleFactor: 1.05,
+        style: Theme.of(context).textTheme.subtitle1.copyWith(
+              height: 1.3,
+              letterSpacing: 0.15,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black87
+                  : Colors.white.withOpacity(0.9),
+            ),
+        textScaleFactor: 0.85,
         overflow: TextOverflow.ellipsis,
-      ),
+      ).scalable(),
     );
   }
 
   Widget _buildExpanded(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: MarkdownBody(
+        shrinkWrap: false,
         selectable: true,
+        fitContent: false,
         data: fullText,
         styleSheet: MarkdownStyleSheet(
-          p: GoogleFonts.rubikTextTheme(
-            Theme.of(context).textTheme,
-          ).bodyText2.copyWith(height: 1.4),
-          textScaleFactor: 1.05,
+          p: Theme.of(context).textTheme.subtitle1.copyWith(
+                height: 1.3,
+                letterSpacing: 0.15,
+                color: Theme.of(context).brightness == Brightness.light
+                    ? Colors.black87
+                    : Colors.white.withOpacity(0.9),
+              ),
+          textScaleFactor: 0.85,
         ),
         onTapLink: (_, link, __) => showUrl(link),
-      ),
+      ).scalable(),
     );
   }
 
@@ -240,18 +255,13 @@ class Body extends StatelessWidget {
               collapsed: _buildCollapsed(context),
               expanded: _buildExpanded(context),
             ),
-            const SizedBox(
-              height: 15,
-            ),
-            const Divider(
-              height: 1,
-              thickness: 1.2,
-            ),
+            Separator.spacer(),
+            Separator.divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 6),
                   child: Builder(
                     builder: (context) {
                       final controller = ExpandableController.of(context);
@@ -265,22 +275,25 @@ class Body extends StatelessWidget {
                           ).overline.copyWith(
                               color: Theme.of(context).accentColor,
                               fontWeight: FontWeight.w600),
-                          textScaleFactor: 1.5,
-                        ),
+                          textScaleFactor: 1.4,
+                        ).scalable(),
                       );
                     },
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.only(right: 10),
-                //   child: Row(
-                //     children: <Widget>[
-                //       const Icon(Icons.share_outlined),
-                //       const SizedBox(width: 5),
-                //       Text('$views')
-                //     ],
-                //   ),
-                // ),
+                IconButton(
+                  icon: Icon(
+                    Icons.share_outlined,
+                    size: 22,
+                  ),
+                  splashRadius: 20,
+                  tooltip: 'Поделиться',
+                  color: Theme.of(context).textTheme.caption.color,
+                  onPressed: () => Share.share(
+                    '$shareImage $fullText',
+                    subject: shareTitle,
+                  ),
+                ),
               ],
             ),
           ],
@@ -299,17 +312,16 @@ class Head extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
       child: Text(
         title,
-        style: GoogleFonts.rubikTextTheme(
-          Theme.of(context).textTheme,
-        ).headline6.copyWith(
+        style: Theme.of(context).textTheme.subtitle2.copyWith(
               color: Theme.of(context).brightness == Brightness.light
                   ? Colors.black87
-                  : Colors.white,
+                  : Colors.white.withOpacity(0.9),
             ),
-      ),
+        textScaleFactor: 1.25,
+      ).scalable(),
     );
   }
 }

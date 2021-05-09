@@ -14,15 +14,15 @@ class Timetable {
   final int timestamp;
 
   const Timetable({
-    @required this.id,
-    @required this.group,
-    @required this.lesson,
-    @required this.aud,
-    @required this.name,
-    @required this.subject,
-    @required this.subjectType,
-    @required this.date,
-    @required this.cafedra,
+    this.id,
+    this.group,
+    this.lesson,
+    this.aud,
+    this.name,
+    this.subject,
+    this.subjectType,
+    this.date,
+    this.cafedra,
     this.timestamp,
   });
 

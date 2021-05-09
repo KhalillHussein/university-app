@@ -16,8 +16,7 @@ class NavigationScreen extends StatelessWidget {
   List<Widget> _tabs(AuthRepository model, TimetableRepository model2) {
     return [
       NewsTab(),
-      if (model2.isUserSetCategory)
-        TimetableScreen(model2.getBy(model2.userCategory), Categories.lecturer),
+      if (model2.isUserSetCategory) TimetableScreen(),
       if (!model2.isUserSetCategory) TimetableTab(),
       if (model.isAuth) AccountTab(),
       if (!model.isAuth) AuthTab(),

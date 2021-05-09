@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mtusiapp/ui/screens/settings.dart';
 import 'package:mtusiapp/ui/widgets/custom_page.dart';
 import 'package:mtusiapp/ui/widgets/index.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class AuthTab extends StatelessWidget {
       title: 'Авторизация',
       leading: IconButton(
         splashRadius: 20,
+        tooltip: 'Меню',
         icon: const Icon(MdiIcons.menu),
         onPressed: Scaffold.of(context).openDrawer,
       ),
@@ -25,17 +27,17 @@ class AuthTab extends StatelessWidget {
         IconButton(
           splashRadius: 20,
           icon: const Icon(MdiIcons.cogOutline),
-          onPressed: null,
+          onPressed: () => Navigator.pushNamed(context, SettingsScreen.route),
         ),
       ],
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 50.0),
+          padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 35.0),
           child: Theme(
             data: Theme.of(context).copyWith(
               primaryColor: Theme.of(context).brightness == Brightness.light
-                  ? kLightPrimaryColor
-                  : kDarkPrimaryColor,
+                  ? kLightAccentColor
+                  : kDarkAccentColor,
             ),
             child: Column(
               children: [
@@ -204,6 +206,7 @@ class _PasswordFieldState extends State<PasswordField> {
         hintText: widget.hintText,
         labelText: widget.labelText,
         helperText: widget.helperText,
+        errorMaxLines: 2,
         suffixIcon: UnconstrainedBox(
           alignment: Alignment.bottomRight,
           child: GestureDetector(

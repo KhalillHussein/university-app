@@ -9,15 +9,20 @@ import '../services/index.dart';
 import '../util/index.dart';
 import 'index.dart';
 
+enum Positions { student, lecturer, admin, stuff }
+
 ///Repository that manage authentication process
 class AuthRepository extends BaseRepository<User, AuthService> {
   String _token;
+
   User _user;
+
   SharedPreferences _prefs;
 
   AuthRepository(AuthService service) : super(service);
 
   bool get isAuth => _token != null;
+
   User get user => _user;
 
   ///Function that checks if token contains in local memory
@@ -41,8 +46,8 @@ class AuthRepository extends BaseRepository<User, AuthService> {
 
   ///Function to perform API request
   Future<void> authenticate(String email, String password) async {
+    startLoading();
     try {
-      startLoading();
       final userResponse = await service.getUser(login: email, pwd: password);
       _user = User.fromJson(userResponse.data['result']);
       _token = _user.token;
@@ -70,6 +75,25 @@ class AuthRepository extends BaseRepository<User, AuthService> {
       'email': user.email,
       'role': user.role,
     });
+  }
+
+  Positions getUserPosition() {
+    switch (_user.role) {
+      case 'student':
+        return Positions.student;
+        break;
+      case 'lecturer':
+        return Positions.lecturer;
+        break;
+      case 'admin':
+        return Positions.admin;
+      case 'stuff':
+        return Positions.stuff;
+        break;
+      default:
+        return Positions.student;
+        break;
+    }
   }
 
   ///Function that performs logout operations

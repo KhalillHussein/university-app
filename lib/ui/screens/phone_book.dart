@@ -11,6 +11,7 @@ import 'package:grouped_list/grouped_list.dart';
 import '../../models/index.dart';
 import '../../repositories/index.dart';
 import '../widgets/index.dart';
+import '../../util/extensions.dart';
 
 class PhoneBookScreen extends StatelessWidget {
   static const route = '/phone_book';
@@ -23,7 +24,7 @@ class PhoneBookScreen extends StatelessWidget {
         fab: FloatingActionButton(
           tooltip: 'Поиск',
           onPressed: model.isLoaded || model.list.isNotEmpty
-              ? () => showSearch(
+              ? () => showSearch<PhoneBook>(
                     context: context,
                     delegate: SearchPage<PhoneBook>(
                       items: model.recordings,
@@ -34,7 +35,7 @@ class PhoneBookScreen extends StatelessWidget {
                           style: GoogleFonts.rubikTextTheme(
                             Theme.of(context).textTheme,
                           ).headline6,
-                        ),
+                        ).scalable(),
                         subtitle: Text(
                           'Поиск по сотруднику или должности',
                           style: GoogleFonts.rubikTextTheme(
@@ -43,8 +44,8 @@ class PhoneBookScreen extends StatelessWidget {
                                 color:
                                     Theme.of(context).textTheme.caption.color,
                               ),
-                        ),
-                        child: Icon(Icons.search),
+                        ).scalable(),
+                        child: const Icon(Icons.search),
                       ),
                       failure: BigTip(
                         title: Text(
@@ -52,7 +53,7 @@ class PhoneBookScreen extends StatelessWidget {
                           style: GoogleFonts.rubikTextTheme(
                             Theme.of(context).textTheme,
                           ).headline6,
-                        ),
+                        ).scalable(),
                         subtitle: Text(
                           'По вашему запросу ничего не найдено',
                           style: GoogleFonts.rubikTextTheme(
@@ -61,8 +62,8 @@ class PhoneBookScreen extends StatelessWidget {
                                 color:
                                     Theme.of(context).textTheme.caption.color,
                               ),
-                        ),
-                        child: Icon(Icons.sentiment_dissatisfied),
+                        ).scalable(),
+                        child: const Icon(Icons.sentiment_dissatisfied),
                       ),
                       filter: (record) => [
                         record.fullName,
@@ -79,7 +80,7 @@ class PhoneBookScreen extends StatelessWidget {
                     ),
                   )
               : null,
-          child: Icon(Icons.search),
+          child: const Icon(Icons.search),
         ),
         body: Consumer<PhoneBookRepository>(
           builder: (ctx, model, _) => Scrollbar(
@@ -115,11 +116,9 @@ class PhoneBookScreen extends StatelessWidget {
             : Colors.white10,
         title: Text(
           titleLabel,
-          style: GoogleFonts.rubikTextTheme(
-            Theme.of(context).textTheme,
-          ).bodyText1,
-          textScaleFactor: 1.2,
-        ),
+          style: Theme.of(context).textTheme.bodyText1,
+          textScaleFactor: 1.15,
+        ).scalable(),
         trailing: Icon(
           Icons.arrow_forward_ios_outlined,
           size: 16,
@@ -132,9 +131,9 @@ class PhoneBookScreen extends StatelessWidget {
               Theme.of(context).textTheme,
             ).caption,
             textScaleFactor: 1.1,
-          ),
+          ).scalable(),
         ),
-        childrenPadding: EdgeInsets.only(left: 10),
+        childrenPadding: const EdgeInsets.only(left: 10.0),
         children: [
           Row(
             children: [
@@ -164,7 +163,7 @@ class PhoneBookScreen extends StatelessWidget {
                         ],
                       ),
                       textScaleFactor: 1.15,
-                    ),
+                    ).scalable(),
                   ),
                 ),
             ],

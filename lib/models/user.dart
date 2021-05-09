@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class User {
   final String userId;
   final String token;
@@ -9,12 +7,12 @@ class User {
   final String role;
 
   User({
-    @required this.userId,
-    @required this.token,
-    @required this.userName,
-    @required this.group,
-    @required this.email,
-    @required this.role,
+    this.userId,
+    this.token,
+    this.userName,
+    this.group,
+    this.email,
+    this.role,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {

@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mtusiapp/ui/screens/settings.dart';
 import 'package:mtusiapp/ui/widgets/custom_page.dart';
 import 'package:mtusiapp/ui/widgets/index.dart';
+import 'package:row_collection/row_collection.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../util/index.dart';
+import '../../providers/text_scale.dart';
 
 class AboutTab extends StatelessWidget {
   @override
@@ -23,7 +26,7 @@ class AboutTab extends StatelessWidget {
         IconButton(
           splashRadius: 20,
           icon: const Icon(MdiIcons.cogOutline),
-          onPressed: null,
+          onPressed: () => Navigator.pushNamed(context, SettingsScreen.route),
         ),
       ],
       body: Scrollbar(
@@ -56,7 +59,7 @@ class AboutTab extends StatelessWidget {
                     : Colors.white70,
               ),
           scrollPhysics: NeverScrollableScrollPhysics(),
-        ),
+        ).scalable(),
       ),
     );
   }
@@ -82,7 +85,7 @@ class AboutTab extends StatelessWidget {
                     Theme.of(context).textTheme,
                   ).overline,
                   textScaleFactor: 1.1,
-                ),
+                ).scalable(),
               ),
             ),
             Column(children: _listRequisites(context)),
@@ -113,49 +116,50 @@ class AboutTab extends StatelessWidget {
               ? Colors.white
               : k04dp,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(2.0),
+            borderRadius: BorderRadius.circular(3.0),
           ),
-          child: ListTile(
-            leading: SizedBox(
-                height: double.infinity,
-                child: Icon(
-                  item['icon'],
-                  size: 25,
-                )),
-            title: Transform.translate(
-              offset: Offset(-13, 0),
-              child: Text(
-                item['name'],
-                style: GoogleFonts.rubikTextTheme(
-                  Theme.of(context).textTheme,
-                ).bodyText1,
-              ),
-            ),
-            subtitle: Transform.translate(
-              offset: Offset(-13, 0),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  item['desc'],
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.rubikTextTheme(
-                    Theme.of(context).textTheme,
-                  ).caption,
-                ),
-              ),
-            ),
-            trailing: item['url'] != null
-                ? Transform.translate(
-                    offset: Offset(3, -13),
-                    child: Icon(
-                      MdiIcons.openInNew,
-                      size: 18,
+          child: InkWell(
+            onTap: item['url'] != null ? () => launchUrl(item['url']) : null,
+            borderRadius: BorderRadius.circular(3.0),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
+              child: Row(
+                children: [
+                  Icon(
+                    item['icon'],
+                  ),
+                  Separator.spacer(space: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item['name'],
+                          style: GoogleFonts.rubikTextTheme(
+                            Theme.of(context).textTheme,
+                          ).bodyText2,
+                        ).scalable(),
+                        Separator.spacer(space: 3),
+                        Text(
+                          item['desc'],
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption
+                              .copyWith(height: 1.2, letterSpacing: 0.3),
+                        ).scalable(),
+                      ],
+                    ),
+                  ),
+                  if (item['url'] != null)
+                    Icon(
+                      Icons.keyboard_arrow_right,
+                      size: 28,
                       color: Theme.of(context).disabledColor,
                     ),
-                  )
-                : null,
-            onTap: item['url'] != null ? () => launchUrl(item['url']) : null,
+                ],
+              ),
+            ),
           ),
         ),
     ];

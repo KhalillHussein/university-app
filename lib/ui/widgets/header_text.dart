@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../../util/index.dart';
+
 /// This widget is used in the 'Телефонный справочник' & 'Заказ справок' screens.
 /// It categorizes items based on a theme.
 class HeaderText extends StatelessWidget {
   final String text;
   final bool head;
+  final Color color;
 
   const HeaderText(
     this.text, {
     Key key,
     this.head = false,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -24,10 +28,10 @@ class HeaderText extends StatelessWidget {
       child: Text(
         text,
         style: Theme.of(context).textTheme.bodyText2.copyWith(
-              color: Theme.of(context).accentColor,
+              color: color ?? Theme.of(context).accentColor,
               fontWeight: FontWeight.bold,
             ),
-      ),
+      ).scalable(),
     );
   }
 }

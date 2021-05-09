@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mtusiapp/ui/screens/news_edit.dart';
+import 'package:mtusiapp/ui/screens/settings.dart';
 
-import '../models/index.dart';
-import '../repositories/index.dart';
 import '../ui/pages/index.dart';
 import '../ui/screens/index.dart';
 import '../ui/screens/inquiries.dart';
@@ -36,17 +36,23 @@ class Routes {
             builder: (_) => PhoneBookScreen(),
           );
         case PersonalPage.route:
-          final lecturer = args['object'] as Lecturer;
+          final lecturer = args['name'] as String;
           return MaterialPageRoute(
             settings: routeSettings,
             builder: (_) => PersonalPage(lecturer),
           );
-        case TimetableScreen.route:
-          final timetableList = args['timetableList'] as List;
-          final category = args['category'] as Categories;
+        case CreateNewsScreen.route:
           return MaterialPageRoute(
             settings: routeSettings,
-            builder: (_) => TimetableScreen(timetableList, category),
+            builder: (_) => CreateNewsScreen(),
+          );
+        case SettingsScreen.route:
+          return MaterialPageRoute(
+            builder: (_) => SettingsScreen(),
+          );
+        case TimetableScreen.route:
+          return MaterialPageRoute(
+            builder: (_) => TimetableScreen(),
           );
         default:
           return errorRoute(routeSettings);

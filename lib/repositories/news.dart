@@ -22,8 +22,8 @@ class NewsRepository extends BaseRepository<News, NewsService> {
       final newsResponse =
           await service.getNews(pageIndex: _pageIndex, limit: _limit);
       _pagesCount = newsResponse.data['result']['totalPages'];
-      debugPrint(newsResponse.data['result']['page']
-          .toString()); //showing current page number
+      debugPrint(
+          'page ${newsResponse.data['result']['page']}'); //showing current page number
       for (final item in newsResponse.data['result']['docs']) {
         list.add(News.fromJson(item));
       }
@@ -52,7 +52,7 @@ class NewsRepository extends BaseRepository<News, NewsService> {
     } on DioError catch (dioError) {
       receivedError(ApiException.fromDioError(dioError).message);
     } catch (_) {
-      receivedError('[PARSER ERROR]');
+      receivedError('Internal error');
     }
   }
 

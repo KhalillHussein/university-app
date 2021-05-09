@@ -14,12 +14,15 @@ class PlaceholderImage extends StatelessWidget {
     return Container(
       height: height,
       width: width,
+      padding: const EdgeInsets.all(15),
       color: Theme.of(context).canvasColor,
       child: Center(
-        child: Icon(
-          Icons.photo,
-          color: Theme.of(context).disabledColor,
-          size: 80.0,
+        child: FittedBox(
+          child: Icon(
+            Icons.photo,
+            color: Theme.of(context).disabledColor,
+            size: 80.0,
+          ),
         ),
       ),
     );

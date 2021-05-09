@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 import '../util/url.dart';
@@ -14,14 +13,14 @@ class News {
   final DateTime updatedAt;
 
   const News({
-    @required this.images,
-    @required this.id,
-    @required this.title,
-    @required this.introText,
-    @required this.fullText,
-    @required this.views,
-    @required this.createdAt,
-    @required this.updatedAt,
+    this.images,
+    this.id,
+    this.title,
+    this.introText,
+    this.fullText,
+    this.views,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory News.fromJson(Map<String, dynamic> json) {

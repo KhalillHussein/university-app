@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
+import 'package:mtusiapp/repositories/news_edit.dart';
+import 'package:mtusiapp/services/news_edit.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
@@ -35,8 +38,16 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => ValidationProvider()),
         ChangeNotifierProvider(create: (ctx) => NavigationProvider()),
         ChangeNotifierProvider(create: (ctx) => RadioProvider()),
+        ChangeNotifierProvider(create: (ctx) => TextScaleProvider()),
         ChangeNotifierProvider(
             create: (ctx) => AuthRepository(AuthService(httpClient))),
+        ChangeNotifierProxyProvider<AuthRepository, NewsEditRepository>(
+          create: (ctx) => NewsEditRepository(NewsEditService(httpClient)),
+          lazy: true,
+          update: (ctx, model, model2) =>
+              NewsEditRepository(NewsEditService(httpClient))
+                ..token = model.user.token,
+        ),
         ChangeNotifierProvider(
             create: (ctx) => LecturersRepository(LecturersService(httpClient))),
         ChangeNotifierProvider(
@@ -58,7 +69,7 @@ class App extends StatelessWidget {
           child: Builder(
             builder: (context) => MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'MTUSI APP',
+              title: 'MTUСI APP',
               theme: ThemeProvider.of(context),
               darkTheme: Style.dark,
               onGenerateRoute: Routes.generateRoute,

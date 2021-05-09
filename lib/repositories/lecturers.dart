@@ -24,10 +24,14 @@ class LecturersRepository extends BaseRepository<Lecturer, LecturersService> {
     }
   }
 
-  List<Lecturer> get lecturers => list;
+  // List<Lecturer> get lecturers => list;
 
   List<Lecturer> getByKafedra(String kafedra) {
     return [...list]?.where((element) => element.kafedra == kafedra)?.toList();
+  }
+
+  Lecturer getByLecturer(String name) {
+    return list.singleWhere((element) => element.fullName == name);
   }
 
   int get itemCount => list?.length;

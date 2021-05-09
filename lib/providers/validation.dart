@@ -38,7 +38,10 @@ class ValidationProvider with ChangeNotifier {
   }
 
   bool get isAuthFormValid {
-    if (_login.value != null && _password.value != null) {
+    if (_login.error == null &&
+        _password.error == null &&
+        _login.value != null &&
+        _password.value != null) {
       return true;
     } else {
       return false;
@@ -50,7 +53,7 @@ class ValidationProvider with ChangeNotifier {
     if (regex.hasMatch(value)) {
       _login = ValidationItem(value, null);
     } else {
-      _login = ValidationItem(null, 'Неверный формат email');
+      _login = ValidationItem(value, 'Неверный формат email');
     }
     notifyListeners();
   }
@@ -60,7 +63,7 @@ class ValidationProvider with ChangeNotifier {
       _password = ValidationItem(value, null);
     } else {
       _password =
-          ValidationItem(null, 'Пароль должен быть не менее 5 символов');
+          ValidationItem(value, 'Пароль должен быть не менее 5 символов');
     }
     notifyListeners();
   }

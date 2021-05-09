@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -32,6 +33,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
   @override
   void dispose() {
     widget.pageController.dispose();
+    SystemChrome.setEnabledSystemUIOverlays(
+        [SystemUiOverlay.bottom, SystemUiOverlay.top]);
     super.dispose();
   }
 
@@ -49,8 +52,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
         backgroundColor: Colors.black,
         extendBody: true,
         extendBodyBehindAppBar: true,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           centerTitle: true,
+          toolbarHeight: appBarHeight,
           backgroundColor: Colors.black54,
           elevation: 0.0,
           title: Text(
@@ -62,14 +67,34 @@ class _GalleryScreenState extends State<GalleryScreen> {
     );
   }
 
+  double appBarHeight = kToolbarHeight;
+
+  void setOverlaysVisible() {
+    if (appBarHeight != 0) {
+      SystemChrome.setEnabledSystemUIOverlays([]);
+      setState(() {
+        appBarHeight = 0;
+      });
+    } else {
+      SystemChrome.setEnabledSystemUIOverlays(
+          [SystemUiOverlay.bottom, SystemUiOverlay.top]);
+      setState(() {
+        appBarHeight = kToolbarHeight;
+      });
+    }
+  }
+
   Widget _buildGallery(List<String> imageList) {
-    return PhotoViewGallery.builder(
-      scrollPhysics: const BouncingScrollPhysics(),
-      builder: _buildItem,
-      itemCount: imageList.length,
-      loadingBuilder: _loadingBuilder,
-      onPageChanged: onPageChanged,
-      pageController: widget.pageController,
+    return GestureDetector(
+      onTap: setOverlaysVisible,
+      child: PhotoViewGallery.builder(
+        scrollPhysics: const BouncingScrollPhysics(),
+        builder: _buildItem,
+        itemCount: imageList.length,
+        loadingBuilder: _loadingBuilder,
+        onPageChanged: onPageChanged,
+        pageController: widget.pageController,
+      ),
     );
   }
 
@@ -79,7 +104,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
         width: 30.0,
         height: 30.0,
         child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(kDarkPrimaryColor),
+          valueColor: AlwaysStoppedAnimation<Color>(kDarkAccentColor),
           value: event == null
               ? 0
               : event.cumulativeBytesLoaded / event.expectedTotalBytes,
