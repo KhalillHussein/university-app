@@ -37,7 +37,7 @@ class PhoneBookScreen extends StatelessWidget {
                           ).headline6,
                         ).scalable(),
                         subtitle: Text(
-                          'Поиск по сотруднику или должности',
+                          'Поиск по сотруднику, должности или отделению',
                           style: GoogleFonts.rubikTextTheme(
                             Theme.of(context).textTheme,
                           ).subtitle1.copyWith(
@@ -82,6 +82,7 @@ class PhoneBookScreen extends StatelessWidget {
               : null,
           child: const Icon(Icons.search),
         ),
+        placeholder: PhoneBookPlaceholder(),
         body: Consumer<PhoneBookRepository>(
           builder: (ctx, model, _) => Scrollbar(
             child: GroupedListView<PhoneBook, String>(

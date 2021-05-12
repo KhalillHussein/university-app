@@ -42,6 +42,7 @@ class AboutTab extends StatelessWidget {
 
   Widget _buildAboutCard(BuildContext context) {
     return Card(
+      elevation: 3.0,
       margin: const EdgeInsets.all(10.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(2.0),
@@ -66,7 +67,8 @@ class AboutTab extends StatelessWidget {
 
   Widget _buildCardBody(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(10.0),
+      elevation: 3.0,
+      margin: const EdgeInsets.all(10.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(2.0),
       ),
@@ -111,10 +113,10 @@ class AboutTab extends StatelessWidget {
     return [
       for (final Map item in Doc.doc.info)
         Card(
-          elevation: 2,
+          elevation: 2.0,
           color: Theme.of(context).brightness == Brightness.light
               ? Colors.white
-              : k04dp,
+              : k08dp,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(3.0),
           ),

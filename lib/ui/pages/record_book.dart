@@ -288,7 +288,7 @@ class RecordBookPage extends StatelessWidget {
 
   Widget _buildExpanded(BuildContext context, List<Map> disciplines) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: ConstrainedBox(
         constraints: BoxConstraints(
           minWidth: MediaQuery.of(context).size.width,

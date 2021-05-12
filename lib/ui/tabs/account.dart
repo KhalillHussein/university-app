@@ -217,7 +217,7 @@ class _Master extends StatelessWidget {
     VoidCallback onTap,
   }) {
     return Card(
-      elevation: 2,
+      elevation: 3.0,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(3.0),
@@ -317,71 +317,3 @@ class _Lecturer extends StatelessWidget {
     );
   }
 }
-//
-// class Schedule extends StatelessWidget {
-//   final String keyword;
-//
-//   const Schedule(this.keyword);
-//
-//   static const route = '/timetable';
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Consumer<TimetableRepository>(
-//       builder: (ctx, model, _) => _buildListView(
-//         context,
-//         model.getBy(keyword),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildListView(BuildContext context, List<Timetable> timetable) {
-//     return GroupedListView<Timetable, DateTime>(
-//       floatingHeader: true,
-//       addAutomaticKeepAlives: false,
-//       elements: timetable,
-//       separator: Separator.spacer(space: 6),
-//       groupBy: (element) =>
-//           DateTime(element.date.year, element.date.month, element.date.day),
-//       groupSeparatorBuilder: (groupByValue) =>
-//           _buildSeparator(context, groupByValue),
-//       shrinkWrap: true,
-//       indexedItemBuilder: (context, schedule, index) => TimetableCard(
-//         lessonNumber: schedule.lesson,
-//         title: schedule.subject,
-//         subjectType: schedule.subjectType,
-//         trailing: schedule.name,
-//         subtitle: schedule.aud,
-//         header: schedule.cafedra,
-//       ),
-//     );
-//   }
-//
-//   Widget _buildSeparator(BuildContext context, DateTime date) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-//       child: Row(children: <Widget>[
-//         Expanded(
-//           child: Container(
-//             margin: const EdgeInsets.only(left: 10.0, right: 20.0),
-//             child: Separator.divider(),
-//           ),
-//         ),
-//         Text(
-//           '${toBeginningOfSentenceCase(DateFormat.EEEE('Ru').format(date))}, ${DateFormat.MMMMd('Ru').format(date)}',
-//           textAlign: TextAlign.center,
-//           style: GoogleFonts.rubikTextTheme(
-//             Theme.of(context).textTheme,
-//           ).caption,
-//           textScaleFactor: 1.2,
-//         ).scalable(),
-//         Expanded(
-//           child: Container(
-//             margin: const EdgeInsets.only(left: 20.0, right: 10.0),
-//             child: Separator.divider(),
-//           ),
-//         ),
-//       ]),
-//     );
-//   }
-// }

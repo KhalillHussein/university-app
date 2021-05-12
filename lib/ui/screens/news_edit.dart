@@ -28,24 +28,41 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
   @override
   Widget build(BuildContext context) {
     return SimplePage(
-      title: 'Создание',
+      title: 'Создание новости',
       actions: [
         Consumer<NewsEditRepository>(
-          builder: (ctx, model, _) => IconButton(
-            icon: const Icon(Icons.check),
-            splashRadius: 20,
-            tooltip: 'Публикация',
-            onPressed: () async {
-              if (_formKey.currentState.validate()) {
-                await context.read<NewsEditRepository>().postData();
-                if (model.postingFailed) {
-                  _showSnackBar(context, model.errorMessage);
-                } else {
-                  Navigator.pop(context);
-                }
-              }
-            },
-          ),
+          builder: (ctx, model, _) => model.isLoading
+              ? Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Center(
+                    heightFactor: 1,
+                    widthFactor: 1,
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).iconTheme.color),
+                      ),
+                    ),
+                  ),
+                )
+              : IconButton(
+                  icon: const Icon(Icons.check),
+                  splashRadius: 20,
+                  tooltip: 'Публикация',
+                  onPressed: () async {
+                    if (_formKey.currentState.validate()) {
+                      await context.read<NewsEditRepository>().postData();
+                      if (model.postingFailed) {
+                        _showSnackBar(context, model.errorMessage);
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    }
+                  },
+                ),
         ),
       ],
       body: Theme(
@@ -58,146 +75,22 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
           child: ListView(
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10.0),
             children: [
-              Consumer<NewsEditRepository>(
-                builder: (ctx, model, _) => TextFormField(
-                  onChanged: model.changeTitle,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Укажите заголовок';
-                    }
-                    return null;
-                  },
-                  style: TextStyle(
-                      fontSize: 17,
-                      color: Theme.of(context).textTheme.bodyText1.color),
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    errorMaxLines: 2,
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).dividerColor, width: 2),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).dividerColor, width: 2),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).dividerColor, width: 2),
-                    ),
-                    hintText: 'Заголовок',
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .subtitle1
-                        .copyWith(color: Theme.of(context).disabledColor),
-                    filled: true,
-                    fillColor: Theme.of(context).cardColor,
-                  ),
-
-                  // onChanged: (value) => validate.changeCompanyName(value),
-                ),
-              ),
+              _buildTitleTextField(),
               Separator.spacer(),
-              Consumer<NewsEditRepository>(
-                builder: (ctx, model, _) => DateTimeField(
-                  initialValue: model.createdAt,
-                  format: format,
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Укажите дату';
-                    }
-                    return null;
-                  },
-                  onChanged: model.changeDate,
-                  decoration: InputDecoration(
-                    errorMaxLines: 2,
-                    suffixIcon: Icon(Icons.today),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).dividerColor, width: 2),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).dividerColor, width: 2),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      borderSide: BorderSide(
-                          color: Theme.of(context).dividerColor, width: 2),
-                    ),
-                    hintText: format.pattern,
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .subtitle1
-                        .copyWith(color: Theme.of(context).disabledColor),
-                    filled: true,
-                    fillColor: Theme.of(context).cardColor,
-                  ),
-                  onShowPicker: (context, currentValue) async {
-                    final date = await showDatePicker(
-                        context: context,
-                        firstDate: DateTime(1900),
-                        initialDate: currentValue ?? DateTime.now(),
-                        lastDate: DateTime(2100));
-
-                    if (date != null) {
-                      final time = await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.fromDateTime(
-                            currentValue ?? DateTime.now()),
-                      );
-                      return DateTimeField.combine(date, time);
-                    } else {
-                      return currentValue;
-                    }
-                  },
-                ),
-              ),
+              _buildDatePickerTextField(),
               Separator.spacer(),
-              Consumer<NewsEditRepository>(
-                builder: (ctx, model, _) => MarkdownTextInput(
-                  model.changeIntoText,
-                  model.introText,
-                  label: 'Вступление',
-                  maxLines: 2,
-                  validators: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Поле "Вступление" не должно быть пустым';
-                    }
-                    return null;
-                  },
-                ),
-              ),
+              _buildNewsIntroTextField(),
               Separator.spacer(),
               DottedBorder(
                 dashPattern: const [6, 6],
                 color: Theme.of(context).dividerColor,
-                radius: Radius.circular(10),
-                padding: EdgeInsets.all(5),
+                radius: const Radius.circular(10),
                 strokeWidth: 2,
                 child: Consumer<NewsEditRepository>(
-                    builder: (ctx, model, _) => _buildGridView(model)),
+                    builder: (ctx, model, _) => _buildSelectedImages(model)),
               ),
               Separator.spacer(),
-              Consumer<NewsEditRepository>(
-                builder: (ctx, model, _) => MarkdownTextInput(
-                  model.changeFullText,
-                  model.fullText,
-                  label: 'Основной текст',
-                  maxLines: 8,
-                  validators: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Поле "Основной текст" не должно быть пустым';
-                    }
-                    return null;
-                  },
-                ),
-              ),
+              _buildNewsFullTextField(),
             ],
           ),
         ),
@@ -205,61 +98,203 @@ class _CreateNewsScreenState extends State<CreateNewsScreen> {
     );
   }
 
-  Widget _buildGridView(NewsEditRepository model) {
+  Widget _buildTitleTextField() {
+    return Consumer<NewsEditRepository>(
+      builder: (ctx, model, _) => TextFormField(
+        initialValue: model.title,
+        onChanged: model.changeTitle,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Укажите заголовок';
+          }
+          return null;
+        },
+        style: TextStyle(
+            fontSize: 17, color: Theme.of(context).textTheme.bodyText1.color),
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+          errorMaxLines: 2,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide:
+                BorderSide(color: Theme.of(context).dividerColor, width: 2),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide:
+                BorderSide(color: Theme.of(context).dividerColor, width: 2),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide:
+                BorderSide(color: Theme.of(context).dividerColor, width: 2),
+          ),
+          hintText: 'Заголовок',
+          hintStyle: Theme.of(context)
+              .textTheme
+              .subtitle1
+              .copyWith(color: Theme.of(context).disabledColor),
+          filled: true,
+          fillColor: Theme.of(context).cardColor,
+        ),
+
+        // onChanged: (value) => validate.changeCompanyName(value),
+      ),
+    );
+  }
+
+  Widget _buildDatePickerTextField() {
+    return Consumer<NewsEditRepository>(
+      builder: (ctx, model, _) => DateTimeField(
+        initialValue: model.createdAt,
+        format: format,
+        validator: (value) {
+          if (value == null) {
+            return 'Укажите дату';
+          }
+          return null;
+        },
+        onChanged: model.changeDate,
+        decoration: InputDecoration(
+          errorMaxLines: 2,
+          suffixIcon: Icon(Icons.today),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide:
+                BorderSide(color: Theme.of(context).dividerColor, width: 2),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide:
+                BorderSide(color: Theme.of(context).dividerColor, width: 2),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide:
+                BorderSide(color: Theme.of(context).dividerColor, width: 2),
+          ),
+          hintText: format.pattern,
+          hintStyle: Theme.of(context)
+              .textTheme
+              .subtitle1
+              .copyWith(color: Theme.of(context).disabledColor),
+          filled: true,
+          fillColor: Theme.of(context).cardColor,
+        ),
+        onShowPicker: (context, currentValue) async {
+          final date = await showDatePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime(2100));
+
+          if (date != null) {
+            final time = await showTimePicker(
+              context: context,
+              initialTime:
+                  TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+            );
+            return DateTimeField.combine(date, time);
+          } else {
+            return currentValue;
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _buildNewsIntroTextField() {
+    return Consumer<NewsEditRepository>(
+      builder: (ctx, model, _) => MarkdownTextInput(
+        model.changeIntoText,
+        '',
+        label: 'Вступление',
+        maxLines: 3,
+        validators: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Поле "Вступление" не должно быть пустым';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _buildNewsFullTextField() {
+    return Consumer<NewsEditRepository>(
+      builder: (ctx, model, _) => MarkdownTextInput(
+        model.changeFullText,
+        '',
+        label: 'Основной текст',
+        maxLines: 9,
+        validators: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Поле "Основной текст" не должно быть пустым';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _buildSelectedImages(NewsEditRepository model) {
     if (model.images.isNotEmpty) {
-      return GridView.count(
-        shrinkWrap: true,
-        crossAxisCount: 6,
-        crossAxisSpacing: 2,
-        mainAxisSpacing: 2,
-        physics: NeverScrollableScrollPhysics(),
-        children: List.generate(
-            model.images.length > 30
-                ? model.images.length
-                : model.images.length + 1, (index) {
-          return index >= model.images.length
-              ? GestureDetector(
-                  onTap: model.getImage,
-                  child: Container(
-                    width: 300,
-                    height: 300,
-                    color: Theme.of(context).cardColor,
-                    alignment: Alignment.center,
-                    child: Icon(
-                      Icons.add,
-                      color: Theme.of(context).textTheme.caption.color,
-                    ),
-                  ),
-                )
-              : Stack(
-                  children: [
-                    Image.file(
-                      model.images[index],
-                      fit: BoxFit.cover,
+      return Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: GridView.count(
+          shrinkWrap: true,
+          crossAxisCount: 6,
+          crossAxisSpacing: 2,
+          mainAxisSpacing: 2,
+          physics: NeverScrollableScrollPhysics(),
+          children: List.generate(
+              model.images.length > 30
+                  ? model.images.length
+                  : model.images.length + 1, (index) {
+            return index >= model.images.length
+                ? GestureDetector(
+                    onTap: model.getImage,
+                    child: Container(
                       width: 300,
                       height: 300,
+                      color: Theme.of(context).cardColor,
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.add,
+                        color: Theme.of(context).textTheme.caption.color,
+                      ),
                     ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: () => setState(() {
-                          model.images.removeWhere((element) =>
-                              element.path == model.images[index].path);
-                        }),
-                        child: Container(
-                          color: Colors.black38,
-                          child: Icon(
-                            Icons.close,
-                            size: 15,
-                            color: Theme.of(context).textTheme.caption.color,
+                  )
+                : Stack(
+                    children: [
+                      Image.file(
+                        model.images[index],
+                        fit: BoxFit.cover,
+                        width: 300,
+                        height: 300,
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () => setState(() {
+                            model.images.removeWhere((element) =>
+                                element.path == model.images[index].path);
+                          }),
+                          child: Container(
+                            color: Colors.black38,
+                            child: Icon(
+                              Icons.close,
+                              size: 15,
+                              color: Theme.of(context).textTheme.caption.color,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-        }),
+                    ],
+                  );
+          }),
+        ),
       );
     } else {
       return InkWell(

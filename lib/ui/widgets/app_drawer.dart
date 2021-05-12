@@ -34,21 +34,21 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isAuth = context.watch<AuthRepository>().isAuth;
+    final userData = context.read<AuthRepository>();
     final Size size = MediaQuery.of(context).size;
     return Drawer(
       child: Scrollbar(
         thickness: 3.0,
         child: ListView(
-          padding: const EdgeInsets.only(right: 8.0),
           shrinkWrap: true,
           children: <Widget>[
             Separator.divider(),
-            if (!isAuth) _buildDrawerHeader(context),
-            if (isAuth) SizedBox(height: size.height * 0.2),
+            if (!userData.isAuth) _buildDrawerHeader(context, size),
+            if (userData.isAuth) SizedBox(height: size.height * 0.2),
             Separator.divider(),
             _buildMainInfo(context),
-            if (isAuth) _buildAdditional(context),
+            if (userData.getUserPosition() == Positions.student)
+              _buildAdditional(context),
             _buildDownloadableResources(context),
             _buildExternalResources(context),
           ],
@@ -57,13 +57,13 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  Widget _buildDrawerHeader(BuildContext context) {
+  Widget _buildDrawerHeader(BuildContext context, Size size) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: size.height * 0.08),
         Padding(
-          padding:
-              const EdgeInsets.only(top: 60.0, left: 15, right: 30, bottom: 10),
+          padding: const EdgeInsets.only(left: 15, right: 30, bottom: 5.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,6 +92,7 @@ class AppDrawer extends StatelessWidget {
             MdiIcons.loginVariant,
             color: Theme.of(context).accentColor,
           ),
+          visualDensity: VisualDensity.comfortable,
           title: Transform.translate(
             offset: Offset(-15, 2),
             child: Text(
@@ -99,7 +100,6 @@ class AppDrawer extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyText2.copyWith(
                     color: Theme.of(context).accentColor,
                   ),
-              textScaleFactor: 1.1,
             ).scalable(),
           ),
           onTap: () {
@@ -254,35 +254,38 @@ class AppDrawer extends StatelessWidget {
               children: children,
             ),
           )
-        : ListTile(
-            minLeadingWidth: 30,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(32),
-                bottomRight: Radius.circular(32),
+        : Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: ListTile(
+              minLeadingWidth: 30,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(32),
+                  bottomRight: Radius.circular(32),
+                ),
               ),
+              visualDensity: VisualDensity.comfortable,
+              leading: Icon(
+                icon,
+                size: 20,
+                color: Theme.of(context).textTheme.caption.color,
+              ),
+              title: Text(
+                label,
+                style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          .color
+                          .withOpacity(0.9),
+                    ),
+                maxLines: 1,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ).scalable(),
+              trailing: trailing,
+              onTap: onTap,
             ),
-            visualDensity: VisualDensity.comfortable,
-            leading: Icon(
-              icon,
-              size: 20,
-              color: Theme.of(context).textTheme.caption.color,
-            ),
-            title: Text(
-              label,
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        .color
-                        .withOpacity(0.9),
-                  ),
-              maxLines: 1,
-              softWrap: true,
-              overflow: TextOverflow.ellipsis,
-            ).scalable(),
-            trailing: trailing,
-            onTap: onTap,
           );
   }
 }

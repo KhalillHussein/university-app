@@ -20,7 +20,7 @@ class NewsPlaceholder extends StatelessWidget {
             children: [
               _buildTopBox(context),
               Separator.spacer(space: 6),
-              _AnimationContainer(
+              _AnimatedContainer(
                 size: Size(double.infinity, 1),
               ),
               _buildMiddleBox(context, width),
@@ -43,12 +43,12 @@ class NewsPlaceholder extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            _AnimationContainer(
+            _AnimatedContainer(
               size: Size(45, 45),
               borderRadius: BorderRadius.circular(100.0),
             ),
             Expanded(
-              child: _AnimationContainer(
+              child: _AnimatedContainer(
                 margin: const EdgeInsets.only(left: 15.0),
                 size: Size(double.infinity, 13.0),
                 borderRadius: BorderRadius.circular(10.0),
@@ -74,17 +74,17 @@ class NewsPlaceholder extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _AnimationContainer(
+                _AnimatedContainer(
                   margin: const EdgeInsets.symmetric(vertical: 3.0),
                   size: Size(double.infinity, 13.0),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                _AnimationContainer(
+                _AnimatedContainer(
                   margin: const EdgeInsets.symmetric(vertical: 3.0),
                   size: Size(width * 0.4, 13.0),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                _AnimationContainer(
+                _AnimatedContainer(
                   margin: const EdgeInsets.symmetric(vertical: 3.0),
                   size: Size(width * 0.6, 13.0),
                   borderRadius: BorderRadius.circular(10.0),
@@ -106,12 +106,12 @@ class NewsPlaceholder extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _AnimationContainer(
+          _AnimatedContainer(
             size: Size(width * 0.4, 24),
             margin: const EdgeInsets.all(15.0),
             borderRadius: BorderRadius.circular(20.0),
           ),
-          _AnimationContainer(
+          _AnimatedContainer(
             size: Size(double.infinity, 170.0),
           ),
           Padding(
@@ -119,11 +119,11 @@ class NewsPlaceholder extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                _AnimationContainer(
+                _AnimatedContainer(
                   size: Size(55, 30.0),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
-                _AnimationContainer(
+                _AnimatedContainer(
                   size: Size(55, 30.0),
                   margin: const EdgeInsets.only(left: 10.0),
                   borderRadius: BorderRadius.circular(4.0),
@@ -143,31 +143,31 @@ class LecturersPlaceholder extends StatelessWidget {
     final double width = MediaQuery.of(context).size.width;
     return ListView.separated(
       itemCount: 10,
-      separatorBuilder: (ctx, index) => _AnimationContainer(
+      separatorBuilder: (ctx, index) => _AnimatedContainer(
         size: Size(width, 1),
-        margin: const EdgeInsets.only(left: 78),
+        margin: const EdgeInsets.only(left: 83),
       ),
       itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 15.0),
           child: Row(
             children: [
-              _AnimationContainer(
+              _AnimatedContainer(
                 size: Size(48, 48),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(2.0),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 15.0),
+                padding: const EdgeInsets.only(left: 20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _AnimationContainer(
-                      size: Size(width * 0.7, 18),
+                    _AnimatedContainer(
+                      size: Size(width * 0.7, 16),
                     ),
-                    Separator.spacer(),
-                    _AnimationContainer(
+                    Separator.spacer(space: 10),
+                    _AnimatedContainer(
                       size: Size(width * 0.5, 8),
                     ),
                   ],
@@ -181,13 +181,55 @@ class LecturersPlaceholder extends StatelessWidget {
   }
 }
 
-class _AnimationContainer extends StatelessWidget {
+class PhoneBookPlaceholder extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    return ListView.separated(
+      itemCount: 10,
+      separatorBuilder: (ctx, index) => _AnimatedContainer(
+        size: Size(width, 1),
+        margin: const EdgeInsets.only(left: 15),
+      ),
+      itemBuilder: (BuildContext context, int index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _AnimatedContainer(
+                      size: Size(width * 0.3, 12),
+                    ),
+                    Separator.spacer(space: 20),
+                    _AnimatedContainer(
+                      size: Size(width * 0.75, 14),
+                    ),
+                    Separator.spacer(space: 6),
+                    _AnimatedContainer(
+                      size: Size(width * 0.5, 8),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _AnimatedContainer extends StatelessWidget {
   final Size size;
   final BorderRadiusGeometry borderRadius;
   final EdgeInsets padding;
   final EdgeInsets margin;
 
-  const _AnimationContainer({
+  const _AnimatedContainer({
     @required this.size,
     this.borderRadius,
     this.padding,

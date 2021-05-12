@@ -69,6 +69,7 @@ class InquiriesScreen extends StatelessWidget {
                     .bodyText1
                     .color
                     .withOpacity(0.9),
+                height: 1.4,
               ),
         ).scalable(),
       ),

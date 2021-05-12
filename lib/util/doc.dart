@@ -160,21 +160,14 @@ class Doc {
     }
     final body = """
 Студент группы $group,
-<br>
 $userName запрашивает выдачу справки "$inquiry".
-<br>
-<br>
 Учреждение располагается: "$location".
-<br>
-<br>
 $doc
-<br>
-<br>
 О готовности документа сообщить по телефону: +7 $phoneNumber.
 """;
     return Uri(
         scheme: 'mailto',
-        path: 'RusObeySwag@gmail.com',
+        path: 'Informationtecnologies@yandex.ru',
         queryParameters: {
           'subject': 'Запрос на выдачу справки "$inquiry"',
           'body': body,

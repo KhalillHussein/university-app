@@ -10,6 +10,7 @@ import 'package:mtusiapp/ui/widgets/index.dart';
 import 'package:provider/provider.dart';
 import 'package:row_collection/row_collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../util/index.dart';
 
@@ -196,52 +197,82 @@ class SettingsScreen extends StatelessWidget {
             context,
             icon: Icons.email,
             title: 'Напишите нам',
-            subtitle: 'Сообщения об ошибках, предложение новых функций',
+            subtitle: 'Сообщения об ошибках, запрос новых функций',
+            onTap: () => _launchURL(
+              context,
+              'mailto:Informationtecnologies@yandex.ru',
+            ),
           ),
         ],
       ),
     );
   }
 
+  Future<void> _launchURL(BuildContext context, String url) async {
+    try {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'На Вашем устройстве не найден почтовый клиент для отправки';
+      }
+    } catch (error) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Theme.of(context).errorColor,
+            content: Text(
+              error.toString(),
+              style: Theme.of(context).snackBarTheme.contentTextStyle,
+            ),
+            duration: const Duration(seconds: 1),
+          ),
+        );
+    }
+  }
+
   Widget _buildSettingsTile(BuildContext context,
       {String title, String subtitle, IconData icon, VoidCallback onTap}) {
-    return ListCell.icon(
-      icon: icon,
-      title: title,
-      subtitle: subtitle,
+    return
+        //   ListCell.icon(
+        //   icon: icon,
+        //   title: title,
+        //   subtitle: subtitle,
+        //   onTap: onTap,
+        // );
+        ListTile(
       onTap: onTap,
+      horizontalTitleGap: 10,
+      leading: Transform.translate(
+        offset: Offset(0, 4),
+        child: Icon(
+          icon,
+          size: 25,
+          color: Theme.of(context).textTheme.caption.color,
+        ),
+      ),
+      title: Text(
+        title,
+        style: GoogleFonts.rubikTextTheme(
+          Theme.of(context).textTheme,
+        ).bodyText1,
+        textScaleFactor: 1.1,
+      ).scalable(),
+      subtitle: Text(
+        subtitle,
+        style: GoogleFonts.rubikTextTheme(
+          Theme.of(context).textTheme,
+        ).caption,
+        textScaleFactor: 1.1,
+      ).scalable(),
+      trailing: Icon(
+        Icons.arrow_forward_ios_outlined,
+        size: 15,
+        color: Theme.of(context).textTheme.caption.color,
+      ),
     );
-    //   ListTile(
-    //   onTap: onTap,
-    //   horizontalTitleGap: 10,
-    //   leading: Transform.translate(
-    //     offset: Offset(0, 4),
-    //     child: Icon(
-    //       icon,
-    //       size: 25,
-    //       color: Theme.of(context).textTheme.caption.color,
-    //     ),
-    //   ),
-    //   title: Text(
-    //     title,
-    //     style: GoogleFonts.rubikTextTheme(
-    //       Theme.of(context).textTheme,
-    //     ).bodyText1,
-    //     textScaleFactor: 1.1,
-    //   ).scalable(),
-    //   subtitle: Text(
-    //     subtitle,
-    //     style: GoogleFonts.rubikTextTheme(
-    //       Theme.of(context).textTheme,
-    //     ).caption,
-    //     textScaleFactor: 1.1,
-    //   ).scalable(),
-    //   trailing: Icon(
-    //     Icons.arrow_forward_ios_outlined,
-    //     size: 15,
-    //     color: Theme.of(context).textTheme.caption.color,
-    //   ),
-    // );
   }
 
   Future<void> _changeTextScale(BuildContext context,

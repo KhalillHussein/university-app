@@ -9,7 +9,7 @@ import '../services/index.dart';
 import '../util/index.dart';
 import 'index.dart';
 
-enum Positions { student, lecturer, admin, stuff }
+enum Positions { student, lecturer, admin, stuff, unauthorized }
 
 ///Repository that manage authentication process
 class AuthRepository extends BaseRepository<User, AuthService> {
@@ -78,7 +78,7 @@ class AuthRepository extends BaseRepository<User, AuthService> {
   }
 
   Positions getUserPosition() {
-    switch (_user.role) {
+    switch (_user?.role) {
       case 'student':
         return Positions.student;
         break;
@@ -91,7 +91,7 @@ class AuthRepository extends BaseRepository<User, AuthService> {
         return Positions.stuff;
         break;
       default:
-        return Positions.student;
+        return Positions.unauthorized;
         break;
     }
   }

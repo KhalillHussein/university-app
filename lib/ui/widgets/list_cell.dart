@@ -33,6 +33,7 @@ class ListCell extends StatelessWidget {
     @required String title,
     String subtitle,
     VoidCallback onTap,
+    double iconSize,
     EdgeInsets contentPadding,
     bool dense = false,
   }) {
@@ -40,7 +41,7 @@ class ListCell extends StatelessWidget {
       key: key,
       leading: Transform.translate(
         offset: Offset(0, 4),
-        child: Icon(icon, size: 25),
+        child: Icon(icon, size: iconSize ?? 25),
       ),
       trailing: trailing,
       title: title,
@@ -64,7 +65,7 @@ class ListCell extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
             overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+            maxLines: 2,
           ).scalable(),
           if (subtitle != null) Separator.spacer(space: 4),
         ],

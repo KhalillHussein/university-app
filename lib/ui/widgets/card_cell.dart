@@ -7,10 +7,12 @@ import '../../util/extensions.dart';
 /// No shadows and a little rounded border :)
 class CardCell extends StatelessWidget {
   final Widget child;
+  final double elevation;
 
   const CardCell({
     Key key,
     @required this.child,
+    this.elevation,
   }) : super(key: key);
 
   /// Custom [CardCell] design, specifically for page headings.
@@ -86,17 +88,17 @@ class CardCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
+      elevation: elevation ?? 3.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5),
-        side: BorderSide(
-          color: Theme.of(context).dividerColor.withOpacity(
-                Theme.of(context).brightness == Brightness.dark ? 0.4 : 0.1,
-              ),
-        ),
+        // side: BorderSide(
+        //   color: Theme.of(context).dividerColor.withOpacity(
+        //         Theme.of(context).brightness == Brightness.dark ? 0.4 : 0.1,
+        //       ),
+        // ),
       ),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: child,
       ),
     );

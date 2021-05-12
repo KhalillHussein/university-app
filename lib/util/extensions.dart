@@ -79,9 +79,8 @@ extension CustomColorScheme on ColorScheme {
       ? kLightEucalyptusColor
       : kDarkEucalyptusColor;
 
-  Color get info => brightness == Brightness.light
-      ? kLightPistachioColor
-      : kDarkPistachioColor;
+  Color get info =>
+      brightness == Brightness.light ? kLightLavenderColor : kDarkLavenderColor;
 
   Color get warning =>
       brightness == Brightness.light ? kLightCitronColor : kDarkCitronColor;

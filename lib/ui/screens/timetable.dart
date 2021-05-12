@@ -434,6 +434,7 @@ class _TimingState extends State<_Timing> {
         Padding(
           padding: const EdgeInsets.all(5.0),
           child: CardCell(
+            elevation: 0.0,
             child: Column(children: <Widget>[
               if (Doc.doc.timing[_selectedIndex]['shift'].contains('1'))
                 RowLayout(

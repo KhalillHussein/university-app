@@ -43,17 +43,59 @@ class Style {
       type: BottomNavigationBarType.fixed,
     ),
     brightness: Brightness.dark,
-    canvasColor: k06dp,
-    cardColor: k02dp,
+    canvasColor: k08dp,
+    cardColor: k04dp,
     dialogBackgroundColor: k24dp,
     dividerColor: Colors.white12,
     errorColor: kDarkErrorColor,
-    primaryColor: k04dp,
+    primaryColor: k06dp,
     pageTransitionsTheme: _pageTransitionsTheme,
     scaffoldBackgroundColor: k01dp,
     selectedRowColor: Colors.white.withOpacity(0.2),
     // textTheme: GoogleFonts.rubikTextTheme(ThemeData.dark().textTheme),
   );
+
+  // static final ThemeData dark = ThemeData(
+  //   accentColor: kDarkAccentColor,
+  //   appBarTheme: AppBarTheme(titleSpacing: 0.0),
+  //   bottomNavigationBarTheme: BottomNavigationBarThemeData(
+  //     elevation: 3.0,
+  //     selectedItemColor: kDarkSecondaryColor,
+  //     type: BottomNavigationBarType.fixed,
+  //   ),
+  //   brightness: Brightness.dark,
+  //   canvasColor: k08dp,
+  //   cardColor: k01dp,
+  //   dialogBackgroundColor: k24dp,
+  //   dividerColor: Colors.white12,
+  //   errorColor: kDarkErrorColor,
+  //   primaryColor: k04dp,
+  //   pageTransitionsTheme: _pageTransitionsTheme,
+  //   scaffoldBackgroundColor: k00dp,
+  //   selectedRowColor: Colors.white.withOpacity(0.2),
+  //   // textTheme: GoogleFonts.rubikTextTheme(ThemeData.dark().textTheme),
+  // );
+
+  // static final ThemeData dark = ThemeData(
+  //   accentColor: kDarkAccentColor,
+  //   appBarTheme: AppBarTheme(titleSpacing: 0.0),
+  //   bottomNavigationBarTheme: BottomNavigationBarThemeData(
+  //     elevation: 3.0,
+  //     selectedItemColor: kDarkSecondaryColor,
+  //     type: BottomNavigationBarType.fixed,
+  //   ),
+  //   brightness: Brightness.dark,
+  //   canvasColor: k06dp,
+  //   cardColor: k02dp,
+  //   dialogBackgroundColor: k24dp,
+  //   dividerColor: Colors.white12,
+  //   errorColor: kDarkErrorColor,
+  //   primaryColor: k04dp,
+  //   pageTransitionsTheme: _pageTransitionsTheme,
+  //   scaffoldBackgroundColor: k01dp,
+  //   selectedRowColor: Colors.white.withOpacity(0.2),
+  //   // textTheme: GoogleFonts.rubikTextTheme(ThemeData.dark().textTheme),
+  // );
 
   // static final ThemeData dark = ThemeData(
   //   accentColor: kDarkPrimaryColor,

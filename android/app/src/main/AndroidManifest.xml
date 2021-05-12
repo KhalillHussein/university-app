@@ -7,7 +7,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="mtusiapp"
+        android:label="SKF MTUCI mobile"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity

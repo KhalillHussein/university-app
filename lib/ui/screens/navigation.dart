@@ -4,15 +4,21 @@ import 'package:mtusiapp/ui/screens/index.dart';
 import 'package:provider/provider.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 import '../../providers/index.dart';
 import '../../repositories/index.dart';
 import '../tabs/index.dart';
 import '../widgets/index.dart';
 
-class NavigationScreen extends StatelessWidget {
+class NavigationScreen extends StatefulWidget {
   static const route = '/';
 
+  @override
+  _NavigationScreenState createState() => _NavigationScreenState();
+}
+
+class _NavigationScreenState extends State<NavigationScreen> {
   List<Widget> _tabs(AuthRepository model, TimetableRepository model2) {
     return [
       NewsTab(),
@@ -22,6 +28,49 @@ class NavigationScreen extends StatelessWidget {
       if (!model.isAuth) AuthTab(),
       AboutTab(),
     ];
+  }
+
+  @override
+  void initState() {
+    // Reading app shortcuts input
+    final QuickActions quickActions = QuickActions();
+    quickActions.initialize((type) {
+      switch (type) {
+        case 'timetable':
+          context.read<NavigationProvider>().currentIndex =
+              Tabs.timetable.index;
+          break;
+        case 'account':
+          context.read<NavigationProvider>().currentIndex = Tabs.auth.index;
+          break;
+        case 'phone_book':
+          Navigator.pushNamed(context, PhoneBookScreen.route);
+          break;
+        default:
+          context.read<NavigationProvider>().currentIndex = Tabs.news.index;
+      }
+    });
+    Future.delayed(Duration.zero, () async {
+      // Setting app shortcuts
+      await quickActions.setShortcutItems(<ShortcutItem>[
+        ShortcutItem(
+          type: 'timetable',
+          localizedTitle: 'Расписание',
+          icon: 'action_timetable',
+        ),
+        ShortcutItem(
+          type: 'account',
+          localizedTitle: 'Аккаунт',
+          icon: 'action_account',
+        ),
+        ShortcutItem(
+          type: 'phone_book',
+          localizedTitle: 'Телефонная книга',
+          icon: 'action_phone',
+        ),
+      ]);
+    });
+    super.initState();
   }
 
   @override

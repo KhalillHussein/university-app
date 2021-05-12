@@ -123,6 +123,7 @@ Future<String> showSearchTimetable(
       builder: (record) => Column(
         children: [
           ListCell.icon(
+              iconSize: 35,
               icon: model.getCategory(record) == Categories.lecturer
                   ? MdiIcons.accountTie
                   : model.getCategory(record) == Categories.auditory

@@ -275,52 +275,6 @@ class Progress extends StatelessWidget {
     );
   }
 
-  // Widget _buildRateCard(BuildContext context,
-  //     {String name, String overage, Color ovgColor}) {
-  //   return Card(
-  //     color: Theme.of(context).brightness == Brightness.light
-  //         ? Colors.white
-  //         : k04dp,
-  //     elevation: 3,
-  //     shape: RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.circular(3.0),
-  //     ),
-  //     child: Padding(
-  //       padding: const EdgeInsets.all(10),
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           Expanded(
-  //             flex: 3,
-  //             child: FittedBox(
-  //               alignment: Alignment.topLeft,
-  //               fit: BoxFit.scaleDown,
-  //               child: Text(
-  //                 name,
-  //               ),
-  //             ),
-  //           ),
-  //           Expanded(
-  //             flex: 2,
-  //             child: Container(
-  //               padding: const EdgeInsets.all(5),
-  //               // decoration: BoxDecoration(
-  //               //     color: ovgColor,
-  //               //     borderRadius: BorderRadius.all(Radius.circular(5))),
-  //               child: FittedBox(
-  //                 fit: BoxFit.scaleDown,
-  //                 child: Text(
-  //                   overage,
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _buildLinearProgress(BuildContext context,
       {String title, String trailing, double value, Color color}) {
     return Column(

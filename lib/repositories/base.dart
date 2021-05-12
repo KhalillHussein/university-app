@@ -79,8 +79,14 @@ abstract class BasePostRepository<T extends BaseService> with ChangeNotifier {
   /// Overridable method, used to post the model's data.
   Future<void> postData();
 
+  bool get isLoading => _status == Status.loading;
   bool get postingFailed => _status == Status.error;
   bool get isPosted => _status == Status.loaded;
+
+  void startLoading() {
+    _status = Status.loading;
+    notifyListeners();
+  }
 
   /// Signals that there has been an error downloading data.
   void receivedError(String error) {

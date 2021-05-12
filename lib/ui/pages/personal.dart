@@ -27,26 +27,25 @@ class PersonalPage extends StatelessWidget {
             pinned: true,
           ),
           SliverBar(
-            height: 0.3,
+            height: 0.27,
             header: _buildLecturerHeader(context),
           ),
           SliverSafeArea(
             top: false,
             sliver: SliverToBoxAdapter(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15.0, horizontal: 8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _buildMainInfoCard(context),
-                    Separator.spacer(),
+                    Separator.spacer(space: 4),
                     _buildSpecialityCard(context),
-                    Separator.spacer(),
+                    Separator.spacer(space: 4),
                     _buildDisciplinesTaughtCard(context),
-                    Separator.spacer(),
+                    Separator.spacer(space: 4),
                     _buildTrainingsCard(context),
-                    Separator.spacer(),
+                    Separator.spacer(space: 4),
                     _buildScientificInterestsCard(context),
                   ],
                 ),
@@ -61,38 +60,44 @@ class PersonalPage extends StatelessWidget {
   Widget _buildLecturerHeader(BuildContext context) {
     final info = context.read<LecturersRepository>().getByLecturer(name);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(flex: 2, child: _buildLecturerAvatar(info.photo)),
-          const SizedBox(width: 15),
+          Expanded(flex: 12, child: _buildLecturerAvatar(info.photo)),
+          Spacer(),
           Expanded(
-            flex: 3,
+            flex: 18,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildKafedraBadge(context, kafedra: info.kafedra),
+                // _buildKafedraBadge(context, kafedra: info.kafedra),
+                Spacer(),
                 Expanded(
-                  flex: 2,
+                  flex: 7,
                   child: AutoSizeText(
                     info.fullName,
                     style: GoogleFonts.rubikTextTheme(
                       Theme.of(context).textTheme,
                     ).headline6,
-                    textScaleFactor: 0.9,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                Spacer(flex: 2),
                 Expanded(
+                    flex: 6,
                     child:
                         _buildLecturerInfo(context, 'Должность:', info.rank)),
+                Spacer(),
                 Expanded(
+                  flex: 6,
                   child: _buildLecturerInfo(
                       context, 'Ученая степень:', info.academicDegree),
                 ),
+                Spacer(),
                 Expanded(
+                    flex: 3,
                     child: _buildLecturerInfo(
                         context, 'Ученое звание:', info.academicRank)),
               ],
@@ -118,7 +123,7 @@ class PersonalPage extends StatelessWidget {
         kafedra,
         style: Theme.of(context).textTheme.caption.copyWith(
             color: Theme.of(context).accentColor, fontWeight: FontWeight.w500),
-        textScaleFactor: 0.8,
+        textScaleFactor: 0.9,
       ).scalable(),
     );
   }

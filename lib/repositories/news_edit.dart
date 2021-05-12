@@ -30,7 +30,7 @@ class NewsEditRepository extends BasePostRepository<NewsEditService> {
   List<File> images = [];
 
   File _image;
-  final picker = ImagePicker();
+  final ImagePicker picker = ImagePicker();
 
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -41,6 +41,13 @@ class NewsEditRepository extends BasePostRepository<NewsEditService> {
     } else {
       debugPrint('No image selected.');
     }
+  }
+
+  void clearFields() {
+    images = [];
+    introText = '';
+    fullText = '';
+    title = '';
   }
 
   void changeIntoText(String value) {
@@ -65,6 +72,7 @@ class NewsEditRepository extends BasePostRepository<NewsEditService> {
 
   @override
   Future<void> postData() async {
+    startLoading();
     try {
       await service.postNews(
           News(
@@ -75,6 +83,7 @@ class NewsEditRepository extends BasePostRepository<NewsEditService> {
               images: [for (final image in images) image.path]),
           token);
       finishLoading();
+      clearFields();
     } on DioError catch (dioError) {
       try {
         final dynamic error = dioError.response.data['errors']['msg'];
@@ -88,8 +97,10 @@ class NewsEditRepository extends BasePostRepository<NewsEditService> {
   }
 
   Future<void> deleteData(String id) async {
+    startLoading();
     try {
       await service.deleteNews(token, id);
+      finishLoading();
     } on DioError catch (dioError) {
       receivedError(ApiException.fromDioError(dioError).message);
     } catch (error) {

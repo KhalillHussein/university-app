@@ -37,6 +37,36 @@ class NewsTab extends StatelessWidget {
     );
   }
 
+  Widget _buildNewsCard(BuildContext context, int index, NewsRepository model) {
+    final News news = model.news[index];
+    return Card(
+      elevation: 3.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      margin: const EdgeInsets.all(10.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          _buildNewsHeader(context, news.getDate, news.id),
+          Separator.spacer(space: 15),
+          Head(news.title),
+          if (news.images.isNotEmpty) BodyImages(news.images),
+          if (news.images.isEmpty) Separator.spacer(space: 10),
+          Body(
+            id: news.id,
+            introText: news.introText,
+            fullText: news.fullText,
+            views: news.views,
+            shareImage: news.images.isNotEmpty ? news.images.first : '',
+            shareTitle: news.title,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildNewsHeader(BuildContext context, String date, [String id]) {
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, left: 15.0),
@@ -75,7 +105,7 @@ class NewsTab extends StatelessWidget {
             ),
             if (model.getUserPosition() == Positions.admin)
               Positioned(
-                top: -10,
+                top: -15,
                 right: 0,
                 child: IconButton(
                   splashRadius: 15,
@@ -89,36 +119,6 @@ class NewsTab extends StatelessWidget {
               ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildNewsCard(BuildContext context, int index, NewsRepository model) {
-    final News news = model.news[index];
-    return Card(
-      elevation: 2.0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      margin: const EdgeInsets.all(10.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _buildNewsHeader(context, news.getDate, news.id),
-          Separator.spacer(space: 15),
-          Head(news.title),
-          if (news.images.isNotEmpty) BodyImages(news.images),
-          if (news.images.isEmpty) Separator.spacer(space: 10),
-          Body(
-            id: news.id,
-            introText: news.introText,
-            fullText: news.fullText,
-            views: news.views,
-            shareImage: news.images.isNotEmpty ? news.images.first : '',
-            shareTitle: news.title,
-          ),
-        ],
       ),
     );
   }
@@ -144,15 +144,15 @@ class NewsTab extends StatelessWidget {
           ),
           Consumer2<NewsRepository, NewsEditRepository>(
             builder: (ctx, model, model2, _) => TextButton(
-              onPressed: () {
-                model2.deleteData(id);
+              onPressed: () async {
+                await model2.deleteData(id);
                 if (model2.postingFailed) {
                   _showSnackBar(context, model.errorMessage);
                 }
                 Navigator.of(ctx).pop();
                 model.refreshData();
               },
-              child: Text(
+              child: const Text(
                 'ОК',
               ).scalable(),
             ),

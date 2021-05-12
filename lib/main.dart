@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mtusiapp/repositories/news_edit.dart';
 import 'package:mtusiapp/services/news_edit.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 import './repositories/index.dart';
 import './services/index.dart';
@@ -15,7 +14,6 @@ import './util/index.dart';
 import 'providers/index.dart';
 
 void main() {
-  initializeDateFormatting();
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.getInstance().then((prefs) {
     final bool darkModeOn = prefs.getBool('theme') ?? false;
@@ -54,7 +52,6 @@ class App extends StatelessWidget {
             create: (ctx) => NewsRepository(NewsService(httpClient))),
         ChangeNotifierProvider(
             create: (ctx) => PhoneBookRepository(PhoneBookService(httpClient))),
-        ChangeNotifierProvider(create: (ctx) => NotificationsProvider()),
         ChangeNotifierProvider(
             create: (ctx) => TimetableRepository(TimetableService(httpClient))),
         ChangeNotifierProxyProvider<TimetableRepository, TableCalendarProvider>(
@@ -69,6 +66,8 @@ class App extends StatelessWidget {
           child: Builder(
             builder: (context) => MaterialApp(
               debugShowCheckedModeBanner: false,
+              localizationsDelegates: [GlobalMaterialLocalizations.delegate],
+              supportedLocales: const [Locale('ru')],
               title: 'MTUСI APP',
               theme: ThemeProvider.of(context),
               darkTheme: Style.dark,

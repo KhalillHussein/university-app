@@ -158,7 +158,7 @@ class Picture extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.all(1.04),
+        padding: const EdgeInsets.all(1.0),
         child: GestureDetector(
           onTap: () {
             open(context);
@@ -247,6 +247,7 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpandableNotifier(
+      key: Key(id),
       child: ScrollOnExpand(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

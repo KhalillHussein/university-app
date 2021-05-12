@@ -8,7 +8,7 @@ const Color kLightErrorColor = Color(0xFFB00020);
 const Color kLightSecondaryColor = Color(0xFF00999b);
 final Color kLightAccentColor = Colors.blue[700];
 
-//Alternative colors for light mode
+//Alternative color palette for light mode
 const Color kLightTomatoColor = Color(0xFFD50000);
 const Color kLightTangerineColor = Color(0xFFF4511E);
 const Color kLightPumpkinColor = Color(0xFFEF6C00);
@@ -50,9 +50,9 @@ const Color k24dp = Color(0xFF373737);
 
 const Color kDarkErrorColor = Color(0xFFCF6679);
 const Color kDarkSecondaryColor = Color(0xFF19d2d2);
-final Color kDarkAccentColor = Color(0xFF30A8E3);
+final Color kDarkAccentColor = Color(0xFF2C9ED4);
 
-//Alternative colors for dark mode
+//Alternative color palette for dark mode
 const Color kDarkTomatoColor = Color(0xFFDA4646);
 const Color kDarkTangerineColor = Color(0xFFF16F45);
 const Color kDarkPumpkinColor = Color(0xFFEB842F);
