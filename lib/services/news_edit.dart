@@ -10,7 +10,7 @@ class NewsEditService extends BaseService {
 
   /// Post news.
   Future<Response> postNews(News news, String token) async {
-    return client.post(Url.newsUrl,
+    return client.post(Url.news,
         data: FormData.fromMap({
           'title': news.title,
           'introText': news.introText,
@@ -33,7 +33,7 @@ class NewsEditService extends BaseService {
 
   /// Delete news by id.
   Future<Response> deleteNews(String token, String id) async {
-    return client.delete('${Url.newsUrl}/$id',
+    return client.delete('${Url.news}/$id',
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',

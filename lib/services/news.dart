@@ -9,6 +9,6 @@ class NewsService extends BaseService {
 
   /// Retrieves a list featuring the latest news.
   Future<Response> getNews({int limit, int pageIndex}) async {
-    return client.get('${Url.newsUrl}${Url.limit}$limit${Url.page}$pageIndex');
+    return client.get('${Url.news}${Url.limit}$limit${Url.page}$pageIndex');
   }
 }

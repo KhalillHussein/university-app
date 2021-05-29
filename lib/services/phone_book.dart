@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:mtusiapp/util/index.dart';
 
 import 'index.dart';
 
@@ -8,7 +9,6 @@ class PhoneBookService extends BaseService {
 
   /// Retrieves a list featuring the phone numbers.
   Future<Response> getRecordings() async {
-    return client.get(
-        'https://firebasestorage.googleapis.com/v0/b/my-flutter-f53db.appspot.com/o/phone_book.json?alt=media&token=ca9acece-6664-47b1-bad9-7978637e50da');
+    return client.get(Url.phoneNumbers);
   }
 }

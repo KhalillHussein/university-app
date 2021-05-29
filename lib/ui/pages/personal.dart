@@ -233,6 +233,7 @@ class PersonalPage extends StatelessWidget {
         info.disciplinesTaught.reduce((value, element) => '$value, $element'),
         collapsedHint: 'Развернуть',
         expandedHint: 'Свернуть',
+        textAlign: TextAlign.left,
         // style: Theme.of(context).textTheme.bodyText2.copyWith(height: 1.4),
         maxLines: 4,
       ),
@@ -261,6 +262,7 @@ class PersonalPage extends StatelessWidget {
       title: 'Научные интересы',
       child: ExpandText(
         info.scientificInterests.reduce((value, element) => '$value, $element'),
+        textAlign: TextAlign.left,
         // style: Theme.of(context).textTheme.bodyText2.copyWith(height: 1.4),
         maxLines: 4,
       ),

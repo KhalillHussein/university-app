@@ -35,10 +35,12 @@ class LecturersScreen extends StatelessWidget {
           itemBuilder: (ctx, index) {
             final Lecturer lecturer = lecturers[index];
             return ListCell(
-              onTap: () => Navigator.pushNamed(
+              onTap: () => Navigator.push(
                 context,
-                PersonalPage.route,
-                arguments: {'name': lecturer.fullName},
+                MaterialPageRoute(
+                  builder: (context) => PersonalPage(lecturer.fullName),
+                  fullscreenDialog: true,
+                ),
               ),
               leading: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(2.0)),

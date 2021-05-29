@@ -2,11 +2,15 @@ import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mtusiapp/providers/index.dart';
+import 'package:mtusiapp/repositories/changelog.dart';
+import 'package:mtusiapp/services/changelog.dart';
+import 'package:mtusiapp/ui/screens/changelog.dart';
 import 'package:mtusiapp/ui/widgets/custom_page.dart';
 import 'package:mtusiapp/ui/widgets/dialogs.dart';
 import 'package:mtusiapp/ui/widgets/header_text.dart';
@@ -24,6 +28,7 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final service = Dio();
     return SimplePage(
       title: 'Настройки',
       body: ListView(
@@ -209,18 +214,32 @@ class SettingsScreen extends StatelessWidget {
             icon: Icons.info,
             title: 'Версия 0.9.3',
             subtitle: 'Просмотр изменений',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ChangeNotifierProvider<ChangelogRepository>(
+                  create: (context) => ChangelogRepository(
+                    ChangelogService(service),
+                  ),
+                  child: ChangelogScreen(),
+                ),
+                fullscreenDialog: true,
+              ),
+            ),
           ),
           _buildSettingsTile(
             context,
             icon: Icons.email,
             title: 'Напишите нам',
-            subtitle: 'Сообщения о найденных ошибках, запрос новых функций',
+            subtitle:
+                'Сообщения о найденных ошибках, предложение новых функций',
             isThreeLine: true,
             onTap: () => _showDialog(
               context,
               title: 'Перед отправкой',
               content:
-                  '[BUG] в заголовке сообщения, если сообщение об ошибке,\n[FEATURE] в заголовке сообщения, если предложение новых функций. В сообщении об ошибке помимо самой ошибки, необходимо указать модель телефона, версию Android и сценарий ее появления.',
+                  '[BUG] в заголовке сообщения, если сообщение об ошибке,\n[FEATURE] в заголовке сообщения, если предложение новых функций. В сообщении об ошибке помимо самой ошибки, необходимо указать модель телефона, версию Android и сценарий ее воспроизведения.',
               onPressed: () => _launchURL(
                 context,
                 'mailto:Informationtecnologies@yandex.ru',
