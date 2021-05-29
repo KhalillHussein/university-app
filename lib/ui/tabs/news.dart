@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:row_collection/row_collection.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import '../../models/index.dart';
 import '../../repositories/index.dart';
 import '../../ui/widgets/index.dart';
 
@@ -29,41 +28,54 @@ class NewsTab extends StatelessWidget {
               model.handleScrollWithIndex(index);
               return index >= model.itemCount
                   ? BottomLoader<NewsRepository>()
-                  : _buildNewsCard(context, index, model);
+                  : NewsCard(
+                      index,
+                      Key(model.list[index].id),
+                    );
             },
           ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildNewsCard(BuildContext context, int index, NewsRepository model) {
-    final News news = model.news[index];
+class NewsCard extends StatelessWidget {
+  final int index;
+
+  const NewsCard(this.index, Key key) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       elevation: 3.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
       ),
       margin: const EdgeInsets.all(10.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          _buildNewsHeader(context, news.getDate, news.id),
-          Separator.spacer(space: 15),
-          Head(news.title),
-          if (news.images.isNotEmpty) BodyImages(news.images),
-          if (news.images.isEmpty) Separator.spacer(space: 10),
-          Body(
-            id: news.id,
-            introText: news.introText,
-            fullText: news.fullText,
-            views: news.views,
-            shareImage: news.images.isNotEmpty ? news.images.first : '',
-            shareTitle: news.title,
-          ),
-        ],
-      ),
+      child: Consumer<NewsRepository>(builder: (ctx, model, _) {
+        final newsItem = model.list[index];
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildNewsHeader(context, newsItem.getDate, newsItem.id),
+            Separator.spacer(space: 15),
+            Head(newsItem.title),
+            if (newsItem.images.isNotEmpty) BodyImages(newsItem.images),
+            if (newsItem.images.isEmpty) Separator.spacer(space: 10),
+            Body(
+              id: newsItem.id,
+              introText: newsItem.introText,
+              fullText: newsItem.fullText,
+              views: newsItem.views,
+              shareImage:
+                  newsItem.images.isNotEmpty ? newsItem.images.first : '',
+              shareTitle: newsItem.title,
+            ),
+          ],
+        );
+      }),
     );
   }
 

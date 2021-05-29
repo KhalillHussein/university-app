@@ -12,12 +12,11 @@ class TableCalendarProvider with ChangeNotifier {
   DateTime focusedDay = DateTime.now();
   DateTime selectedDay;
 
-  List<Timetable> timetableList = [];
+  final List<Timetable> timetableList;
 
-  TableCalendarProvider() {
+  TableCalendarProvider(this.timetableList) {
     selectedDay = focusedDay;
     selectedEvents = getEventsForDay(selectedDay);
-    // init();
   }
 
   List<Timetable> getEventsForDay(DateTime day) {
@@ -46,15 +45,6 @@ class TableCalendarProvider with ChangeNotifier {
     calendarFormat == CalendarFormat.month
         ? calendarFormat = CalendarFormat.week
         : calendarFormat = CalendarFormat.month;
-    // final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setInt('format', calendarFormat.index);
     notifyListeners();
   }
-  //
-  // Future<void> init() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   final int formatIndex = prefs.getInt('format') ?? CalendarFormat.week.index;
-  //   calendarFormat = CalendarFormat.values[formatIndex];
-  //   notifyListeners();
-  // }
 }

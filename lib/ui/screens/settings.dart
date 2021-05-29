@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:app_settings/app_settings.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mtusiapp/providers/index.dart';
@@ -7,6 +11,7 @@ import 'package:mtusiapp/ui/widgets/custom_page.dart';
 import 'package:mtusiapp/ui/widgets/dialogs.dart';
 import 'package:mtusiapp/ui/widgets/header_text.dart';
 import 'package:mtusiapp/ui/widgets/index.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:row_collection/row_collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -182,7 +187,19 @@ class SettingsScreen extends StatelessWidget {
             context,
             icon: Icons.cleaning_services,
             title: 'Удаление данных',
-            subtitle: 'Удалить все кэшированные данные',
+            subtitle:
+                'Освободить место на устройстве, путем удаления временных файлов и папок',
+            isThreeLine: true,
+            onTap: () => _showDialog(
+              context,
+              title: 'Удалить данные?',
+              content: 'Будут удалены кэшированные данные приложения.',
+              onPressed: () async {
+                await _deleteCacheDir();
+                await _deleteAppDir();
+                Navigator.pop(context);
+              },
+            ),
           ),
           HeaderText(
             'О приложении',
@@ -197,15 +214,75 @@ class SettingsScreen extends StatelessWidget {
             context,
             icon: Icons.email,
             title: 'Напишите нам',
-            subtitle: 'Сообщения об ошибках, запрос новых функций',
-            onTap: () => _launchURL(
+            subtitle: 'Сообщения о найденных ошибках, запрос новых функций',
+            isThreeLine: true,
+            onTap: () => _showDialog(
               context,
-              'mailto:Informationtecnologies@yandex.ru',
+              title: 'Перед отправкой',
+              content:
+                  '[BUG] в заголовке сообщения, если сообщение об ошибке,\n[FEATURE] в заголовке сообщения, если предложение новых функций. В сообщении об ошибке помимо самой ошибки, необходимо указать модель телефона, версию Android и сценарий ее появления.',
+              onPressed: () => _launchURL(
+                context,
+                'mailto:Informationtecnologies@yandex.ru',
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  void _showDialog(
+    BuildContext context, {
+    String title,
+    String content,
+    VoidCallback onPressed,
+  }) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).appBarTheme.color,
+        title: Text(
+          title,
+        ).scalable(),
+        content: Text(
+          content,
+        ).scalable(),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              primary: Theme.of(context).disabledColor,
+            ),
+            onPressed: Navigator.of(ctx).pop,
+            child: const Text(
+              'ОТМЕНА',
+            ).scalable(),
+          ),
+          TextButton(
+            onPressed: onPressed,
+            child: const Text(
+              'ОК',
+            ).scalable(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _deleteAppDir() async {
+    final appDir = await getApplicationSupportDirectory();
+    if (appDir.existsSync()) {
+      appDir.deleteSync(recursive: true);
+    }
+  }
+
+  Future<void> _deleteCacheDir() async {
+    final Directory tempDir = await getTemporaryDirectory();
+    final Directory libCacheDir =
+        Directory('${tempDir.path}/libCachedImageData');
+    if (libCacheDir.existsSync()) {
+      await libCacheDir.delete(recursive: true);
+    }
   }
 
   Future<void> _launchURL(BuildContext context, String url) async {
@@ -233,17 +310,17 @@ class SettingsScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildSettingsTile(BuildContext context,
-      {String title, String subtitle, IconData icon, VoidCallback onTap}) {
-    return
-        //   ListCell.icon(
-        //   icon: icon,
-        //   title: title,
-        //   subtitle: subtitle,
-        //   onTap: onTap,
-        // );
-        ListTile(
+  Widget _buildSettingsTile(
+    BuildContext context, {
+    String title,
+    String subtitle,
+    IconData icon,
+    VoidCallback onTap,
+    bool isThreeLine = false,
+  }) {
+    return ListTile(
       onTap: onTap,
+      isThreeLine: isThreeLine,
       horizontalTitleGap: 10,
       leading: Transform.translate(
         offset: Offset(0, 4),

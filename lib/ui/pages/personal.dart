@@ -97,7 +97,7 @@ class PersonalPage extends StatelessWidget {
                 ),
                 Spacer(),
                 Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: _buildLecturerInfo(
                         context, 'Ученое звание:', info.academicRank)),
               ],

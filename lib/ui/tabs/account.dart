@@ -19,6 +19,7 @@ class AccountTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AuthRepository>(
       builder: (ctx, userData, _) => SimpleTab<AuthRepository>(
+        elevation: 0.0,
         title: userData.user.userName,
         actions: [
           IconButton(
@@ -87,8 +88,11 @@ class AccountTab extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: Theme.of(context).appBarTheme.color,
+        title: const Text(
+          'Выход',
+        ).scalable(),
         content: const Text(
-          'Вы действительно хотите выйти?',
+          'При выходе из учетной записи будут удалены все связанные с нею данные. Продолжить?',
         ).scalable(),
         actions: <Widget>[
           TextButton(

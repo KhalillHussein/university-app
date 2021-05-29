@@ -136,7 +136,9 @@ class TimetableCard extends StatelessWidget {
                         ? MdiIcons.pencil
                         : subjectType.toLowerCase().contains('лр')
                             ? MdiIcons.flaskOutline
-                            : Theme.of(context).errorColor,
+                            : subjectType.toLowerCase().contains('кон')
+                                ? MdiIcons.forumOutline
+                                : MdiIcons.alertOctagramOutline,
                 size: 16,
                 color: Theme.of(context).brightness == Brightness.dark
                     ? Colors.black

@@ -291,7 +291,7 @@ class Body extends StatelessWidget {
                   tooltip: 'Поделиться',
                   color: Theme.of(context).textTheme.caption.color,
                   onPressed: () => Share.share(
-                    '$shareImage $fullText',
+                    fullText,
                     subject: shareTitle,
                   ),
                 ),

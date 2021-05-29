@@ -78,6 +78,12 @@ class ValidationProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearFields() {
+    _organizationName = ValidationItem(null, null);
+    _phoneNumber = ValidationItem(null, null);
+    _location = ValidationItem(null, null);
+  }
+
   void changePhoneNumber(String value) {
     final phoneExp = RegExp(r'^\(\d\d\d\) \d\d\d\-\d\d\-\d\d$');
     if (phoneExp.hasMatch(value)) {

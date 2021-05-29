@@ -87,6 +87,8 @@ class InquiriesScreen extends StatelessWidget {
       {bool isUserInquiry = false}) {
     showBottomDialog(
       context: context,
+      isDismissible: false,
+      enableDrag: false,
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -217,7 +219,10 @@ class InquiriesScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () {
+                              context.read<ValidationProvider>().clearFields();
+                              Navigator.pop(context);
+                            },
                             style: ButtonStyle(
                               foregroundColor: MaterialStateProperty.all<Color>(
                                 Theme.of(context).accentColor,
@@ -262,6 +267,7 @@ class InquiriesScreen extends StatelessWidget {
                                             .toString()
                                             .replaceAll("+", "%20"),
                                       );
+                                      validate.clearFields();
                                       Navigator.pop(context);
                                     }
                                   : null,
