@@ -12,7 +12,7 @@ import 'index.dart';
 enum Positions { student, lecturer, admin, stuff, unauthorized }
 
 ///Repository that manage authentication process
-class AuthRepository extends BaseRepository<User, AuthService> {
+class AuthRepository extends BaseRepository<AuthService> {
   String _token;
 
   User _user;

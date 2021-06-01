@@ -16,7 +16,7 @@ class BottomLoader<T extends BaseRepository> extends StatelessWidget {
       margin: const EdgeInsets.all(10.0),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(10.0),
           child: Consumer<T>(
             builder: (ctx, model, child) => model.loadingFailed
                 ? TextButton(

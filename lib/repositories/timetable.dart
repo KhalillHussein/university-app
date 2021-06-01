@@ -12,10 +12,12 @@ import 'index.dart';
 enum Categories { group, auditory, lecturer }
 
 /// Repository that holds timetable data.
-class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
+class TimetableRepository extends BaseRepository<TimetableService> {
   Database db;
 
   String userCategory;
+
+  List<Timetable> _timetable = [];
 
   TimetableRepository(TimetableService service) : super(service) {
     init();
@@ -26,20 +28,24 @@ class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
   @override
   Future<void> loadData() async {
     try {
+      //load data from api
       final timetableResponse = await service.getTimetable();
-      list = [
+      //fill the list of data with removing unnecessary data
+      _timetable = [
         for (final item in timetableResponse.data['result'])
           Timetable.fromJson(item)
-      ];
-      list.removeWhere((element) => element.aud.contains('+'));
-      for (final item in timetableResponse.data['result']) {
-        DatabaseHelper.db
-            .insert(service.tableName, service.toMap(Timetable.fromJson(item)));
+      ]..removeWhere((element) => element.aud.contains('+'));
+      //prepare table by clean old data
+      DatabaseHelper.db.clearTable(service.tableName);
+      //fill table by new data
+      for (final item in _timetable) {
+        DatabaseHelper.db.insert(service.tableName, service.toMap(item));
       }
+      //signals that data loading is finished
       finishLoading();
     } on DioError catch (dioError) {
       errorMessage = ApiException.fromDioError(dioError).message;
-      fetchFromDB();
+      loadDataFromDb();
     } on DatabaseException catch (dbError) {
       receivedError(dbError.toString());
     } catch (error) {
@@ -47,19 +53,20 @@ class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
     }
   }
 
-  Future<void> fetchFromDB() async {
+  Future<void> loadDataFromDb() async {
     try {
-      final dbResult = await service.getRecords();
+      final dbResult = await service.getDbRecords();
       if (dbResult.isEmpty) throw errorMessage;
-      list = [for (final item in dbResult) Timetable.fromJson(item)];
-      timestamp = DateTime.fromMillisecondsSinceEpoch(list.last.timestamp);
+      _timetable = [for (final item in dbResult) Timetable.fromJson(item)];
+      timestamp =
+          DateTime.fromMillisecondsSinceEpoch(_timetable.last.timestamp);
       databaseFetching();
     } catch (e) {
       receivedError(e.toString());
     }
   }
 
-  int get itemCount => list?.length;
+  int get itemCount => _timetable?.length;
 
   Future<void> setUserCategory(String category) async {
     userCategory = category;
@@ -75,7 +82,7 @@ class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
   }
 
   List<Timetable> getBy(String keyword) {
-    return [...list]
+    return [..._timetable]
         .where((element) =>
             element.group == keyword ||
             element.aud == keyword ||
@@ -99,15 +106,17 @@ class TimetableRepository extends BaseRepository<Timetable, TimetableService> {
     return Categories.group;
   }
 
+  List<Timetable> get timetable => _timetable;
+
   List<String> get groups {
-    return {for (final item in list) item.group}.toList();
+    return {for (final item in _timetable) item.group}.toList();
   }
 
   List<String> get lecturers {
-    return {for (final item in list) item.name}.toList()..sort();
+    return {for (final item in _timetable) item.name}.toList()..sort();
   }
 
   List<String> get aud {
-    return {for (final item in list) item.aud}.toList()..sort();
+    return {for (final item in _timetable) item.aud}.toList()..sort();
   }
 }

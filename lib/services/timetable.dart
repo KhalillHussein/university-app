@@ -29,7 +29,7 @@ class TimetableService extends BaseService {
     return client.get(Url.allSchedule);
   }
 
-  Future<List<Object>> getRecords() {
+  Future<List<Object>> getDbRecords() {
     return DatabaseHelper.db.getRecords(tableName);
   }
 

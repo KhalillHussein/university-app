@@ -56,9 +56,9 @@ class Routes {
           return MaterialPageRoute(
             builder: (_) => SettingsScreen(),
           );
-        case TimetableScreen.route:
+        case CalendarScreen.route:
           return MaterialPageRoute(
-            builder: (_) => TimetableScreen(),
+            builder: (_) => CalendarScreen(),
           );
         default:
           return errorRoute(routeSettings);

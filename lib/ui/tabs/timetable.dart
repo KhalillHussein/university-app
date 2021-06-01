@@ -17,7 +17,7 @@ class TimetableTab extends StatelessWidget {
         title: 'Расписание',
         fab: FloatingActionButton(
           tooltip: 'Поиск',
-          onPressed: model.isLoaded || model.list.isNotEmpty
+          onPressed: model.isLoaded || model.timetable.isNotEmpty
               ? () => showSearchTimetable(context, model)
               : null,
           child: const Icon(Icons.search),

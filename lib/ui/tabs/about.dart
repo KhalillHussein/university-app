@@ -9,7 +9,6 @@ import 'package:row_collection/row_collection.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../util/index.dart';
-import '../../providers/text_scale.dart';
 
 class AboutTab extends StatelessWidget {
   @override

@@ -4,4 +4,4 @@ export 'inquiries.dart';
 export 'lecturers.dart';
 export 'navigation.dart';
 export 'phone_book.dart';
-export 'timetable.dart';
+export 'calendar.dart';

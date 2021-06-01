@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mtusiapp/providers/index.dart';
@@ -127,7 +126,7 @@ class SettingsScreen extends StatelessWidget {
                                     max: 1.5,
                                     value: scale.scaleFactor,
                                     activeColor: Theme.of(context).accentColor,
-                                    inactiveColor: Colors.black26,
+                                    inactiveColor: Colors.black12,
                                     onChanged: scale.setScaleFactor,
                                     onChangeEnd: (val) => _changeTextScale(
                                       context,
@@ -193,7 +192,7 @@ class SettingsScreen extends StatelessWidget {
             icon: Icons.cleaning_services,
             title: 'Удаление данных',
             subtitle:
-                'Освободить место на устройстве, путем удаления временных файлов и папок',
+                'Освободить место на устройстве, путем удаления временных файлов',
             isThreeLine: true,
             onTap: () => _showDialog(
               context,
@@ -212,8 +211,8 @@ class SettingsScreen extends StatelessWidget {
           _buildSettingsTile(
             context,
             icon: Icons.info,
-            title: 'Версия 0.9.3',
-            subtitle: 'Просмотр изменений',
+            title: 'Версия 0.9.3 beta',
+            subtitle: 'Просмотр списка изменений',
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -232,19 +231,34 @@ class SettingsScreen extends StatelessWidget {
             context,
             icon: Icons.email,
             title: 'Напишите нам',
-            subtitle:
-                'Сообщения о найденных ошибках, предложение новых функций',
+            subtitle: 'Сообщения о найденных ошибках, запрос новых функций',
             isThreeLine: true,
-            onTap: () => _showDialog(
-              context,
-              title: 'Перед отправкой',
-              content:
-                  '[BUG] в заголовке сообщения, если сообщение об ошибке,\n[FEATURE] в заголовке сообщения, если предложение новых функций. В сообщении об ошибке помимо самой ошибки, необходимо указать модель телефона, версию Android и сценарий ее воспроизведения.',
-              onPressed: () => _launchURL(
+            onTap: () => _showDialog(context,
+                title: 'Перед отправкой',
+                contentWidget: MarkdownBody(
+                  data: Doc.doc.messageRequirements,
+                  listItemCrossAxisAlignment:
+                      MarkdownListItemCrossAxisAlignment.start,
+                  styleSheet:
+                      MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+                    blockSpacing: 10,
+                    strong:
+                        GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                            .subtitle1
+                            .copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                    p: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                        .bodyText2,
+                  ),
+                ), onPressed: () {
+              _launchURL(
                 context,
                 'mailto:Informationtecnologies@yandex.ru',
-              ),
-            ),
+              );
+              Navigator.pop(context);
+            }),
           ),
         ],
       ),
@@ -255,6 +269,7 @@ class SettingsScreen extends StatelessWidget {
     BuildContext context, {
     String title,
     String content,
+    Widget contentWidget,
     VoidCallback onPressed,
   }) {
     showDialog(
@@ -264,14 +279,14 @@ class SettingsScreen extends StatelessWidget {
         title: Text(
           title,
         ).scalable(),
-        content: Text(
-          content,
-        ).scalable(),
+        content: contentWidget ??
+            Text(
+              content,
+              style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                  .bodyText2,
+            ).scalable(),
         actions: <Widget>[
           TextButton(
-            style: TextButton.styleFrom(
-              primary: Theme.of(context).disabledColor,
-            ),
             onPressed: Navigator.of(ctx).pop,
             child: const Text(
               'ОТМЕНА',

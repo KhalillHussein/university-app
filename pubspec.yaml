@@ -3,7 +3,7 @@ description: A new Flutter application.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.9.3
+version: 0.9.4
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -38,6 +38,7 @@ dependencies:
   markdown_editable_textinput: ^2.0.0
   datetime_picker_formfield: ^2.0.0
   dotted_border: ^2.0.0
+  flutter_svg: ^0.22.0
   expandable:
     git:
       url: git://github.com/KhalillHussein/flutter-expandable.git
@@ -59,8 +60,10 @@ dependencies:
   app_settings: ^4.1.0
   quick_actions: ^0.6.0+1
   path_provider: ^2.0.1
+  device_calendar: ^3.1.0
   firebase_core: ^1.2.0
   firebase_messaging: ^10.0.0
+
 
   ## Icons
   material_design_icons_flutter: ^4.0.5955

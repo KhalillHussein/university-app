@@ -27,7 +27,7 @@ class PersonalPage extends StatelessWidget {
             pinned: true,
           ),
           SliverBar(
-            height: 0.27,
+            height: 0.28,
             header: _buildLecturerHeader(context),
           ),
           SliverSafeArea(
@@ -234,7 +234,11 @@ class PersonalPage extends StatelessWidget {
         collapsedHint: 'Развернуть',
         expandedHint: 'Свернуть',
         textAlign: TextAlign.left,
-        // style: Theme.of(context).textTheme.bodyText2.copyWith(height: 1.4),
+        style: Theme.of(context).textTheme.bodyText2.copyWith(
+              height: 1.4,
+              fontSize: 13,
+              color: Theme.of(context).textTheme.caption.color,
+            ),
         maxLines: 4,
       ),
     );
@@ -248,7 +252,12 @@ class PersonalPage extends StatelessWidget {
       child: ExpandText(
         info.trainings.reduce((value, element) => '$value\n$element'),
         maxLines: 4,
-        // style: Theme.of(context).textTheme.bodyText2.copyWith(height: 1.4),
+        style: Theme.of(context).textTheme.bodyText2.copyWith(
+              height: 1.4,
+              fontSize: 13,
+              color: Theme.of(context).textTheme.caption.color,
+            ),
+        textAlign: TextAlign.left,
         collapsedHint: 'Развернуть',
         expandedHint: 'Свернуть',
       ),
@@ -263,7 +272,11 @@ class PersonalPage extends StatelessWidget {
       child: ExpandText(
         info.scientificInterests.reduce((value, element) => '$value, $element'),
         textAlign: TextAlign.left,
-        // style: Theme.of(context).textTheme.bodyText2.copyWith(height: 1.4),
+        style: Theme.of(context).textTheme.bodyText2.copyWith(
+              height: 1.4,
+              fontSize: 13,
+              color: Theme.of(context).textTheme.caption.color,
+            ),
         maxLines: 4,
       ),
     );

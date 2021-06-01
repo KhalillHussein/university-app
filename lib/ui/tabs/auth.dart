@@ -48,6 +48,15 @@ class AuthTab extends StatelessWidget {
                 _buildTextFieldPwd(context),
                 Separator.spacer(),
                 _buildAuthButton(context),
+                Separator.spacer(),
+                Text(
+                  'Функционал личного кабинета в разработке и на данный момент недоступен.',
+                  style: TextStyle(
+                    color: Theme.of(context).errorColor,
+                  ),
+                  textScaleFactor: 0.95,
+                  textAlign: TextAlign.center,
+                ).scalable(),
               ],
             ),
           ),

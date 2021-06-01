@@ -180,6 +180,7 @@ class Picture extends StatelessWidget {
           galleryItems: imageList,
           initialIndex: index,
         ),
+        fullscreenDialog: true,
       ),
     );
   }

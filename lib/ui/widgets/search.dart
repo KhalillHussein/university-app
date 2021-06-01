@@ -6,7 +6,6 @@ import 'package:mtusiapp/repositories/index.dart';
 import 'package:mtusiapp/ui/widgets/index.dart';
 import 'package:row_collection/row_collection.dart';
 import 'package:search_page/search_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../util/extensions.dart';
 

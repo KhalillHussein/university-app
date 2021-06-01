@@ -25,11 +25,11 @@ class Url {
 
   //Alternative Lecturers URL
   static const lecturers =
-      'https://firebasestorage.googleapis.com/v0/b/my-flutter-f53db.appspot.com/o/lecturers_full.json?alt=media&token=b6b92f37-600e-4f8e-814e-9823c46939a6';
+      'https://firebasestorage.googleapis.com/v0/b/my-flutter-f53db.appspot.com/o/lecturers_full.json?alt=media&token=722d462a-38db-4480-a43d-ef3241758af2';
 
   //Alternative Phone numbers URL
   static const phoneNumbers =
-      'https://firebasestorage.googleapis.com/v0/b/my-flutter-f53db.appspot.com/o/phone_book.json?alt=media&token=ca9acece-6664-47b1-bad9-7978637e50da';
+      'https://firebasestorage.googleapis.com/v0/b/my-flutter-f53db.appspot.com/o/phone_book.json?alt=media&token=f1066c76-8561-414c-8f08-44841c5823d2';
 
   //Changelog URL
   static const changelog =

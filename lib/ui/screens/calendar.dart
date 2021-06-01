@@ -20,15 +20,15 @@ import '../widgets/index.dart';
 
 const Duration _kExpand = Duration(milliseconds: 350);
 
-class TimetableScreen extends StatefulWidget {
+class CalendarScreen extends StatefulWidget {
   static const route = '/timetable';
 
   @override
-  _TimetableScreenState createState() => _TimetableScreenState();
+  _CalendarScreenState createState() => _CalendarScreenState();
 }
 
-class _TimetableScreenState extends State<TimetableScreen>
-    with SingleTickerProviderStateMixin<TimetableScreen> {
+class _CalendarScreenState extends State<CalendarScreen>
+    with SingleTickerProviderStateMixin<CalendarScreen> {
   static final Animatable<double> _easeInTween =
       CurveTween(curve: Curves.easeIn);
   static final Animatable<double> _halfTween =
@@ -74,7 +74,7 @@ class _TimetableScreenState extends State<TimetableScreen>
             elevation: 4,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: _TableCalendar(),
+              child: _CalendarHeader(),
             ),
           ),
           _buildBody()
@@ -89,19 +89,20 @@ class _TimetableScreenState extends State<TimetableScreen>
         tooltip: 'Еще',
         itemBuilder: (context) => [
               PopupMenuItem(
-                  value: 'Поиск',
-                  child: Row(
-                    children: [
-                      Icon(Icons.search),
-                      Separator.spacer(),
-                      Text('Поиск').scalable(),
-                    ],
-                  )),
-              PopupMenuItem(
-                value: 'Настройки',
+                value: 'search',
                 child: Row(
                   children: [
-                    Icon(Icons.settings_outlined),
+                    const Icon(Icons.search),
+                    Separator.spacer(),
+                    Text('Поиск').scalable(),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'settings',
+                child: Row(
+                  children: [
+                    const Icon(Icons.settings_outlined),
                     Separator.spacer(),
                     Text('Настройки').scalable(),
                   ],
@@ -110,10 +111,10 @@ class _TimetableScreenState extends State<TimetableScreen>
             ],
         onSelected: (text) {
           switch (text) {
-            case 'Поиск':
+            case 'search':
               showSearchTimetable(context, model);
               break;
-            case 'Настройки':
+            case 'settings':
               Navigator.pushNamed(context, SettingsScreen.route);
               break;
           }
@@ -287,7 +288,7 @@ class _TimetableScreenState extends State<TimetableScreen>
   }
 }
 
-class _TableCalendar extends StatelessWidget {
+class _CalendarHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<TableCalendarProvider>(
@@ -315,16 +316,12 @@ class _TableCalendar extends StatelessWidget {
           outsideDaysVisible: false,
           todayDecoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Theme.of(context).accentColor,
-          ),
-          selectedDecoration: BoxDecoration(
-            shape: BoxShape.circle,
             color: Theme.of(context).accentColor.withOpacity(0.3),
           ),
         ),
         startingDayOfWeek: StartingDayOfWeek.monday,
-        firstDay: DateTime.now().subtract(Duration(days: 365)),
-        lastDay: DateTime.now().add(Duration(days: 365)),
+        firstDay: DateTime.now().subtract(Duration(days: 60)),
+        lastDay: DateTime.now().add(Duration(days: 60)),
         focusedDay: calendar.focusedDay,
       ),
     );
@@ -339,7 +336,7 @@ class _TableCalendar extends StatelessWidget {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: date.isSameDate(DateTime.now())
-              ? Theme.of(ctx).accentColor
+              ? Theme.of(ctx).accentColor.withOpacity(0.3)
               : Theme.of(ctx).textTheme.caption.color.withOpacity(0.2),
         ),
         child: Text(
@@ -449,17 +446,17 @@ class _TimingState extends State<_Timing> {
                     RowText(
                         '1 пара',
                         Doc.doc.timing[_selectedIndex]['first']
-                            .reduce((a, b) => '$a, $b')),
+                            .reduce((a, b) => '$a  $b')),
                     Separator.divider(),
                     RowText(
                         '2 пара',
                         Doc.doc.timing[_selectedIndex]['second']
-                            .reduce((a, b) => '$a, $b')),
+                            .reduce((a, b) => '$a  $b')),
                     Separator.divider(),
                     RowText(
                         '3 пара',
                         Doc.doc.timing[_selectedIndex]['third']
-                            .reduce((a, b) => '$a, $b')),
+                            .reduce((a, b) => '$a  $b')),
                   ],
                 ),
               if (Doc.doc.timing[_selectedIndex]['shift'].contains('2'))
@@ -468,17 +465,17 @@ class _TimingState extends State<_Timing> {
                     RowText(
                         '4 пара',
                         Doc.doc.timing[_selectedIndex]['four']
-                            .reduce((a, b) => '$a, $b')),
+                            .reduce((a, b) => '$a  $b')),
                     Separator.divider(),
                     RowText(
                         '5 пара',
                         Doc.doc.timing[_selectedIndex]['five']
-                            .reduce((a, b) => '$a, $b')),
+                            .reduce((a, b) => '$a  $b')),
                     Separator.divider(),
                     RowText(
                         '6 пара',
                         Doc.doc.timing[_selectedIndex]['six']
-                            .reduce((a, b) => '$a, $b')),
+                            .reduce((a, b) => '$a  $b')),
                     ExpandChild(
                       child: RowLayout(
                         children: [
@@ -493,17 +490,17 @@ class _TimingState extends State<_Timing> {
                           RowText(
                               '1 пара',
                               Doc.doc.timing[_selectedIndex]['first']
-                                  .reduce((a, b) => '$a, $b')),
+                                  .reduce((a, b) => '$a  $b')),
                           Separator.divider(),
                           RowText(
                               '2 пара',
                               Doc.doc.timing[_selectedIndex]['second']
-                                  .reduce((a, b) => '$a, $b')),
+                                  .reduce((a, b) => '$a  $b')),
                           Separator.divider(),
                           RowText(
                               '3 пара',
                               Doc.doc.timing[_selectedIndex]['third']
-                                  .reduce((a, b) => '$a, $b')),
+                                  .reduce((a, b) => '$a  $b')),
                         ],
                       ),
                     ),

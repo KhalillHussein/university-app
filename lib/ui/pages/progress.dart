@@ -4,7 +4,6 @@ import 'package:expandable/expandable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:row_collection/row_collection.dart';
-import 'package:row_item/row_item.dart';
 
 import '../../util/index.dart';
 
@@ -311,31 +310,6 @@ class Progress extends StatelessWidget {
           value: value,
         ),
       ],
-    );
-  }
-
-  Widget _buildRateCard(BuildContext context,
-      {String name, String overage, Color ovgColor}) {
-    return Card(
-      color: Theme.of(context).brightness == Brightness.light
-          ? Colors.white
-          : k04dp,
-      elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(3.0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: RowItem.text(
-          name,
-          overage,
-          descriptionStyle: GoogleFonts.rubikTextTheme(
-            Theme.of(context).textTheme,
-          ).bodyText2.copyWith(
-                color: ovgColor,
-              ),
-        ),
-      ),
     );
   }
 }

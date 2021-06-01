@@ -2,16 +2,14 @@ import 'package:flutter/foundation.dart';
 
 import '../services/base.dart';
 
-enum Status { loading, error, loaded, databaseFetch }
+enum Status { loading, error, loaded, dbFetching }
 
 /// This class serves as the building blocks of a repository.
 ///
 /// A repository has the purpose to load and parse the data
 
-abstract class BaseRepository<M, T extends BaseService> with ChangeNotifier {
+abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
   DateTime timestamp;
-
-  List<M> list = [];
 
   /// System to perform data manipulation operations
   final T service;
@@ -36,7 +34,7 @@ abstract class BaseRepository<M, T extends BaseService> with ChangeNotifier {
   bool get isLoading => _status == Status.loading;
   bool get loadingFailed => _status == Status.error;
   bool get isLoaded => _status == Status.loaded;
-  bool get databaseFetch => _status == Status.databaseFetch;
+  bool get databaseFetch => _status == Status.dbFetching;
 
   /// Signals that information is being downloaded.
   void startLoading() {
@@ -51,7 +49,7 @@ abstract class BaseRepository<M, T extends BaseService> with ChangeNotifier {
   }
 
   void databaseFetching() {
-    _status = Status.databaseFetch;
+    _status = Status.dbFetching;
     notifyListeners();
   }
 

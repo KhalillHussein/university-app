@@ -78,7 +78,9 @@ class AccountTab extends StatelessWidget {
                 ? _Lecturer()
                 : userData.getUserPosition() == Positions.admin
                     ? _Master()
-                    : SizedBox(),
+                    : const Center(
+                        child: Text('Отсутствуют данные для просмотра'),
+                      ),
       ),
     );
   }
@@ -91,24 +93,23 @@ class AccountTab extends StatelessWidget {
         title: const Text(
           'Выход',
         ).scalable(),
-        content: const Text(
-          'При выходе из учетной записи будут удалены все связанные с нею данные. Продолжить?',
+        content: Text(
+          'При выходе из учетной записи будут удалены все связанные с нею данные.',
+          style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+              .bodyText2
+              .copyWith(
+                color: Theme.of(context).textTheme.caption.color,
+              ),
         ).scalable(),
         actions: <Widget>[
           TextButton(
-            style:
-                TextButton.styleFrom(primary: Theme.of(context).disabledColor),
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
+            onPressed: Navigator.of(ctx).pop,
             child: const Text(
               'ОТМЕНА',
             ).scalable(),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop(userData.logout());
-            },
+            onPressed: () => Navigator.of(ctx).pop(userData.logout()),
             child: const Text(
               'ОК',
             ).scalable(),
@@ -122,10 +123,6 @@ class AccountTab extends StatelessWidget {
 class _Student extends StatelessWidget {
   List<Map<String, dynamic>> _tabs(BuildContext context) {
     return [
-      // {
-      //   'tab': 'РАСПИСАНИЕ',
-      //   'page': Schedule('ДИ-11'),
-      // },
       {
         'tab': 'УСПЕВАЕМОСТЬ',
         'page': Progress(),

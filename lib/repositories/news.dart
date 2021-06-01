@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../models/index.dart';
 import '../services/index.dart';
@@ -7,10 +7,11 @@ import '../util/index.dart';
 import 'index.dart';
 
 /// Repository that holds news data.
-class NewsRepository extends BaseRepository<News, NewsService> {
+class NewsRepository extends BaseRepository<NewsService> {
   final int _limit = 12;
   int _pagesCount = 0;
   int _pageIndex = 1;
+  List<News> _news = [];
 
   NewsRepository(NewsService service) : super(service);
 
@@ -25,7 +26,7 @@ class NewsRepository extends BaseRepository<News, NewsService> {
       debugPrint(
           'page ${newsResponse.data['result']['page']}'); //showing current page number
       for (final item in newsResponse.data['result']['docs']) {
-        list.add(News.fromJson(item));
+        _news.add(News.fromJson(item));
       }
       _pageIndex++;
       finishLoading();
@@ -42,7 +43,7 @@ class NewsRepository extends BaseRepository<News, NewsService> {
     try {
       // Receives the data and parse it
       final newsResponse = await service.getNews(pageIndex: 1, limit: _limit);
-      list = [
+      _news = [
         for (final item in newsResponse.data['result']['docs'])
           News.fromJson(item)
       ];
@@ -69,7 +70,7 @@ class NewsRepository extends BaseRepository<News, NewsService> {
     }
   }
 
-  List<News> get news => list;
+  List<News> get news => _news;
 
-  int get itemCount => list?.length;
+  int get itemCount => _news?.length;
 }

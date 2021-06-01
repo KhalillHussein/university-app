@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:google_fonts/google_fonts.dart';
-
 import 'colors.dart';
 
 /// Class that contains all the different styles of an app

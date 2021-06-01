@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'index.dart';
 
@@ -8,14 +9,13 @@ class CacheImage extends StatelessWidget {
   final String url;
   final Size size;
   final BoxFit fit;
-  final int cacheWidth;
+
   final Widget placeholder;
 
   const CacheImage(
     this.url, {
     this.size,
     this.fit,
-    this.cacheWidth,
     this.placeholder,
   });
 
@@ -37,12 +37,12 @@ class CacheImage extends StatelessWidget {
     return CacheImage(
       url,
       size: _smallSize,
-      placeholder: Icon(Icons.person, size: 50, color: Colors.white12),
+      placeholder: Icon(MdiIcons.accountTie, size: 50, color: Colors.white12),
     );
   }
 
   factory CacheImage.news(String url) {
-    return CacheImage(url, size: _bigSize, cacheWidth: 400);
+    return CacheImage(url, size: _bigSize);
   }
 
   @override
@@ -56,13 +56,20 @@ class CacheImage extends StatelessWidget {
       width: size?.width ?? double.infinity,
       imageUrl: url,
       fit: fit ?? BoxFit.cover,
-      memCacheWidth: cacheWidth ?? 800,
+      memCacheWidth: 400,
       filterQuality: FilterQuality.high,
-      placeholder: (context, url) => Container(
+      progressIndicatorBuilder: (ctx, url, downloadProgress) => Container(
         height: size?.height ?? double.infinity,
         width: size?.width ?? double.infinity,
         color: Theme.of(context).canvasColor,
-        child: placeholder ?? _loadingIndicator,
+        child: Center(
+          child: placeholder ??
+              CircularProgressIndicator(
+                value: downloadProgress.progress,
+                valueColor: AlwaysStoppedAnimation(Colors.grey),
+                strokeWidth: 3.5,
+              ),
+        ),
       ),
       errorWidget: (context, url, error) => PlaceholderImage(
         height: size?.height ?? double.infinity,
@@ -70,11 +77,4 @@ class CacheImage extends StatelessWidget {
       ),
     );
   }
-
-  Widget get _loadingIndicator => const Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(Colors.grey),
-          strokeWidth: 3.0,
-        ),
-      );
 }

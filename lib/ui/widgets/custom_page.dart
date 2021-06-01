@@ -127,7 +127,7 @@ class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
           onRefresh: () => onRefresh(context, model),
           child: model.isLoading
               ? placeholder ?? _loadingIndicator
-              : model.loadingFailed && model.list.isEmpty
+              : model.loadingFailed
                   ? ChangeNotifierProvider.value(
                       value: model,
                       child: ConnectionError<T>(),
@@ -185,7 +185,7 @@ class ReloadableTab<T extends BaseRepository> extends StatelessWidget {
           onRefresh: () => onRefresh(context, model),
           child: model.isLoading
               ? placeholder ?? _loadingIndicator
-              : model.loadingFailed && model.list.isEmpty
+              : model.loadingFailed
                   ? ChangeNotifierProvider.value(
                       value: model,
                       child: ConnectionError<T>(),
@@ -240,7 +240,7 @@ class SimpleTab<T extends BaseRepository> extends StatelessWidget {
       body: Consumer<T>(
         builder: (context, model, child) => model.isLoading
             ? placeholder ?? _loadingIndicator
-            : model.loadingFailed && model.list.isEmpty
+            : model.loadingFailed
                 ? ChangeNotifierProvider.value(
                     value: model,
                     child: ConnectionError<T>(),
@@ -259,18 +259,18 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
     return Consumer<T>(
       builder: (context, model, child) => BigTip(
         title: Text(
-          'При загрузке данных что-то пошло не так',
+          'При загрузке данных что-то пошло не так. Проверьте подключение к интернету',
           style: GoogleFonts.rubikTextTheme(
             Theme.of(context).textTheme,
           ).headline5,
-          textScaleFactor: 0.65,
+          textScaleFactor: 0.6,
         ).scalable(),
         subtitle: TextButton(
           onPressed: () async => onRefresh(context, model),
           child: Text(
             'ПОВТОРИТЬ',
             style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-                .subtitle1
+                .subtitle2
                 .copyWith(
                   color: Theme.of(context).accentColor,
                   fontWeight: FontWeight.w600,

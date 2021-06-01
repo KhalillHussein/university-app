@@ -38,6 +38,7 @@ class TableCalendarProvider with ChangeNotifier {
   void onPageChanged(DateTime focDay) {
     focusedDay = focDay;
     selectedDay = focDay;
+    selectedEvents = getEventsForDay(focDay);
     notifyListeners();
   }
 

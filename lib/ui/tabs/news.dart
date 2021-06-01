@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mtusiapp/repositories/news_edit.dart';
 
@@ -30,7 +31,7 @@ class NewsTab extends StatelessWidget {
                   ? BottomLoader<NewsRepository>()
                   : NewsCard(
                       index,
-                      Key(model.list[index].id),
+                      Key(model.news[index].id),
                     );
             },
           ),
@@ -54,7 +55,7 @@ class NewsCard extends StatelessWidget {
       ),
       margin: const EdgeInsets.all(10.0),
       child: Consumer<NewsRepository>(builder: (ctx, model, _) {
-        final newsItem = model.list[index];
+        final newsItem = model.news[index];
         return Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +90,9 @@ class NewsCard extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 22,
-                  backgroundColor: Colors.blueGrey.withOpacity(0.2),
+                  backgroundColor: k24dp,
+                  child: ClipOval(
+                      child: SvgPicture.asset('assets/images/avatar.svg')),
                 ),
                 Separator.spacer(space: 15),
                 Column(

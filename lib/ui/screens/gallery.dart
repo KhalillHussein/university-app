@@ -71,7 +71,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   void setOverlaysVisible() {
     if (appBarHeight != 0) {
-      SystemChrome.setEnabledSystemUIOverlays([]);
+      SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
       setState(() {
         appBarHeight = 0;
       });

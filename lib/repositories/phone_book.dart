@@ -6,14 +6,18 @@ import '../util/index.dart';
 import 'index.dart';
 
 /// Repository that holds lecturers data.
-class PhoneBookRepository extends BaseRepository<PhoneBook, PhoneBookService> {
+class PhoneBookRepository extends BaseRepository<PhoneBookService> {
   PhoneBookRepository(PhoneBookService service) : super(service);
+
+  List<PhoneBook> _phoneNumbers;
 
   @override
   Future<void> loadData() async {
     try {
       final response = await service.getRecordings();
-      list = [for (final item in response.data) PhoneBook.fromJson(item)];
+      _phoneNumbers = [
+        for (final item in response.data) PhoneBook.fromJson(item)
+      ];
       finishLoading();
     } on DioError catch (dioError) {
       receivedError(ApiException.fromDioError(dioError).message);
@@ -22,7 +26,7 @@ class PhoneBookRepository extends BaseRepository<PhoneBook, PhoneBookService> {
     }
   }
 
-  List<PhoneBook> get recordings => list;
+  List<PhoneBook> get recordings => _phoneNumbers;
 
-  int get itemCount => list?.length;
+  int get itemCount => _phoneNumbers?.length;
 }

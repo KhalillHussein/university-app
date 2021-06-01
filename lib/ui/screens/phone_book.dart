@@ -23,7 +23,7 @@ class PhoneBookScreen extends StatelessWidget {
         title: 'Телефонный справочник',
         fab: FloatingActionButton(
           tooltip: 'Поиск',
-          onPressed: model.isLoaded || model.list.isNotEmpty
+          onPressed: model.isLoaded
               ? () => showSearch<PhoneBook>(
                     context: context,
                     delegate: SearchPage<PhoneBook>(

@@ -1,10 +1,9 @@
 import 'package:mtusiapp/services/changelog.dart';
 
-import '../services/index.dart';
 import 'index.dart';
 
 /// Repository that holds information about the changelog of this app.
-class ChangelogRepository extends BaseRepository<String, ChangelogService> {
+class ChangelogRepository extends BaseRepository<ChangelogService> {
   String _changelog;
 
   ChangelogRepository(ChangelogService service) : super(service);
@@ -19,7 +18,7 @@ class ChangelogRepository extends BaseRepository<String, ChangelogService> {
 
       finishLoading();
     } catch (e) {
-      receivedError(e);
+      receivedError(e.toString());
     }
   }
 

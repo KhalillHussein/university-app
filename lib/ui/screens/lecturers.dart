@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:row_collection/row_collection.dart';
 
 import '../../models/index.dart';
 import '../../repositories/index.dart';
 import '../../ui/widgets/index.dart';
-import '../../util/index.dart';
 import '../pages/index.dart';
 
 class LecturersScreen extends StatelessWidget {

@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mtusiapp/repositories/changelog.dart';
 import 'package:provider/provider.dart';
 
-import '../../repositories/index.dart';
 import '../../util/index.dart';
 import '../widgets/index.dart';
 
@@ -19,21 +18,24 @@ class ChangelogScreen extends StatelessWidget {
       builder: (context, model, child) =>
           ReloadableSimplePage<ChangelogRepository>(
         title: 'Список изменений',
-        body: Markdown(
-          data: model.changelog ?? '',
-          onTapLink: (_, url, __) => showUrl(url),
-          styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-            blockSpacing: 10,
-            h2: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-                .subtitle1
-                .copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-            p: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-                .bodyText2
-                .copyWith(
-                  color: Theme.of(context).textTheme.caption.color,
-                ),
+        body: Scrollbar(
+          child: Markdown(
+            data: model.changelog ?? '',
+            onTapLink: (_, url, __) => showUrl(url),
+            styleSheet:
+                MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+              blockSpacing: 10,
+              h2: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                  .subtitle1
+                  .copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+              p: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                  .bodyText2
+                  .copyWith(
+                    color: Theme.of(context).textTheme.caption.color,
+                  ),
+            ),
           ),
         ),
       ),

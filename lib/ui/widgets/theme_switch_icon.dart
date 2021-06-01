@@ -16,6 +16,7 @@ class ThemeSwitchIcon extends StatelessWidget {
     return ThemeSwitcher(
       builder: (context) => IconButton(
           splashRadius: 20,
+          tooltip: 'Режим',
           icon: Icon(
             isDarkTheme ? MdiIcons.weatherSunny : MdiIcons.weatherNight,
           ),
