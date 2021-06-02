@@ -1,5 +1,4 @@
-import 'package:mtusiapp/services/changelog.dart';
-
+import '../services/changelog.dart';
 import 'index.dart';
 
 /// Repository that holds information about the changelog of this app.

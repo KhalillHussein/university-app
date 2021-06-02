@@ -40,6 +40,7 @@ class Style {
       selectedItemColor: kDarkSecondaryColor,
       type: BottomNavigationBarType.fixed,
     ),
+    bottomAppBarColor: k06dp,
     brightness: Brightness.dark,
     canvasColor: k08dp,
     cardColor: k04dp,

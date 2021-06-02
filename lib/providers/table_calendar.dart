@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../models/index.dart';
-
 import '../util/index.dart';
 
 class TableCalendarProvider with ChangeNotifier {

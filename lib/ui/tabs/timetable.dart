@@ -1,13 +1,12 @@
-import 'package:big_tip/big_tip.dart';
 import 'package:flutter/material.dart';
 
-import 'package:google_fonts/google_fonts.dart';
-import 'package:mtusiapp/ui/widgets/search.dart';
 import 'package:provider/provider.dart';
+import 'package:big_tip/big_tip.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../repositories/index.dart';
+import '../../util/index.dart';
 import '../widgets/index.dart';
-import '../../util/extensions.dart';
 
 class TimetableTab extends StatelessWidget {
   @override

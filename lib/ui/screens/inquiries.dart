@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:row_collection/row_collection.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../providers/index.dart';
 import '../../repositories/index.dart';
@@ -31,7 +31,7 @@ class InquiriesScreen extends StatelessWidget {
         child: GroupedListView<Map, String>(
           separator: Separator.divider(indent: 15),
           addAutomaticKeepAlives: false,
-          elements: Doc.doc.inquiries,
+          elements: inquiries,
           groupBy: (element) => element['department'],
           groupSeparatorBuilder: _buildSeparator,
           itemBuilder: _buildListTile,
@@ -43,7 +43,7 @@ class InquiriesScreen extends StatelessWidget {
   Widget _buildSeparator(String groupByValue) {
     return HeaderText(
       groupByValue,
-      head: groupByValue == Doc.doc.inquiries.first['department'],
+      head: groupByValue == inquiries.first['department'],
     );
   }
 
@@ -249,23 +249,19 @@ class InquiriesScreen extends StatelessWidget {
                                   ? () async {
                                       _launchURL(
                                         context,
-                                        Doc.doc
-                                            .emailForm(
-                                              group: 'ДИ-11',
-                                              userName: context
-                                                  .read<AuthRepository>()
-                                                  .user
-                                                  .userName,
-                                              location: validate.location.value,
-                                              inquiry: inquiry ??
-                                                  validate
-                                                      .organizationName.value,
-                                              phoneNumber:
-                                                  validate.phoneNumber.value,
-                                              docType: radio.doc,
-                                            )
-                                            .toString()
-                                            .replaceAll("+", "%20"),
+                                        emailForm(
+                                          group: 'ДИ-11',
+                                          userName: context
+                                              .read<AuthRepository>()
+                                              .user
+                                              .userName,
+                                          location: validate.location.value,
+                                          inquiry: inquiry ??
+                                              validate.organizationName.value,
+                                          phoneNumber:
+                                              validate.phoneNumber.value,
+                                          docType: radio.doc,
+                                        ).toString().replaceAll("+", "%20"),
                                       );
                                       validate.clearFields();
                                       Navigator.pop(context);

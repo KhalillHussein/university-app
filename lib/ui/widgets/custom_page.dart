@@ -60,19 +60,22 @@ Future<void> onRefresh(BuildContext context, BaseRepository repository) {
 /// Used when the desired page doesn't have reloading.
 class SimplePage extends StatelessWidget {
   final String title;
-  final Widget body, fab, leading, titleWidget;
+  final Widget body, fab, leading, titleWidget, bottomNavigationBar;
+  final PreferredSizeWidget bottom;
   final List<Widget> actions;
   final double elevation;
 
   const SimplePage({
     this.title,
+    this.bottom,
     @required this.body,
     this.elevation,
     this.titleWidget,
     this.leading,
     this.fab,
     this.actions,
-  });
+    this.bottomNavigationBar,
+  }) : assert(title != null || titleWidget != null);
 
   @override
   Widget build(BuildContext context) {
@@ -80,14 +83,11 @@ class SimplePage extends StatelessWidget {
       appBar: AppBar(
         leading: leading,
         elevation: elevation,
-        title: titleWidget ??
-            Text(
-              title,
-              // style: GoogleFonts.rubik(fontWeight: FontWeight.w500),
-              // style: Theme.of(context).textTheme.headline6,
-            ),
+        title: titleWidget ?? Text(title),
         actions: actions,
+        bottom: bottom,
       ),
+      bottomNavigationBar: bottomNavigationBar,
       body: body,
       floatingActionButton: fab,
     );
@@ -99,8 +99,14 @@ class SimplePage extends StatelessWidget {
 class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
   final String title;
   final List<Widget> actions;
-  final Widget body, fab, placeholder, leading, titleWidget;
+  final Widget body,
+      fab,
+      placeholder,
+      leading,
+      titleWidget,
+      bottomNavigationBar;
   final double elevation;
+  final PreferredSizeWidget bottom;
 
   const ReloadableSimplePage({
     this.title,
@@ -111,7 +117,9 @@ class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
     this.placeholder,
     this.fab,
     this.leading,
-  });
+    this.bottom,
+    this.bottomNavigationBar,
+  }) : assert(title != null || titleWidget != null);
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +130,8 @@ class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
       titleWidget: titleWidget,
       fab: fab,
       leading: leading,
+      bottom: bottom,
+      bottomNavigationBar: bottomNavigationBar,
       body: Consumer<T>(
         builder: (context, model, child) => RefreshIndicator(
           onRefresh: () => onRefresh(context, model),
@@ -143,6 +153,7 @@ class ReloadableTab<T extends BaseRepository> extends StatelessWidget {
   final String title;
   final List<Widget> actions;
   final Widget body, fab, placeholder, leading, titleWidget;
+  final PreferredSizeWidget bottom;
   final double elevation;
 
   const ReloadableTab({
@@ -150,11 +161,12 @@ class ReloadableTab<T extends BaseRepository> extends StatelessWidget {
     @required this.body,
     this.titleWidget,
     this.elevation,
+    this.bottom,
     this.actions,
     this.placeholder,
     this.fab,
     this.leading,
-  });
+  }) : assert(title != null || titleWidget != null);
 
   @override
   Widget build(BuildContext context) {
@@ -174,6 +186,7 @@ class ReloadableTab<T extends BaseRepository> extends StatelessWidget {
       elevation: elevation,
       titleWidget: titleWidget,
       fab: fab,
+      bottom: bottom,
       leading: IconButton(
         splashRadius: 20,
         tooltip: 'Меню',
@@ -201,6 +214,7 @@ class SimpleTab<T extends BaseRepository> extends StatelessWidget {
   final String title;
   final List<Widget> actions;
   final Widget body, fab, placeholder, leading, titleWidget;
+  final PreferredSizeWidget bottom;
   final double elevation;
 
   const SimpleTab({
@@ -211,8 +225,9 @@ class SimpleTab<T extends BaseRepository> extends StatelessWidget {
     this.actions,
     this.placeholder,
     this.fab,
+    this.bottom,
     this.leading,
-  });
+  }) : assert(title != null || titleWidget != null);
 
   @override
   Widget build(BuildContext context) {
@@ -230,6 +245,7 @@ class SimpleTab<T extends BaseRepository> extends StatelessWidget {
       title: title,
       elevation: elevation,
       titleWidget: titleWidget,
+      bottom: bottom,
       fab: fab,
       leading: IconButton(
         splashRadius: 20,

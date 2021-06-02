@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:mtusiapp/ui/screens/index.dart';
 
 import 'package:provider/provider.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:quick_actions/quick_actions.dart';
@@ -14,6 +13,7 @@ import '../../repositories/index.dart';
 import '../../util/index.dart';
 import '../tabs/index.dart';
 import '../widgets/index.dart';
+import 'index.dart';
 
 class NavigationScreen extends StatefulWidget {
   static const route = '/';
@@ -78,54 +78,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
     super.initState();
   }
 
-  void showStartDialog() {
-    SharedPreferences.getInstance().then((prefs) {
-      final bool showDialog = prefs.getBool('dialog_open') ?? true;
-      if (showDialog) {
-        //shows dialog for one time only
-        Future.delayed(const Duration(milliseconds: 100), () {
-          _showDialog(context);
-          prefs.setBool('dialog_open', false);
-        });
-      }
-    });
-  }
-
-  void _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Theme.of(context).appBarTheme.color,
-        title: Text(
-          'Добро пожаловать!',
-        ).scalable(),
-        content: MarkdownBody(
-          data: Doc.doc.welcomeMessage,
-          listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
-          styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-            blockSpacing: 10,
-            strong: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-                .bodyText2
-                .copyWith(
-                  fontWeight: FontWeight.w900,
-                ),
-            p: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-                .bodyText2,
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: Navigator.of(ctx).pop,
-            child: const Text(
-              'ЗАКРЫТЬ',
-            ).scalable(),
-          ),
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return ThemeSwitchingArea(
@@ -160,7 +112,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
           BottomNavigationBarItem(
             icon: Icon(
               MdiIcons.calendarTextOutline,
-              size: 28,
+              size: 30,
             ),
             label: 'Расписание',
           ),
@@ -177,6 +129,54 @@ class _NavigationScreenState extends State<NavigationScreen> {
               size: 30,
             ),
             label: 'О нас',
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showStartDialog() {
+    SharedPreferences.getInstance().then((prefs) {
+      final bool showDialog = prefs.getBool('dialog_open') ?? true;
+      if (showDialog) {
+        //shows dialog for one time only
+        Future.delayed(const Duration(milliseconds: 100), () {
+          _showDialog(context);
+          prefs.setBool('dialog_open', false);
+        });
+      }
+    });
+  }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).appBarTheme.color,
+        title: Text(
+          'Добро пожаловать!',
+        ).scalable(),
+        content: MarkdownBody(
+          data: welcomeMessage,
+          listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
+          styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+            blockSpacing: 10,
+            strong: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                .bodyText2
+                .copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
+            p: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                .bodyText2,
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: Navigator.of(ctx).pop,
+            child: const Text(
+              'ЗАКРЫТЬ',
+            ).scalable(),
           ),
         ],
       ),

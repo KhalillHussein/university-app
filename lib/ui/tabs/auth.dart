@@ -1,15 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mtusiapp/ui/screens/settings.dart';
-import 'package:mtusiapp/ui/widgets/custom_page.dart';
-import 'package:mtusiapp/ui/widgets/index.dart';
 import 'package:provider/provider.dart';
 import 'package:row_collection/row_collection.dart';
 
 import '../../providers/index.dart';
 import '../../repositories/index.dart';
 import '../../util/index.dart';
+import '../screens/index.dart';
+import '../widgets/index.dart';
 
 class AuthTab extends StatelessWidget {
   @override

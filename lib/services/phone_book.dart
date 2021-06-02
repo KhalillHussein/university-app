@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:mtusiapp/util/index.dart';
 
+import '../util/index.dart';
 import 'index.dart';
 
 /// Services that retrieves phone numbers.

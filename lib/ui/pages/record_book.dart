@@ -1,207 +1,21 @@
 import 'package:flutter/material.dart';
+
 import 'package:expandable/expandable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:row_collection/row_collection.dart';
 
+import '../../util/doc.dart';
 import '../../util/extensions.dart';
 
 class RecordBookPage extends StatelessWidget {
-  final List<Map<String, dynamic>> _semesters = [
-    {
-      'semester': 1,
-      'year': '2018/2019',
-      'session': 'зимняя сессия',
-      'course': '1 курс',
-      'qualified': false,
-      'disciplines': [
-        {
-          'name': 'Математика',
-          'control': 'Экзамен',
-          'grade': 2,
-          'date': '26.12.2018'
-        },
-        {
-          'name': 'Физика',
-          'control': 'Экзамен',
-          'grade': 4,
-          'date': '22.12.2018'
-        },
-        {
-          'name': 'Электротехника',
-          'control': 'Зачет',
-          'grade': 'зачтено',
-          'date': '16.12.2018'
-        },
-        {
-          'name': 'Информатика',
-          'control': 'Экзамен',
-          'grade': 4,
-          'date': '11.01.2019'
-        },
-        {
-          'name': 'Мат. логика',
-          'control': 'Зачет',
-          'grade': 4,
-          'date': '16.01.2019'
-        },
-      ],
-    },
-    {
-      'semester': 2,
-      'year': '2018/2019',
-      'session': 'весенняя сессия',
-      'course': '1 курс',
-      'qualified': true,
-      'disciplines': [
-        {'name': 'БЖ', 'control': 'Экзамен', 'grade': 5, 'date': '05.14.2019'},
-        {
-          'name': 'Теория связи',
-          'control': 'Экзамен',
-          'grade': 4,
-          'date': '05.16.2019'
-        },
-        {
-          'name': 'ООП',
-          'control': 'Экзамен',
-          'grade': '3',
-          'date': '05.26.2019'
-        },
-        {
-          'name': 'Теория вероятности',
-          'control': 'Экзамен',
-          'grade': 4,
-          'date': '05.30.2019'
-        },
-        {
-          'name': 'Мат. Логика',
-          'control': 'Зачет',
-          'grade': 4,
-          'date': '06.05.2019'
-        },
-      ],
-    },
-    {
-      'semester': 3,
-      'year': '2019/2020',
-      'session': 'зимняя сессия',
-      'course': '2 курс',
-      'qualified': true,
-      'disciplines': [
-        {
-          'name': 'Математика',
-          'control': 'Экзамен',
-          'grade': 2,
-          'date': '26.12.2018'
-        },
-        {
-          'name': 'Физика',
-          'control': 'Экзамен',
-          'grade': 4,
-          'date': '22.12.2018'
-        },
-        {
-          'name': 'Электротехника',
-          'control': 'Зачет',
-          'grade': 'зачтено',
-          'date': '16.12.2018'
-        },
-        {
-          'name': 'Информатика',
-          'control': 'Экзамен',
-          'grade': 4,
-          'date': '11.01.2019'
-        },
-        {
-          'name': 'Мат. логика',
-          'control': 'Зачет',
-          'grade': 4,
-          'date': '16.01.2019'
-        },
-      ],
-    },
-    {
-      'semester': 4,
-      'year': '2019/2020',
-      'session': 'весенняя сессия',
-      'course': '2 курс',
-      'qualified': true,
-      'disciplines': [
-        {'name': 'БЖ', 'control': 'Экзамен', 'grade': 5, 'date': '05.14.2019'},
-        {
-          'name': 'Теория связи',
-          'control': 'Экзамен',
-          'grade': 4,
-          'date': '05.16.2019'
-        },
-        {
-          'name': 'ООП',
-          'control': 'Экзамен',
-          'grade': '3',
-          'date': '05.26.2019'
-        },
-        {
-          'name': 'Теория вероятности',
-          'control': 'Экзамен',
-          'grade': 4,
-          'date': '05.30.2019'
-        },
-        {
-          'name': 'Мат. Логика',
-          'control': 'Зачет',
-          'grade': 4,
-          'date': '06.05.2019'
-        },
-      ],
-    },
-    {
-      'semester': 5,
-      'year': '2020/2021',
-      'session': 'зимняя сессия',
-      'course': '3 курс',
-      'qualified': true,
-      'disciplines': [
-        {
-          'name': 'Математика',
-          'control': 'Экзамен',
-          'grade': 2,
-          'date': '26.12.2018'
-        },
-        {
-          'name': 'Физика',
-          'control': 'Экзамен',
-          'grade': 4,
-          'date': '22.12.2018'
-        },
-        {
-          'name': 'Электротехника',
-          'control': 'Зачет',
-          'grade': 'зачтено',
-          'date': '16.12.2018'
-        },
-        {
-          'name': 'Информатика',
-          'control': 'Экзамен',
-          'grade': 4,
-          'date': '11.01.2019'
-        },
-        {
-          'name': 'Мат. логика',
-          'control': 'Зачет',
-          'grade': 4,
-          'date': '16.01.2019'
-        },
-      ],
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     return GroupedListView<Map, String>(
       padding: EdgeInsets.only(bottom: 15),
       floatingHeader: true,
       addAutomaticKeepAlives: false,
-      elements: _semesters,
+      elements: semestersPerformance,
       separator: Separator.spacer(space: 6),
       groupBy: (element) => element['year'],
       groupSeparatorBuilder: (groupByValue) =>
@@ -224,7 +38,7 @@ class RecordBookPage extends StatelessWidget {
           border: Border(
             top: BorderSide(
               width: 2.0,
-              color: _semesters[index]['qualified'] == false
+              color: semestersPerformance[index]['qualified'] == false
                   ? Theme.of(context).colorScheme.danger
                   : Theme.of(context).colorScheme.success,
             ),
@@ -250,7 +64,7 @@ class RecordBookPage extends StatelessWidget {
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Семестр ${_semesters[index]['semester']}',
+                        'Семестр ${semestersPerformance[index]['semester']}',
                         style: Theme.of(context)
                             .textTheme
                             .headline6
@@ -261,7 +75,7 @@ class RecordBookPage extends StatelessWidget {
                   ),
                   Separator.spacer(space: 4),
                   Text(
-                    '${_semesters[index]['course']}, ${_semesters[index]['session']}',
+                    '${semestersPerformance[index]['course']}, ${semestersPerformance[index]['session']}',
                     style: GoogleFonts.rubikTextTheme(
                       Theme.of(context).textTheme,
                     ).caption.copyWith(fontWeight: FontWeight.w500),
@@ -272,7 +86,7 @@ class RecordBookPage extends StatelessWidget {
             ),
             expanded: _buildExpanded(
               context,
-              _semesters[index]['disciplines'],
+              semestersPerformance[index]['disciplines'],
             ),
             builder: (_, __, expanded) {
               return Expandable(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mtusiapp/repositories/news_edit.dart';
-import 'package:mtusiapp/services/news_edit.dart';
+import 'package:mtusiapp/repositories/news_create.dart';
+import 'package:mtusiapp/services/news_create.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
@@ -39,11 +39,11 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (ctx) => TextScaleProvider()),
         ChangeNotifierProvider(
             create: (ctx) => AuthRepository(AuthService(httpClient))),
-        ChangeNotifierProxyProvider<AuthRepository, NewsEditRepository>(
-          create: (ctx) => NewsEditRepository(NewsEditService(httpClient)),
+        ChangeNotifierProxyProvider<AuthRepository, NewsCreateRepository>(
+          create: (ctx) => NewsCreateRepository(NewsCreateService(httpClient)),
           lazy: true,
           update: (ctx, model, model2) =>
-              NewsEditRepository(NewsEditService(httpClient))
+              NewsCreateRepository(NewsCreateService(httpClient))
                 ..token = model.user.token,
         ),
         ChangeNotifierProvider(

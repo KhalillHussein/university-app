@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mtusiapp/ui/screens/settings.dart';
-import 'package:mtusiapp/ui/widgets/custom_page.dart';
-import 'package:mtusiapp/ui/widgets/index.dart';
 import 'package:row_collection/row_collection.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../util/index.dart';
+import '../screens/index.dart';
+import '../widgets/index.dart';
 
 class AboutTab extends StatelessWidget {
   @override
@@ -49,7 +48,7 @@ class AboutTab extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: SelectableText(
-          Doc.doc.organizationText,
+          organizationText,
           textAlign: TextAlign.center,
           style: GoogleFonts.rubikTextTheme(
             Theme.of(context).textTheme,
@@ -110,7 +109,7 @@ class AboutTab extends StatelessWidget {
 
   List<Widget> _listRequisites(BuildContext context) {
     return [
-      for (final Map item in Doc.doc.info)
+      for (final Map item in info)
         Card(
           elevation: 2.0,
           color: Theme.of(context).brightness == Brightness.light

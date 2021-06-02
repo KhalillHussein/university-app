@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:row_collection/row_collection.dart';
 
@@ -12,26 +10,6 @@ import '../../util/index.dart';
 import '../screens/index.dart';
 
 class AppDrawer extends StatelessWidget {
-  final List<Map<String, String>> kafedru = [
-    {
-      'name':
-          'Коллектив кафедры инфокоммуникационных технологий и систем связи',
-      'abbr': 'ИТСС',
-    },
-    {
-      'name': 'Коллектив кафедры информатики и вычислительной техники',
-      'abbr': 'ИВТ',
-    },
-    {
-      'name': 'Коллектив кафедры общенаучной подготовки',
-      'abbr': 'ОНП',
-    },
-    {
-      'name': 'Коллектив отдела научно-исследовательской работы',
-      'abbr': 'ОНИР',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     final userData = context.read<AuthRepository>();
@@ -136,7 +114,7 @@ class AppDrawer extends StatelessWidget {
           label: 'Научно-педагогический состав',
           icon: MdiIcons.accountTie,
           children: [
-            for (final item in kafedru)
+            for (final item in kafedruSections)
               ListTile(
                 title: Text(
                   item['name'],

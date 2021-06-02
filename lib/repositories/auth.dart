@@ -96,7 +96,7 @@ class AuthRepository extends BaseRepository<AuthService> {
     }
   }
 
-  ///Function that performs logout operations
+  ///Function that delete user from memory
   Future<void> logout() async {
     _user = User.fromJson({});
     _token = null;

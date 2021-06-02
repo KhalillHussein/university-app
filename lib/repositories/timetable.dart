@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:sqflite/sqflite.dart';
 
 import '../helpers/db_helper.dart';
@@ -46,11 +45,17 @@ class TimetableRepository extends BaseRepository<TimetableService> {
     } on DioError catch (dioError) {
       errorMessage = ApiException.fromDioError(dioError).message;
       loadDataFromDb();
-    } on DatabaseException catch (dbError) {
-      receivedError(dbError.toString());
     } catch (error) {
-      receivedError(error);
+      errorMessage = error.toString();
+      loadDataFromDb();
+      // receivedError(error);
     }
+  }
+
+  Future<void> init() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    userCategory = prefs.getString('category');
+    notifyListeners();
   }
 
   Future<void> loadDataFromDb() async {
@@ -73,12 +78,6 @@ class TimetableRepository extends BaseRepository<TimetableService> {
     notifyListeners();
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('category', userCategory);
-  }
-
-  Future<void> init() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    userCategory = prefs.getString('category');
-    notifyListeners();
   }
 
   List<Timetable> getBy(String keyword) {

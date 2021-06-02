@@ -1,21 +1,19 @@
+import 'package:flutter/material.dart';
+
 import 'package:big_tip/big_tip.dart';
 import 'package:expand_widget/expand_widget.dart';
-import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mtusiapp/providers/index.dart';
-import 'package:mtusiapp/ui/screens/settings.dart';
-import 'package:mtusiapp/ui/widgets/search.dart';
-import 'package:mtusiapp/util/index.dart';
-
 import 'package:provider/provider.dart';
 import 'package:row_collection/row_collection.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../models/index.dart';
+import '../../providers/index.dart';
 import '../../repositories/index.dart';
 import '../../util/index.dart';
+import '../screens/index.dart';
 import '../widgets/index.dart';
 
 const Duration _kExpand = Duration(milliseconds: 350);
@@ -396,7 +394,7 @@ class _TimingState extends State<_Timing> {
           child: Wrap(
             spacing: 6,
             children: [
-              for (int i = 0; i < Doc.doc.timing.length; i++)
+              for (int i = 0; i < timing.length; i++)
                 ChoiceChip(
                   shape: RoundedRectangleBorder(
                     // side: BorderSide(color: Theme.of(context).accentColor),
@@ -404,7 +402,7 @@ class _TimingState extends State<_Timing> {
                   ),
                   selected: _selectedIndex == i,
                   label: Text(
-                    Doc.doc.timing[i]['group'],
+                    timing[i]['group'],
                   ).scalable(),
                   labelStyle: Theme.of(context).textTheme.caption.copyWith(
                       color: _selectedIndex == i
@@ -440,41 +438,41 @@ class _TimingState extends State<_Timing> {
                   width: 2,
                 )),
             child: Column(children: <Widget>[
-              if (Doc.doc.timing[_selectedIndex]['shift'].contains('1'))
+              if (timing[_selectedIndex]['shift'].contains('1'))
                 RowLayout(
                   children: [
                     RowText(
                         '1 пара',
-                        Doc.doc.timing[_selectedIndex]['first']
+                        timing[_selectedIndex]['first']
                             .reduce((a, b) => '$a  $b')),
                     Separator.divider(),
                     RowText(
                         '2 пара',
-                        Doc.doc.timing[_selectedIndex]['second']
+                        timing[_selectedIndex]['second']
                             .reduce((a, b) => '$a  $b')),
                     Separator.divider(),
                     RowText(
                         '3 пара',
-                        Doc.doc.timing[_selectedIndex]['third']
+                        timing[_selectedIndex]['third']
                             .reduce((a, b) => '$a  $b')),
                   ],
                 ),
-              if (Doc.doc.timing[_selectedIndex]['shift'].contains('2'))
+              if (timing[_selectedIndex]['shift'].contains('2'))
                 RowLayout(
                   children: [
                     RowText(
                         '4 пара',
-                        Doc.doc.timing[_selectedIndex]['four']
+                        timing[_selectedIndex]['four']
                             .reduce((a, b) => '$a  $b')),
                     Separator.divider(),
                     RowText(
                         '5 пара',
-                        Doc.doc.timing[_selectedIndex]['five']
+                        timing[_selectedIndex]['five']
                             .reduce((a, b) => '$a  $b')),
                     Separator.divider(),
                     RowText(
                         '6 пара',
-                        Doc.doc.timing[_selectedIndex]['six']
+                        timing[_selectedIndex]['six']
                             .reduce((a, b) => '$a  $b')),
                     ExpandChild(
                       child: RowLayout(
@@ -489,17 +487,17 @@ class _TimingState extends State<_Timing> {
                           ),
                           RowText(
                               '1 пара',
-                              Doc.doc.timing[_selectedIndex]['first']
+                              timing[_selectedIndex]['first']
                                   .reduce((a, b) => '$a  $b')),
                           Separator.divider(),
                           RowText(
                               '2 пара',
-                              Doc.doc.timing[_selectedIndex]['second']
+                              timing[_selectedIndex]['second']
                                   .reduce((a, b) => '$a  $b')),
                           Separator.divider(),
                           RowText(
                               '3 пара',
-                              Doc.doc.timing[_selectedIndex]['third']
+                              timing[_selectedIndex]['third']
                                   .reduce((a, b) => '$a  $b')),
                         ],
                       ),

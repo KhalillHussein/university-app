@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mtusiapp/repositories/changelog.dart';
 import 'package:provider/provider.dart';
 
+import '../../repositories/index.dart';
 import '../../util/index.dart';
 import '../widgets/index.dart';
 
@@ -36,7 +37,7 @@ class ChangelogScreen extends StatelessWidget {
                     color: Theme.of(context).textTheme.caption.color,
                   ),
             ),
-          ),
+          ).scalable(),
         ),
       ),
     );

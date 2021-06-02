@@ -49,6 +49,7 @@ class TimetableService extends BaseService {
       )
       """;
 
+  //Mapping data for saving in database
   Map<String, dynamic> toMap(Timetable object) {
     return <String, dynamic>{
       columnId: object.id,

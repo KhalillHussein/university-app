@@ -1,26 +1,23 @@
 import 'dart:io';
 
-import 'package:app_settings/app_settings.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mtusiapp/providers/index.dart';
-import 'package:mtusiapp/repositories/changelog.dart';
-import 'package:mtusiapp/services/changelog.dart';
-import 'package:mtusiapp/ui/screens/changelog.dart';
-import 'package:mtusiapp/ui/widgets/custom_page.dart';
-import 'package:mtusiapp/ui/widgets/dialogs.dart';
-import 'package:mtusiapp/ui/widgets/header_text.dart';
-import 'package:mtusiapp/ui/widgets/index.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:row_collection/row_collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:dio/dio.dart';
+import 'package:app_settings/app_settings.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:row_collection/row_collection.dart';
 
+import '../../providers/index.dart';
+import '../../repositories/changelog.dart';
+import '../../services/changelog.dart';
 import '../../util/index.dart';
+import '../screens/changelog.dart';
+import '../widgets/index.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const route = '/settings';
@@ -211,7 +208,7 @@ class SettingsScreen extends StatelessWidget {
           _buildSettingsTile(
             context,
             icon: Icons.info,
-            title: 'Версия 0.9.3 beta',
+            title: 'Версия 0.9.4 beta',
             subtitle: 'Просмотр списка изменений',
             onTap: () => Navigator.push(
               context,
@@ -236,7 +233,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () => _showDialog(context,
                 title: 'Перед отправкой',
                 contentWidget: MarkdownBody(
-                  data: Doc.doc.messageRequirements,
+                  data: messageRequirements,
                   listItemCrossAxisAlignment:
                       MarkdownListItemCrossAxisAlignment.start,
                   styleSheet:

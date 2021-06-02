@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:mtusiapp/models/index.dart';
 
+import '../models/index.dart';
 import '../util/index.dart';
 import 'index.dart';
 
 /// Services that send news to [ApiService].
-class NewsEditService extends BaseService {
-  const NewsEditService(Dio client) : super(client);
+class NewsCreateService extends BaseService {
+  const NewsCreateService(Dio client) : super(client);
 
   /// Post news.
   Future<Response> postNews(News news, String token) async {

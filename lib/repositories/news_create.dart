@@ -1,21 +1,19 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
+import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:mtusiapp/services/news_edit.dart';
-
 import '../models/index.dart';
-
+import '../services/index.dart';
 import '../util/index.dart';
 import 'index.dart';
 
-///Repository that manage news post
-class NewsEditRepository extends BasePostRepository<NewsEditService> {
-  NewsEditRepository(NewsEditService service) : super(service);
+///Repository that manage news creation
+class NewsCreateRepository extends BasePostRepository<NewsCreateService> {
+  NewsCreateRepository(NewsCreateService service) : super(service);
 
   String token;
 
@@ -31,44 +29,6 @@ class NewsEditRepository extends BasePostRepository<NewsEditService> {
 
   File _image;
   final ImagePicker picker = ImagePicker();
-
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      _image = File(pickedFile.path);
-      if (!images.contains(_image)) images.add(_image);
-      notifyListeners();
-    } else {
-      debugPrint('No image selected.');
-    }
-  }
-
-  void clearFields() {
-    images = [];
-    introText = '';
-    fullText = '';
-    title = '';
-  }
-
-  void changeIntoText(String value) {
-    introText = value;
-    notifyListeners();
-  }
-
-  void changeTitle(String value) {
-    title = value;
-    notifyListeners();
-  }
-
-  void changeFullText(String value) {
-    fullText = value;
-    notifyListeners();
-  }
-
-  void changeDate(DateTime date) {
-    createdAt = date;
-    notifyListeners();
-  }
 
   @override
   Future<void> postData() async {
@@ -106,5 +66,43 @@ class NewsEditRepository extends BasePostRepository<NewsEditService> {
     } catch (error) {
       receivedError(error.toString());
     }
+  }
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+      if (!images.contains(_image)) images.add(_image);
+      notifyListeners();
+    } else {
+      debugPrint('No image selected.');
+    }
+  }
+
+  void clearFields() {
+    images = [];
+    introText = '';
+    fullText = '';
+    title = '';
+  }
+
+  void changeIntoText(String value) {
+    introText = value;
+    notifyListeners();
+  }
+
+  void changeTitle(String value) {
+    title = value;
+    notifyListeners();
+  }
+
+  void changeFullText(String value) {
+    fullText = value;
+    notifyListeners();
+  }
+
+  void changeDate(DateTime date) {
+    createdAt = date;
+    notifyListeners();
   }
 }

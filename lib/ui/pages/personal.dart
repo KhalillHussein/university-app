@@ -1,14 +1,13 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:expand_widget/expand_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import 'package:mtusiapp/repositories/index.dart';
-import 'package:row_collection/row_collection.dart';
 import 'package:provider/provider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:row_collection/row_collection.dart';
 
-import '../widgets/index.dart';
+import '../../repositories/index.dart';
 import '../../util/index.dart';
+import '../widgets/index.dart';
 
 class PersonalPage extends StatelessWidget {
   final String name;
@@ -105,26 +104,6 @@ class PersonalPage extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildKafedraBadge(BuildContext context, {String kafedra}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 4),
-      margin: const EdgeInsets.only(bottom: 5),
-      decoration: BoxDecoration(
-        color: Theme.of(context).accentColor.withOpacity(0.1),
-        border: Border.all(
-          color: Theme.of(context).accentColor,
-        ),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        kafedra,
-        style: Theme.of(context).textTheme.caption.copyWith(
-            color: Theme.of(context).accentColor, fontWeight: FontWeight.w500),
-        textScaleFactor: 0.9,
-      ).scalable(),
     );
   }
 

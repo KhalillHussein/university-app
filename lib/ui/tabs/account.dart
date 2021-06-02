@@ -2,9 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mtusiapp/ui/screens/news_edit.dart';
-import 'package:mtusiapp/ui/screens/settings.dart';
-
 import 'package:provider/provider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:row_collection/row_collection.dart';
@@ -12,6 +9,7 @@ import 'package:row_collection/row_collection.dart';
 import '../../repositories/index.dart';
 import '../../util/index.dart';
 import '../pages/index.dart';
+import '../screens/index.dart';
 import '../widgets/index.dart';
 
 class AccountTab extends StatelessWidget {
@@ -19,7 +17,6 @@ class AccountTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AuthRepository>(
       builder: (ctx, userData, _) => SimpleTab<AuthRepository>(
-        elevation: 0.0,
         title: userData.user.userName,
         actions: [
           IconButton(
@@ -95,11 +92,8 @@ class AccountTab extends StatelessWidget {
         ).scalable(),
         content: Text(
           'При выходе из учетной записи будут удалены все связанные с нею данные.',
-          style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-              .bodyText2
-              .copyWith(
-                color: Theme.of(context).textTheme.caption.color,
-              ),
+          style:
+              GoogleFonts.rubikTextTheme(Theme.of(context).textTheme).bodyText2,
         ).scalable(),
         actions: <Widget>[
           TextButton(
@@ -178,35 +172,44 @@ class _Student extends StatelessWidget {
 class _Master extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      children: [
-        _buildCardSection(
-          context,
-          title: 'Новости',
-          subtitle: 'Добавление новости',
-          icon: MdiIcons.newspaperVariantMultipleOutline,
-          onTap: () => Navigator.pushNamed(context, CreateNewsScreen.route),
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildCardSection(
+              context,
+              title: 'Новости',
+              subtitle: 'Добавление новости',
+              icon: MdiIcons.newspaperVariantMultipleOutline,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewsCreateScreen(),
+                  fullscreenDialog: true,
+                ),
+              ),
+            ),
+            _buildCardSection(
+              context,
+              title: 'Расписание',
+              subtitle: 'Управление расписанием',
+              icon: MdiIcons.archiveAlertOutline,
+            ),
+            _buildCardSection(
+              context,
+              title: 'Преподаватели',
+              subtitle: 'Просмотр преподавателей',
+              icon: MdiIcons.accountTie,
+            ),
+            _buildCardSection(
+              context,
+              title: 'Аккаунты',
+              subtitle: 'Управление аккаунтами',
+              icon: MdiIcons.accountGroupOutline,
+            ),
+          ],
         ),
-        _buildCardSection(
-          context,
-          title: 'Расписание',
-          subtitle: 'Управление расписанием',
-          icon: MdiIcons.archiveAlertOutline,
-        ),
-        _buildCardSection(
-          context,
-          title: 'Преподаватели',
-          subtitle: 'Просмотр преподавателей',
-          icon: MdiIcons.accountTie,
-        ),
-        _buildCardSection(
-          context,
-          title: 'Аккаунты',
-          subtitle: 'Управление аккаунтами',
-          icon: MdiIcons.accountGroupOutline,
-        ),
-      ],
+      ),
     );
   }
 

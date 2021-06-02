@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mtusiapp/ui/screens/changelog.dart';
-import 'package:mtusiapp/ui/screens/news_edit.dart';
+import 'package:mtusiapp/ui/screens/news_create.dart';
 import 'package:mtusiapp/ui/screens/settings.dart';
 
 import '../ui/pages/index.dart';
@@ -42,10 +42,10 @@ class Routes {
             settings: routeSettings,
             builder: (_) => PersonalPage(lecturer),
           );
-        case CreateNewsScreen.route:
+        case NewsCreateScreen.route:
           return MaterialPageRoute(
             settings: routeSettings,
-            builder: (_) => CreateNewsScreen(),
+            builder: (_) => NewsCreateScreen(),
           );
         case ChangelogScreen.route:
           return MaterialPageRoute(

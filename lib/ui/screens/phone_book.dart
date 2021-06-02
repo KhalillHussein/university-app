@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:row_collection/row_collection.dart';
 
+import 'package:row_collection/row_collection.dart';
 import 'package:search_page/search_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
@@ -10,8 +10,8 @@ import 'package:grouped_list/grouped_list.dart';
 
 import '../../models/index.dart';
 import '../../repositories/index.dart';
-import '../widgets/index.dart';
 import '../../util/extensions.dart';
+import '../widgets/index.dart';
 
 class PhoneBookScreen extends StatelessWidget {
   static const route = '/phone_book';
@@ -29,41 +29,53 @@ class PhoneBookScreen extends StatelessWidget {
                     delegate: SearchPage<PhoneBook>(
                       items: model.recordings,
                       searchLabel: 'Поиск контактов',
-                      suggestion: BigTip(
-                        title: Text(
-                          'Телефонный справочник',
-                          style: GoogleFonts.rubikTextTheme(
-                            Theme.of(context).textTheme,
-                          ).headline6,
-                        ).scalable(),
-                        subtitle: Text(
-                          'Поиск по сотруднику, должности или отделению',
-                          style: GoogleFonts.rubikTextTheme(
-                            Theme.of(context).textTheme,
-                          ).subtitle1.copyWith(
-                                color:
-                                    Theme.of(context).textTheme.caption.color,
-                              ),
-                        ).scalable(),
-                        child: const Icon(Icons.search),
+                      suggestion: Center(
+                        child: SingleChildScrollView(
+                          child: BigTip(
+                            title: Text(
+                              'Телефонный справочник',
+                              style: GoogleFonts.rubikTextTheme(
+                                Theme.of(context).textTheme,
+                              ).headline6,
+                            ).scalable(),
+                            subtitle: Text(
+                              'Поиск по сотруднику, должности или отделению',
+                              style: GoogleFonts.rubikTextTheme(
+                                Theme.of(context).textTheme,
+                              ).subtitle1.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .caption
+                                        .color,
+                                  ),
+                            ).scalable(),
+                            child: const Icon(Icons.search),
+                          ),
+                        ),
                       ),
-                      failure: BigTip(
-                        title: Text(
-                          'Ой... Тут пусто',
-                          style: GoogleFonts.rubikTextTheme(
-                            Theme.of(context).textTheme,
-                          ).headline6,
-                        ).scalable(),
-                        subtitle: Text(
-                          'По вашему запросу ничего не найдено',
-                          style: GoogleFonts.rubikTextTheme(
-                            Theme.of(context).textTheme,
-                          ).subtitle1.copyWith(
-                                color:
-                                    Theme.of(context).textTheme.caption.color,
-                              ),
-                        ).scalable(),
-                        child: const Icon(Icons.sentiment_dissatisfied),
+                      failure: Center(
+                        child: SingleChildScrollView(
+                          child: BigTip(
+                            title: Text(
+                              'Ой... Тут пусто',
+                              style: GoogleFonts.rubikTextTheme(
+                                Theme.of(context).textTheme,
+                              ).headline6,
+                            ).scalable(),
+                            subtitle: Text(
+                              'По вашему запросу ничего не найдено',
+                              style: GoogleFonts.rubikTextTheme(
+                                Theme.of(context).textTheme,
+                              ).subtitle1.copyWith(
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .caption
+                                        .color,
+                                  ),
+                            ).scalable(),
+                            child: const Icon(Icons.sentiment_dissatisfied),
+                          ),
+                        ),
                       ),
                       filter: (record) => [
                         record.fullName,

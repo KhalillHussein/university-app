@@ -5,7 +5,7 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../../providers/index.dart';
-import '../../util/style.dart';
+import '../../util/index.dart';
 
 class ThemeSwitchIcon extends StatelessWidget {
   @override

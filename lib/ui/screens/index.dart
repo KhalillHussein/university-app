@@ -1,7 +1,10 @@
+export 'calendar.dart';
+export 'changelog.dart';
 export 'error.dart';
 export 'gallery.dart';
 export 'inquiries.dart';
 export 'lecturers.dart';
 export 'navigation.dart';
+export 'news_create.dart';
 export 'phone_book.dart';
-export 'calendar.dart';
+export 'settings.dart';

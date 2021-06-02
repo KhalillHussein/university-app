@@ -5,7 +5,7 @@ import '../services/index.dart';
 import '../util/index.dart';
 import 'index.dart';
 
-/// Repository that holds lecturers data.
+/// Repository that holds phone numbers.
 class PhoneBookRepository extends BaseRepository<PhoneBookService> {
   PhoneBookRepository(PhoneBookService service) : super(service);
 

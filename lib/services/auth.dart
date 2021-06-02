@@ -9,9 +9,11 @@ import 'index.dart';
 class AuthService extends BaseService {
   const AuthService(Dio client) : super(client);
 
-  /// Send a user data.
-  Future<Response> getUser(
-      {@required String login, @required String pwd}) async {
+  /// Send a user auth data.
+  Future<Response> getUser({
+    @required String login,
+    @required String pwd,
+  }) async {
     return client.post(
       Url.loginUrl,
       data: {

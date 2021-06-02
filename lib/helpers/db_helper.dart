@@ -1,7 +1,7 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-///Provider which prepare initial steps to work with the database
+///Class which prepare initial steps to work with the database
 class DatabaseHelper {
   DatabaseHelper._();
   static final DatabaseHelper db = DatabaseHelper._();
@@ -35,12 +35,13 @@ class DatabaseHelper {
     );
   }
 
+  ///  method, used for clear all data in the table
   Future<void> clearTable(String table) async {
     final db = await databaseInstance;
     await db.delete(table);
   }
 
-  ///  method, used for delete data in the table
+  ///  method, used for delete specific data in the table
   Future<void> delete({String table, String columnId, int id}) async {
     final db = await databaseInstance;
     await db.delete(table, where: '$columnId = ?', whereArgs: [id]);

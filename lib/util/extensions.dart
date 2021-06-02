@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:mtusiapp/providers/index.dart';
-import 'package:mtusiapp/util/colors.dart';
 
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/index.dart';
+import '../util/colors.dart';
 
 extension Scalable on Text {
   Widget scalable() {
@@ -23,7 +24,7 @@ extension Scalable on Text {
   }
 }
 
-extension ScalableMarkdown on MarkdownBody {
+extension ScalableMarkdownBody on MarkdownBody {
   Widget scalable() {
     return Consumer<TextScaleProvider>(
       builder: (ctx, scale, _) => MarkdownBody(
@@ -37,6 +38,27 @@ extension ScalableMarkdown on MarkdownBody {
               ? styleSheet.textScaleFactor * scale.scaleFactor
               : 1 * scale.scaleFactor,
         ),
+      ),
+    );
+  }
+}
+
+extension ScalableMarkdown on Markdown {
+  Widget scalable() {
+    return Consumer<TextScaleProvider>(
+      builder: (ctx, scale, _) => Markdown(
+        data: data,
+        shrinkWrap: shrinkWrap,
+        selectable: selectable,
+        styleSheet: MarkdownStyleSheet(
+          blockSpacing: styleSheet.blockSpacing,
+          h2: styleSheet.h2,
+          p: styleSheet.p,
+          textScaleFactor: styleSheet.textScaleFactor != null
+              ? styleSheet.textScaleFactor * scale.scaleFactor
+              : 1 * scale.scaleFactor,
+        ),
+        onTapLink: onTapLink,
       ),
     );
   }

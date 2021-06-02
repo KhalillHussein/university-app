@@ -8,69 +8,6 @@ import 'package:row_collection/row_collection.dart';
 import '../../util/index.dart';
 
 class Progress extends StatelessWidget {
-  final List<Map<String, dynamic>> _disciplines = [
-    {
-      'discipline': 'Иностранный язык',
-      'lecturer': 'Светличная Н.О.',
-      'percent': 0.957,
-      'first_module': '46 из 48',
-      'second_module': '48 из 52',
-      'passed': '6 из 100ч',
-      '5': 0.7,
-      '4': 0.3,
-      '3': 0.0,
-      '2': 0.0,
-    },
-    {
-      'discipline': 'Информатика',
-      'lecturer': 'Швидченко С.А.',
-      'percent': 0.763,
-      'first_module': '28 из 32',
-      'second_module': '30 из 32',
-      'passed': '6 из 64ч',
-      '5': 0.2,
-      '4': 0.65,
-      '3': 0.1,
-      '2': 0.05,
-    },
-    {
-      'discipline': 'Физика',
-      'lecturer': 'Конкин Б.Б.',
-      'percent': 0.832,
-      'first_module': '32 из 32',
-      'second_module': '30 из 32',
-      'passed': '2 из 64ч',
-      '5': 0.55,
-      '4': 0.35,
-      '3': 0.1,
-      '2': 0.0,
-    },
-    {
-      'discipline': 'Теория вероятности',
-      'lecturer': 'Ефимов С.В.',
-      'percent': 0.676,
-      'first_module': '8 из 16',
-      'second_module': '12 из 16',
-      'passed': '12 из 32ч',
-      '5': 0.15,
-      '4': 0.35,
-      '3': 0.4,
-      '2': 0.1,
-    },
-    {
-      'discipline': 'Математика',
-      'lecturer': 'Ефимов С.В.',
-      'percent': 0.491,
-      'first_module': '36 из 54',
-      'second_module': '32 из 48',
-      'passed': '34 из 102ч',
-      '5': 0.1,
-      '4': 0.32,
-      '3': 0.35,
-      '2': 0.23,
-    },
-  ];
-
   Color getStatusColor(BuildContext context, double percent) {
     if (percent <= 1.0 && percent >= 0.7) {
       return Theme.of(context).colorScheme.success;
@@ -85,7 +22,7 @@ class Progress extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 5.0),
-      itemCount: _disciplines.length,
+      itemCount: disciplinesProgress.length,
       itemBuilder: (ctx, index) => ExpandableNotifier(
         child: _buildDisciplineCard(context, index),
       ),
@@ -107,7 +44,7 @@ class Progress extends StatelessWidget {
               width: 2.0,
               color: getStatusColor(
                 context,
-                _disciplines[index]['percent'],
+                disciplinesProgress[index]['percent'],
               ),
             ),
           ),
@@ -126,7 +63,7 @@ class Progress extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    _disciplines[index]['discipline'],
+                    disciplinesProgress[index]['discipline'],
                     style: GoogleFonts.rubikTextTheme(
                       Theme.of(context).textTheme,
                     ).headline6,
@@ -134,7 +71,7 @@ class Progress extends StatelessWidget {
                   ).scalable(),
                   Separator.spacer(space: 4),
                   Text(
-                    'Преподаватель: ${_disciplines[index]['lecturer']}',
+                    'Преподаватель: ${disciplinesProgress[index]['lecturer']}',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.rubikTextTheme(
@@ -145,7 +82,7 @@ class Progress extends StatelessWidget {
                 ],
               ),
             ),
-            expanded: _buildExpanded(context, _disciplines[index]),
+            expanded: _buildExpanded(context, disciplinesProgress[index]),
             builder: (_, __, expanded) {
               return Expandable(
                 expanded: Padding(

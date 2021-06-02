@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 
 import '../models/index.dart';
 import '../services/index.dart';
@@ -23,8 +22,8 @@ class NewsRepository extends BaseRepository<NewsService> {
       final newsResponse =
           await service.getNews(pageIndex: _pageIndex, limit: _limit);
       _pagesCount = newsResponse.data['result']['totalPages'];
-      debugPrint(
-          'page ${newsResponse.data['result']['page']}'); //showing current page number
+      // debugPrint(
+      //     'page ${newsResponse.data['result']['page']}'); //showing current page number
       for (final item in newsResponse.data['result']['docs']) {
         _news.add(News.fromJson(item));
       }

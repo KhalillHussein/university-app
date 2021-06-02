@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mtusiapp/repositories/news_edit.dart';
 
-import 'package:provider/provider.dart';
-import 'package:row_collection/row_collection.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:row_collection/row_collection.dart';
+import 'package:provider/provider.dart';
 
 import '../../repositories/index.dart';
+import '../../repositories/news_create.dart';
 import '../../ui/widgets/index.dart';
-
 import '../../util/index.dart';
 
 class NewsTab extends StatelessWidget {
@@ -143,8 +143,13 @@ class NewsCard extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: Theme.of(context).appBarTheme.color,
-        content: const Text(
+        title: const Text(
           'Удалить эту новость?',
+        ).scalable(),
+        content: Text(
+          'Новость будет удалена из списка без возможности восстановления.',
+          style:
+              GoogleFonts.rubikTextTheme(Theme.of(context).textTheme).bodyText2,
         ).scalable(),
         actions: <Widget>[
           TextButton(
@@ -157,7 +162,7 @@ class NewsCard extends StatelessWidget {
               'ОТМЕНА',
             ).scalable(),
           ),
-          Consumer2<NewsRepository, NewsEditRepository>(
+          Consumer2<NewsRepository, NewsCreateRepository>(
             builder: (ctx, model, model2, _) => TextButton(
               onPressed: () async {
                 await model2.deleteData(id);
