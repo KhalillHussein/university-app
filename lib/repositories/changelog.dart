@@ -5,7 +5,10 @@ import 'index.dart';
 class ChangelogRepository extends BaseRepository<ChangelogService> {
   String _changelog;
 
-  ChangelogRepository(ChangelogService service) : super(service);
+  ChangelogRepository(ChangelogService service) : super(service) {
+    startLoading();
+    loadData();
+  }
 
   @override
   Future<void> loadData() async {

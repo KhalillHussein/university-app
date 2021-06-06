@@ -16,7 +16,7 @@ class BottomLoader<T extends BaseRepository> extends StatelessWidget {
       margin: const EdgeInsets.all(10.0),
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(15.0),
           child: Consumer<T>(
             builder: (ctx, model, child) => model.loadingFailed
                 ? TextButton(
@@ -35,11 +35,13 @@ class BottomLoader<T extends BaseRepository> extends StatelessWidget {
                     ),
                   )
                 : child,
-            child: const SizedBox(
+            child: SizedBox(
               width: 20,
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation(Theme.of(context).accentColor),
                   strokeWidth: 6,
                 ),
               ),

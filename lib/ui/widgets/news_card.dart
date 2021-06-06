@@ -32,7 +32,7 @@ class BodyImages extends StatelessWidget {
     return imagesList;
   }
 
-  Widget imageLayout() {
+  Widget imageLayout(Size size) {
     return Column(
       children: [
         if (_listImages().length == 3)
@@ -40,8 +40,8 @@ class BodyImages extends StatelessWidget {
             children: [
               _listImages().first,
               SizedBox(
-                width: 110,
-                height: 211,
+                width: size.width * 0.3,
+                height: size.height * 0.3,
                 child: Column(
                   children: _listImages().getRange(1, 3).toList(),
                 ),
@@ -61,7 +61,7 @@ class BodyImages extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 100,
+                height: size.height * 0.13,
                 child: Row(
                   children: [
                     Expanded(
@@ -84,7 +84,7 @@ class BodyImages extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 100,
+                height: size.height * 0.13,
                 child: Row(
                   children: [
                     Expanded(
@@ -133,9 +133,10 @@ class BodyImages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15.0),
-      child: imageLayout(),
+      child: imageLayout(size),
     );
   }
 }

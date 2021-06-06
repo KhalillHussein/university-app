@@ -19,7 +19,10 @@ class AuthRepository extends BaseRepository<AuthService> {
 
   SharedPreferences _prefs;
 
-  AuthRepository(AuthService service) : super(service);
+  AuthRepository(AuthService service) : super(service) {
+    startLoading();
+    loadData();
+  }
 
   bool get isAuth => _token != null;
 

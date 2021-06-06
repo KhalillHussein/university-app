@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../services/base.dart';
 
@@ -20,10 +21,7 @@ abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
   /// String that saves information about the latest error
   String errorMessage;
 
-  BaseRepository(this.service) {
-    startLoading();
-    loadData();
-  }
+  BaseRepository(this.service);
 
   /// Overridable method, used to load the model's data.
   Future<void> loadData();
@@ -62,40 +60,41 @@ abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
   }
 }
 
-abstract class BasePostRepository<T extends BaseService> with ChangeNotifier {
+abstract class BasePaginatedRepository<M, T extends BaseService>
+    with ChangeNotifier {
   /// System to perform data manipulation operations
   final T service;
 
-  /// Status regarding data loading capabilities
-  Status _status;
+  List<M> dataList;
 
-  /// String that saves information about the latest error
-  String errorMessage;
+  int pageIndex;
 
-  BasePostRepository(this.service);
+  PagingState pagingState = PagingState<int, M>();
 
-  /// Overridable method, used to post the model's data.
-  Future<void> postData();
+  BasePaginatedRepository(this.service);
 
-  bool get isLoading => _status == Status.loading;
-  bool get postingFailed => _status == Status.error;
-  bool get isPosted => _status == Status.loaded;
+  /// Overridable method, used to load the model's data.
+  Future<void> loadData();
 
-  void startLoading() {
-    _status = Status.loading;
-    notifyListeners();
+  void refreshData() {
+    pagingState = PagingState<int, M>(
+      nextPageKey: pageIndex = 1,
+    );
+    loadData();
   }
 
-  /// Signals that there has been an error downloading data.
-  void receivedError(String error) {
-    _status = Status.error;
-    errorMessage = error;
-    debugPrint(error);
-  }
+  void retryLastFailedRequest() => loadData();
 
-  /// Signals that information has been downloaded.
-  void finishLoading() {
-    _status = Status.loaded;
+  /// The current error, if any. Initially `null`.
+  dynamic get error => pagingState.error;
+
+  set error(dynamic newError) {
+    pagingState = PagingState<int, M>(
+      error: newError,
+      itemList: pagingState.itemList,
+      nextPageKey: pageIndex,
+    );
+    debugPrint(newError);
     notifyListeners();
   }
 }

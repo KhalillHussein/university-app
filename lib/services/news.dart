@@ -7,8 +7,11 @@ import 'index.dart';
 class NewsService extends BaseService {
   const NewsService(Dio client) : super(client);
 
-  /// Retrieves a list featuring the latest news.
+  /// Retrieves a paginated list featuring the latest news.
   Future<Response> getNews({int limit, int pageIndex}) async {
-    return client.get('${Url.news}${Url.limit}$limit${Url.page}$pageIndex');
+    return client.get(Url.news, queryParameters: {
+      'limit': limit,
+      'page': pageIndex,
+    });
   }
 }

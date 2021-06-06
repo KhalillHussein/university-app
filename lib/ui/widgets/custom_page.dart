@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import 'package:provider/provider.dart';
 import 'package:big_tip/big_tip.dart';
@@ -267,6 +268,95 @@ class SimpleTab<T extends BaseRepository> extends StatelessWidget {
   }
 }
 
+class ReloadablePaginatedTab<M, T extends BaseRepository>
+    extends StatelessWidget {
+  final String title;
+  final List<Widget> actions;
+  final Widget fab, placeholder, leading, titleWidget;
+  final Function itemBuilder;
+  final VoidCallback onTryAgain;
+  final PagingController pagingController;
+  final PreferredSizeWidget bottom;
+  final double elevation;
+
+  const ReloadablePaginatedTab({
+    this.title,
+    this.titleWidget,
+    this.elevation,
+    this.bottom,
+    this.actions,
+    this.onTryAgain,
+    this.placeholder,
+    this.fab,
+    this.leading,
+    @required this.itemBuilder,
+    @required this.pagingController,
+  }) : assert(title != null || titleWidget != null);
+
+  @override
+  Widget build(BuildContext context) {
+    return SimplePage(
+      actions: actions ??
+          [
+            ThemeSwitchIcon(),
+            IconButton(
+              splashRadius: 20,
+              tooltip: 'Настройки',
+              icon: const Icon(MdiIcons.cogOutline),
+              onPressed: () =>
+                  Navigator.pushNamed(context, SettingsScreen.route),
+            ),
+          ],
+      title: title,
+      elevation: elevation,
+      titleWidget: titleWidget,
+      fab: fab,
+      bottom: bottom,
+      leading: IconButton(
+        splashRadius: 20,
+        tooltip: 'Меню',
+        icon: const Icon(MdiIcons.menu),
+        onPressed: Scaffold.of(context).openDrawer,
+      ),
+      body: Consumer<T>(
+        builder: (context, model, child) => RefreshIndicator(
+          onRefresh: () => onRefresh(context, model),
+          child: RawScrollbar(
+            thickness: 3.0,
+            child: PagedListView<int, M>(
+              pagingController: pagingController,
+              builderDelegate: PagedChildBuilderDelegate<M>(
+                itemBuilder: itemBuilder,
+                firstPageProgressIndicatorBuilder: (_) => placeholder,
+                firstPageErrorIndicatorBuilder: (_) => ConnectionError<T>(),
+                newPageErrorIndicatorBuilder: (_) => PageErrorIndicator(
+                  onTryAgain: onTryAgain,
+                ),
+                newPageProgressIndicatorBuilder: (_) => Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Center(
+                    child: SizedBox(
+                      width: 25,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(
+                              Theme.of(context).textTheme.caption.color),
+                          strokeWidth: 5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Widget used to display a connection error message.
 /// It allows user to reload the page with a simple button.
 class ConnectionError<T extends BaseRepository> extends StatelessWidget {
@@ -275,23 +365,34 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
     return Consumer<T>(
       builder: (context, model, child) => BigTip(
         title: Text(
-          'При загрузке данных что-то пошло не так. Проверьте подключение к интернету',
+          'Что-то пошло не так',
           style: GoogleFonts.rubikTextTheme(
             Theme.of(context).textTheme,
-          ).headline5,
-          textScaleFactor: 0.6,
+          ).headline6,
         ).scalable(),
-        subtitle: TextButton(
-          onPressed: () async => onRefresh(context, model),
-          child: Text(
-            'ПОВТОРИТЬ',
-            style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-                .subtitle2
-                .copyWith(
-                  color: Theme.of(context).accentColor,
-                  fontWeight: FontWeight.w600,
-                ),
-          ).scalable(),
+        subtitle: Column(
+          children: [
+            Text(
+              'При загрузке данных произошла ошибка.\nПовторите попытку позже.',
+              textScaleFactor: 0.9,
+              style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                  .bodyText2
+                  .copyWith(height: 1.3),
+            ).scalable(),
+            Separator.spacer(),
+            TextButton(
+              onPressed: () async => onRefresh(context, model),
+              child: Text(
+                'ПОВТОРИТЬ',
+                style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                    .subtitle2
+                    .copyWith(
+                      color: Theme.of(context).accentColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+              ).scalable(),
+            ),
+          ],
         ),
         child: const Icon(Icons.cloud_off),
       ),
@@ -337,5 +438,65 @@ class Message<T extends BaseRepository> extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class PageErrorIndicator extends StatelessWidget {
+  final VoidCallback onTryAgain;
+
+  const PageErrorIndicator({
+    this.onTryAgain,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTryAgain,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            Text(
+              'Что-то пошло не так. Повторите попытку.',
+            ).scalable(),
+            Separator.spacer(space: 6),
+            const Icon(
+              Icons.refresh,
+              size: 18,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Theme.of(context).errorColor,
+          content: Row(
+            children: [
+              Icon(
+                Icons.error,
+                color: Theme.of(context).primaryColor,
+              ),
+              Separator.spacer(),
+              Expanded(
+                child: Text(
+                  message,
+                  softWrap: true,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          duration: const Duration(seconds: 1),
+        ),
+      );
   }
 }

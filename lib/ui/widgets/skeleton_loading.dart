@@ -4,13 +4,41 @@ import 'package:row_collection/row_collection.dart';
 import 'package:shimmer/shimmer.dart';
 
 class NewsPlaceholder extends StatelessWidget {
+  // @override
+  // Widget build(BuildContext context) {
+  //   final double width = MediaQuery.of(context).size.width;
+  //   return ListView.builder(
+  //     itemCount: 4,
+  //     itemBuilder: (BuildContext context, int index) {
+  //       return Container(
+  //         width: double.infinity,
+  //         color: Theme.of(context).cardColor,
+  //         margin: const EdgeInsets.all(10),
+  //         padding: const EdgeInsets.symmetric(vertical: 15.0),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             _buildTopBox(context),
+  //             Separator.spacer(space: 6),
+  //             _AnimatedContainer(
+  //               size: Size(double.infinity, 1),
+  //             ),
+  //             _buildMiddleBox(context, width),
+  //             _buildBottomBox(context, width),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
-    return ListView.builder(
-      itemCount: 4,
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
+    return Column(
+      children: List.generate(
+        2,
+        (index) => Container(
           width: double.infinity,
           color: Theme.of(context).cardColor,
           margin: const EdgeInsets.all(10),
@@ -27,8 +55,8 @@ class NewsPlaceholder extends StatelessWidget {
               _buildBottomBox(context, width),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 

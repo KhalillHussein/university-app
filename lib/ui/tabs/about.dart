@@ -27,7 +27,8 @@ class AboutTab extends StatelessWidget {
           onPressed: () => Navigator.pushNamed(context, SettingsScreen.route),
         ),
       ],
-      body: Scrollbar(
+      body: RawScrollbar(
+        thickness: 3,
         child: ListView(
           children: [
             _buildAboutCard(context),

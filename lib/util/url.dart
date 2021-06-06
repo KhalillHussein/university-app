@@ -9,10 +9,6 @@ class Url {
   static const allNews = '$news/all';
   static const newsImg = '$baseUrl/img/news/';
 
-  //Params for paginate data
-  static const limit = '/?limit=';
-  static const page = '&page=';
-
   //Lecturers URL
   static const lecturersAll = '$baseUrl/lecturers/all';
 

@@ -53,8 +53,8 @@ class _NewsCreateScreenState extends State<NewsCreateScreen> {
                   tooltip: 'Публикация',
                   onPressed: () async {
                     if (_formKey.currentState.validate()) {
-                      await context.read<NewsCreateRepository>().postData();
-                      if (model.postingFailed) {
+                      await context.read<NewsCreateRepository>().loadData();
+                      if (model.loadingFailed) {
                         _showSnackBar(context, model.errorMessage);
                       } else {
                         Navigator.pop(context);

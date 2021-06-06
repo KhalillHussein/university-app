@@ -81,7 +81,7 @@ class PersonalPage extends StatelessWidget {
                     ).headline6,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                  ),
+                  ).scalable(),
                 ),
                 Spacer(flex: 2),
                 Expanded(
@@ -145,7 +145,7 @@ class PersonalPage extends StatelessWidget {
       // textScaleFactor: 0.92,
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
-    );
+    ).scalableRich();
   }
 
   Widget _buildMainInfoCard(BuildContext context) {

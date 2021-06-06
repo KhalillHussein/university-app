@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -73,6 +74,36 @@ extension ScalableSelectableText on SelectableText {
         maxLines: maxLines,
         textAlign: textAlign,
         scrollPhysics: scrollPhysics,
+        textScaleFactor: textScaleFactor != null
+            ? textScaleFactor * scale.scaleFactor
+            : 1 * scale.scaleFactor,
+      ),
+    );
+  }
+}
+
+extension ScalableAutosizedText on AutoSizeText {
+  Widget scalable() {
+    return Consumer<TextScaleProvider>(
+      builder: (ctx, scale, _) => AutoSizeText(
+        data,
+        style: style,
+        maxLines: maxLines,
+        textAlign: textAlign,
+        textScaleFactor: textScaleFactor != null
+            ? textScaleFactor * scale.scaleFactor
+            : 1 * scale.scaleFactor,
+      ),
+    );
+  }
+
+  Widget scalableRich() {
+    return Consumer<TextScaleProvider>(
+      builder: (ctx, scale, _) => AutoSizeText.rich(
+        textSpan,
+        style: style,
+        maxLines: maxLines,
+        textAlign: textAlign,
         textScaleFactor: textScaleFactor != null
             ? textScaleFactor * scale.scaleFactor
             : 1 * scale.scaleFactor,

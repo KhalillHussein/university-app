@@ -7,7 +7,10 @@ import 'index.dart';
 
 /// Repository that holds phone numbers.
 class PhoneBookRepository extends BaseRepository<PhoneBookService> {
-  PhoneBookRepository(PhoneBookService service) : super(service);
+  PhoneBookRepository(PhoneBookService service) : super(service) {
+    startLoading();
+    loadData();
+  }
 
   List<PhoneBook> _phoneNumbers;
 

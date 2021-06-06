@@ -4,7 +4,7 @@ import '../models/index.dart';
 import '../util/index.dart';
 import 'index.dart';
 
-/// Services that send news to [ApiService].
+/// Services that sends news to [ApiService].
 class NewsCreateService extends BaseService {
   const NewsCreateService(Dio client) : super(client);
 

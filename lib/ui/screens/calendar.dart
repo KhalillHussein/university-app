@@ -170,24 +170,10 @@ class _CalendarScreenState extends State<CalendarScreen>
       tooltip: 'Звонки',
       onPressed: () => showBottomDialog(
         context: context,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Separator.spacer(space: 25),
-            Text(
-              'РАСПИСАНИЕ ЗВОНКОВ',
-              maxLines: 1,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.headline6.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-            ).scalable(),
-            Separator.spacer(space: 20),
-            _Timing(),
-          ],
-        ),
+        title: 'РАСПИСАНИЕ ЗВОНКОВ',
+        children: [
+          _Timing(),
+        ],
       ),
     );
   }
@@ -389,123 +375,114 @@ class _TimingState extends State<_Timing> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Wrap(
-            spacing: 6,
-            children: [
-              for (int i = 0; i < timing.length; i++)
-                ChoiceChip(
-                  shape: RoundedRectangleBorder(
-                    // side: BorderSide(color: Theme.of(context).accentColor),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  selected: _selectedIndex == i,
-                  label: Text(
-                    timing[i]['group'],
-                  ).scalable(),
-                  labelStyle: Theme.of(context).textTheme.caption.copyWith(
-                      color: _selectedIndex == i
-                          ? Theme.of(context).accentColor
-                          : Theme.of(context).textTheme.caption.color),
-                  elevation: 0,
-                  pressElevation: 5,
-                  backgroundColor:
-                      Theme.of(context).brightness == Brightness.light
-                          ? Theme.of(context).disabledColor.withOpacity(0.1)
-                          : Theme.of(context).cardColor,
-                  selectedColor: Theme.of(context).accentColor.withOpacity(0.3),
-                  onSelected: (bool selected) {
-                    setState(() {
-                      if (selected) {
-                        _selectedIndex = i;
-                      }
-                    });
-                  },
+        Wrap(
+          spacing: 6,
+          children: [
+            for (int i = 0; i < timing.length; i++)
+              ChoiceChip(
+                shape: RoundedRectangleBorder(
+                  // side: BorderSide(color: Theme.of(context).accentColor),
+                  borderRadius: BorderRadius.circular(5),
                 ),
-            ],
-          ),
+                selected: _selectedIndex == i,
+                label: Text(
+                  timing[i]['group'],
+                ).scalable(),
+                labelStyle: Theme.of(context).textTheme.caption.copyWith(
+                    color: _selectedIndex == i
+                        ? Theme.of(context).accentColor
+                        : Theme.of(context).textTheme.caption.color),
+                elevation: 0,
+                pressElevation: 5,
+                backgroundColor:
+                    Theme.of(context).brightness == Brightness.light
+                        ? Theme.of(context).disabledColor.withOpacity(0.1)
+                        : Theme.of(context).cardColor,
+                selectedColor: Theme.of(context).accentColor.withOpacity(0.3),
+                onSelected: (bool selected) {
+                  setState(() {
+                    if (selected) {
+                      _selectedIndex = i;
+                    }
+                  });
+                },
+              ),
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Container(
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                border: Border.all(
-                  color: Theme.of(context).dividerColor,
-                  width: 2,
-                )),
-            child: Column(children: <Widget>[
-              if (timing[_selectedIndex]['shift'].contains('1'))
-                RowLayout(
-                  children: [
-                    RowText(
-                        '1 пара',
-                        timing[_selectedIndex]['first']
-                            .reduce((a, b) => '$a  $b')),
-                    Separator.divider(),
-                    RowText(
-                        '2 пара',
-                        timing[_selectedIndex]['second']
-                            .reduce((a, b) => '$a  $b')),
-                    Separator.divider(),
-                    RowText(
-                        '3 пара',
-                        timing[_selectedIndex]['third']
-                            .reduce((a, b) => '$a  $b')),
-                  ],
-                ),
-              if (timing[_selectedIndex]['shift'].contains('2'))
-                RowLayout(
-                  children: [
-                    RowText(
-                        '4 пара',
-                        timing[_selectedIndex]['four']
-                            .reduce((a, b) => '$a  $b')),
-                    Separator.divider(),
-                    RowText(
-                        '5 пара',
-                        timing[_selectedIndex]['five']
-                            .reduce((a, b) => '$a  $b')),
-                    Separator.divider(),
-                    RowText(
-                        '6 пара',
-                        timing[_selectedIndex]['six']
-                            .reduce((a, b) => '$a  $b')),
-                    ExpandChild(
-                      child: RowLayout(
-                        children: [
-                          Text(
-                            'СУББОТА',
-                            style:
-                                Theme.of(context).textTheme.headline6.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                          ),
-                          RowText(
-                              '1 пара',
-                              timing[_selectedIndex]['first']
-                                  .reduce((a, b) => '$a  $b')),
-                          Separator.divider(),
-                          RowText(
-                              '2 пара',
-                              timing[_selectedIndex]['second']
-                                  .reduce((a, b) => '$a  $b')),
-                          Separator.divider(),
-                          RowText(
-                              '3 пара',
-                              timing[_selectedIndex]['third']
-                                  .reduce((a, b) => '$a  $b')),
-                        ],
-                      ),
+        Container(
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              border: Border.all(
+                color: Theme.of(context).dividerColor,
+                width: 2,
+              )),
+          child: Column(children: <Widget>[
+            if (timing[_selectedIndex]['shift'].contains('1'))
+              RowLayout(
+                children: [
+                  RowText(
+                      '1 пара',
+                      timing[_selectedIndex]['first']
+                          .reduce((a, b) => '$a  $b')),
+                  Separator.divider(),
+                  RowText(
+                      '2 пара',
+                      timing[_selectedIndex]['second']
+                          .reduce((a, b) => '$a  $b')),
+                  Separator.divider(),
+                  RowText(
+                      '3 пара',
+                      timing[_selectedIndex]['third']
+                          .reduce((a, b) => '$a  $b')),
+                ],
+              ),
+            if (timing[_selectedIndex]['shift'].contains('2'))
+              RowLayout(
+                children: [
+                  RowText(
+                      '4 пара',
+                      timing[_selectedIndex]['four']
+                          .reduce((a, b) => '$a  $b')),
+                  Separator.divider(),
+                  RowText(
+                      '5 пара',
+                      timing[_selectedIndex]['five']
+                          .reduce((a, b) => '$a  $b')),
+                  Separator.divider(),
+                  RowText('6 пара',
+                      timing[_selectedIndex]['six'].reduce((a, b) => '$a  $b')),
+                  ExpandChild(
+                    child: RowLayout(
+                      children: [
+                        Text(
+                          'СУББОТА',
+                          style: Theme.of(context).textTheme.headline6.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                        ),
+                        RowText(
+                            '1 пара',
+                            timing[_selectedIndex]['first']
+                                .reduce((a, b) => '$a  $b')),
+                        Separator.divider(),
+                        RowText(
+                            '2 пара',
+                            timing[_selectedIndex]['second']
+                                .reduce((a, b) => '$a  $b')),
+                        Separator.divider(),
+                        RowText(
+                            '3 пара',
+                            timing[_selectedIndex]['third']
+                                .reduce((a, b) => '$a  $b')),
+                      ],
                     ),
-                  ],
-                ),
-            ]),
-          ),
+                  ),
+                ],
+              ),
+          ]),
         ),
       ],
     );

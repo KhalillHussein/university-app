@@ -27,34 +27,40 @@ class LecturersScreen extends StatelessWidget {
   Widget _buildLecturerCard(BuildContext context, String kafedra) {
     return Consumer<LecturersRepository>(builder: (ctx, model, _) {
       final List<Lecturer> lecturers = model.getByKafedra(kafedra);
-      return ListView.separated(
-          separatorBuilder: (ctx, index) => Separator.divider(indent: 80),
-          itemCount: lecturers.length,
-          itemBuilder: (ctx, index) {
-            final Lecturer lecturer = lecturers[index];
-            return ListCell(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PersonalPage(lecturer.fullName),
-                  fullscreenDialog: true,
+      return RawScrollbar(
+        thickness: 3,
+        child: ListView.separated(
+            separatorBuilder: (ctx, index) => Divider(
+                  indent: 80,
+                  height: 3,
                 ),
-              ),
-              leading: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(2.0)),
-                child: CacheImage.avatar(
-                  lecturer.photo,
+            itemCount: lecturers.length,
+            itemBuilder: (ctx, index) {
+              final Lecturer lecturer = lecturers[index];
+              return ListCell(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PersonalPage(lecturer.fullName),
+                    fullscreenDialog: true,
+                  ),
                 ),
-              ),
-              title: lecturer.fullName,
-              trailing: Icon(
-                Icons.arrow_forward_ios_outlined,
-                size: 16,
-                color: Theme.of(context).textTheme.caption.color,
-              ),
-              subtitle: lecturer.rank,
-            );
-          });
+                leading: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(2.0)),
+                  child: CacheImage.avatar(
+                    lecturer.photo,
+                  ),
+                ),
+                title: lecturer.fullName,
+                trailing: Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  size: 16,
+                  color: Theme.of(context).textTheme.caption.color,
+                ),
+                subtitle: lecturer.rank,
+              );
+            }),
+      );
     });
   }
 }

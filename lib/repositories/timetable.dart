@@ -19,6 +19,8 @@ class TimetableRepository extends BaseRepository<TimetableService> {
   List<Timetable> _timetable = [];
 
   TimetableRepository(TimetableService service) : super(service) {
+    startLoading();
+    loadData();
     init();
   }
 

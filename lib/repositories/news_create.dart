@@ -12,7 +12,7 @@ import '../util/index.dart';
 import 'index.dart';
 
 ///Repository that manage news creation
-class NewsCreateRepository extends BasePostRepository<NewsCreateService> {
+class NewsCreateRepository extends BaseRepository<NewsCreateService> {
   NewsCreateRepository(NewsCreateService service) : super(service);
 
   String token;
@@ -31,7 +31,7 @@ class NewsCreateRepository extends BasePostRepository<NewsCreateService> {
   final ImagePicker picker = ImagePicker();
 
   @override
-  Future<void> postData() async {
+  Future<void> loadData() async {
     startLoading();
     try {
       await service.postNews(

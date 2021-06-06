@@ -96,7 +96,8 @@ class PhoneBookScreen extends StatelessWidget {
         ),
         placeholder: PhoneBookPlaceholder(),
         body: Consumer<PhoneBookRepository>(
-          builder: (ctx, model, _) => Scrollbar(
+          builder: (ctx, model, _) => RawScrollbar(
+            thickness: 3,
             child: GroupedListView<PhoneBook, String>(
                 separator: Separator.divider(indent: 15),
                 addAutomaticKeepAlives: false,

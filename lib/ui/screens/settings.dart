@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:mtusiapp/providers/image_quality.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart';
-import 'package:app_settings/app_settings.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,148 +38,54 @@ class SettingsScreen extends StatelessWidget {
             icon: MdiIcons.formatLetterCase,
             title: 'Масштабирование текста',
             subtitle: 'Изменение масштаба текста',
-            onTap: () => showBottomDialog(
-              context: context,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Separator.spacer(space: 25),
-                    Text(
-                      'МАСШТАБИРОВАНИЕ ТЕКСТА',
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.headline6.copyWith(
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.2,
-                          ),
-                      textScaleFactor: 0.9,
-                    ).scalable(),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Separator.spacer(),
-                          Consumer<TextScaleProvider>(
-                            builder: (ctx, scale, _) => Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        WidgetSpan(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 3.0),
-                                            child: Text(
-                                              '${(scale.scaleFactor * 100).round()}%',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption,
-                                            ),
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: (scale.scaleFactor * 100)
-                                                      .round() ==
-                                                  initialScale * 100
-                                              ? '(Масштаб по умолчанию)'
-                                              : '(Пользовательский масштаб)',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .caption,
-                                        ),
-                                      ],
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                    textScaleFactor: 1.15,
-                                  ).scalable(),
-                                ),
-                                TextButton(
-                                    onPressed: () => _changeTextScale(
-                                          context,
-                                          scaleFactor: initialScale,
-                                        ),
-                                    style: TextButton.styleFrom(
-                                      primary: Theme.of(context).accentColor,
-                                    ),
-                                    child: const Text('Сброс').scalable())
-                              ],
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                MdiIcons.formatLetterCase,
-                                size: 18,
-                                color:
-                                    Theme.of(context).textTheme.caption.color,
-                              ),
-                              Expanded(
-                                child: Consumer<TextScaleProvider>(
-                                  builder: (ctx, scale, _) => Slider.adaptive(
-                                    min: 0.8,
-                                    max: 1.5,
-                                    value: scale.scaleFactor,
-                                    activeColor: Theme.of(context).accentColor,
-                                    inactiveColor: Colors.black12,
-                                    onChanged: scale.setScaleFactor,
-                                    onChangeEnd: (val) => _changeTextScale(
-                                      context,
-                                      scaleFactor: val,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Icon(
-                                MdiIcons.formatLetterCase,
-                                size: 28,
-                                color:
-                                    Theme.of(context).textTheme.caption.color,
-                              ),
-                            ],
-                          ),
-                          Container(
-                            padding: const EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                border: Border.all(
-                                  color: Theme.of(context).dividerColor,
-                                  width: 2,
-                                )),
-                            child: Text(
-                              'Перемещайте ползунок, пока текст не станет удобным для чтения.',
-                              textScaleFactor: 0.85,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1
-                                  .copyWith(
-                                    height: 1.3,
-                                    letterSpacing: 0.15,
-                                    color: Theme.of(context).brightness ==
-                                            Brightness.light
-                                        ? Colors.black87
-                                        : Colors.white.withOpacity(0.9),
-                                  ),
-                            ).scalable(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            onTap: () => _buildTextSettingsDialog(context),
           ),
           _buildSettingsTile(
             context,
-            icon: Icons.notification_important,
-            title: 'Уведомления',
-            subtitle: 'Выбор отображаемых уведомлений',
-            onTap: AppSettings.openNotificationSettings,
+            icon: MdiIcons.imageAutoAdjust,
+            title: 'Качество изображений',
+            subtitle: 'Настройка степени сжатия изображений',
+            onTap: () => showBottomDialog(
+              context: context,
+              title: 'КАЧЕСТВО ИЗОБРАЖЕНИЙ',
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                RadioListTile<ImageQuality>(
+                  title: const Text('Низкое'),
+                  value: ImageQuality.low,
+                  selected: context.read<ImageQualityProvider>().imageQuality ==
+                      ImageQuality.low,
+                  activeColor: Theme.of(context).accentColor,
+                  selectedTileColor:
+                      Theme.of(context).accentColor.withOpacity(0.1),
+                  groupValue: context.read<ImageQualityProvider>().imageQuality,
+                  onChanged: (value) => _changeImageQuality(context, value),
+                ),
+                RadioListTile<ImageQuality>(
+                  title: const Text('Среднее'),
+                  activeColor: Theme.of(context).accentColor,
+                  value: ImageQuality.medium,
+                  selected: context.read<ImageQualityProvider>().imageQuality ==
+                      ImageQuality.medium,
+                  selectedTileColor:
+                      Theme.of(context).accentColor.withOpacity(0.1),
+                  groupValue: context.read<ImageQualityProvider>().imageQuality,
+                  onChanged: (value) => _changeImageQuality(context, value),
+                ),
+                RadioListTile<ImageQuality>(
+                  title: const Text('Высокое'),
+                  value: ImageQuality.high,
+                  activeColor: Theme.of(context).accentColor,
+                  selected: context.read<ImageQualityProvider>().imageQuality ==
+                      ImageQuality.high,
+                  selectedTileColor:
+                      Theme.of(context).accentColor.withOpacity(0.1),
+                  groupValue: context.read<ImageQualityProvider>().imageQuality,
+                  onChanged: (value) => _changeImageQuality(context, value),
+                ),
+                Separator.spacer(space: 24),
+              ],
+            ),
           ),
           HeaderText(
             'Данные',
@@ -262,42 +168,17 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  void _showDialog(
-    BuildContext context, {
-    String title,
-    String content,
-    Widget contentWidget,
-    VoidCallback onPressed,
-  }) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Theme.of(context).appBarTheme.color,
-        title: Text(
-          title,
-        ).scalable(),
-        content: contentWidget ??
-            Text(
-              content,
-              style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-                  .bodyText2,
-            ).scalable(),
-        actions: <Widget>[
-          TextButton(
-            onPressed: Navigator.of(ctx).pop,
-            child: const Text(
-              'ОТМЕНА',
-            ).scalable(),
-          ),
-          TextButton(
-            onPressed: onPressed,
-            child: const Text(
-              'ОК',
-            ).scalable(),
-          ),
-        ],
-      ),
-    );
+  // Updates image quality setting
+  Future<void> _changeImageQuality(
+      BuildContext context, ImageQuality quality) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Saves new settings
+    context.read<ImageQualityProvider>().imageQuality = quality;
+    prefs.setInt('quality', quality.index);
+
+    // Hides dialog
+    Navigator.of(context).pop();
   }
 
   Future<void> _deleteAppDir() async {
@@ -339,6 +220,146 @@ class SettingsScreen extends StatelessWidget {
           ),
         );
     }
+  }
+
+  Future<void> _buildTextSettingsDialog(BuildContext context) {
+    return showBottomDialog(
+      context: context,
+      title: 'МАСШТАБИРОВАНИЕ ТЕКСТА',
+      children: [
+        Consumer<TextScaleProvider>(
+          builder: (ctx, scale, _) => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      WidgetSpan(
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 3.0),
+                          child: Text(
+                            '${(scale.scaleFactor * 100).round()}%',
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                        ),
+                      ),
+                      TextSpan(
+                        text: (scale.scaleFactor * 100).round() ==
+                                initialScale * 100
+                            ? '(Масштаб по умолчанию)'
+                            : '(Пользовательский масштаб)',
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                    ],
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  textScaleFactor: 1.15,
+                ).scalable(),
+              ),
+              TextButton(
+                  onPressed: () => _changeTextScale(
+                        context,
+                        scaleFactor: initialScale,
+                      ),
+                  style: TextButton.styleFrom(
+                    primary: Theme.of(context).accentColor,
+                  ),
+                  child: const Text('Сброс').scalable())
+            ],
+          ),
+        ),
+        Row(
+          children: [
+            Icon(
+              MdiIcons.formatLetterCase,
+              size: 18,
+              color: Theme.of(context).textTheme.caption.color,
+            ),
+            Expanded(
+              child: Consumer<TextScaleProvider>(
+                builder: (ctx, scale, _) => Slider.adaptive(
+                  min: 0.8,
+                  max: 1.5,
+                  value: scale.scaleFactor,
+                  activeColor: Theme.of(context).accentColor,
+                  inactiveColor: Colors.black12,
+                  onChanged: scale.setScaleFactor,
+                  onChangeEnd: (val) => _changeTextScale(
+                    context,
+                    scaleFactor: val,
+                  ),
+                ),
+              ),
+            ),
+            Icon(
+              MdiIcons.formatLetterCase,
+              size: 28,
+              color: Theme.of(context).textTheme.caption.color,
+            ),
+          ],
+        ),
+        Container(
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              border: Border.all(
+                color: Theme.of(context).dividerColor,
+                width: 2,
+              )),
+          child: Text(
+            'Перемещайте ползунок, пока текст не станет удобным для чтения.',
+            textScaleFactor: 0.85,
+            style: Theme.of(context).textTheme.subtitle1.copyWith(
+                  height: 1.3,
+                  letterSpacing: 0.15,
+                  color: Theme.of(context).brightness == Brightness.light
+                      ? Colors.black87
+                      : Colors.white.withOpacity(0.9),
+                ),
+          ).scalable(),
+        ),
+      ],
+    );
+  }
+
+  void _showDialog(
+    BuildContext context, {
+    String title,
+    String content,
+    Widget contentWidget,
+    VoidCallback onPressed,
+  }) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: Theme.of(context).appBarTheme.color,
+        title: Text(
+          title,
+        ).scalable(),
+        content: contentWidget ??
+            Text(
+              content,
+              style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                  .bodyText2,
+            ).scalable(),
+        actions: <Widget>[
+          TextButton(
+            onPressed: Navigator.of(ctx).pop,
+            child: const Text(
+              'ОТМЕНА',
+            ).scalable(),
+          ),
+          TextButton(
+            onPressed: onPressed,
+            child: const Text(
+              'ОК',
+            ).scalable(),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildSettingsTile(

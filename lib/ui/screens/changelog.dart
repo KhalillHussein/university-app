@@ -19,7 +19,8 @@ class ChangelogScreen extends StatelessWidget {
       builder: (context, model, child) =>
           ReloadableSimplePage<ChangelogRepository>(
         title: 'Список изменений',
-        body: Scrollbar(
+        body: RawScrollbar(
+          thickness: 3,
           child: Markdown(
             data: model.changelog ?? '',
             onTapLink: (_, url, __) => showUrl(url),

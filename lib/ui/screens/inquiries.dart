@@ -27,7 +27,8 @@ class InquiriesScreen extends StatelessWidget {
         tooltip: 'Моя справка',
         child: Icon(Icons.edit_outlined),
       ),
-      body: Scrollbar(
+      body: RawScrollbar(
+        thickness: 3,
         child: GroupedListView<Map, String>(
           separator: Separator.divider(indent: 15),
           addAutomaticKeepAlives: false,
@@ -89,195 +90,165 @@ class InquiriesScreen extends StatelessWidget {
       context: context,
       isDismissible: false,
       enableDrag: false,
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Separator.spacer(space: 25),
-            if (isUserInquiry)
-              Text(
-                'МОЯ СПРАВКА',
-                maxLines: 1,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.headline6.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+      title: isUserInquiry ? 'МОЯ СПРАВКА' : null,
+      children: [
+        Theme(
+          data: Theme.of(context).copyWith(
+            primaryColor: Theme.of(context).brightness == Brightness.light
+                ? kLightAccentColor
+                : kDarkAccentColor,
+          ),
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                if (isUserInquiry)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15.0),
+                    child: Consumer<ValidationProvider>(
+                      builder: (ctx, validate, _) => TextFormField(
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          labelText: 'Наименование учреждения*',
+                          filled: true,
+                          errorText: validate.organizationName.error,
+                          helperText:
+                              'Название учреждения, которому требуется предоставить документ.',
+                          helperMaxLines: 2,
+                          errorMaxLines: 2,
+                        ),
+                        onChanged: (value) => validate.changeCompanyName(value),
+                      ),
                     ),
-              ).scalable(),
-            if (isUserInquiry) Separator.spacer(space: 15),
-            Theme(
-              data: Theme.of(context).copyWith(
-                primaryColor: Theme.of(context).brightness == Brightness.light
-                    ? kLightAccentColor
-                    : kDarkAccentColor,
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      if (isUserInquiry)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 15.0),
-                          child: Consumer<ValidationProvider>(
-                            builder: (ctx, validate, _) => TextFormField(
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                labelText: 'Наименование учреждения*',
-                                filled: true,
-                                errorText: validate.organizationName.error,
-                                helperText:
-                                    'Название учреждения, которому требуется предоставить документ.',
-                                helperMaxLines: 2,
-                                errorMaxLines: 2,
-                              ),
-                              onChanged: (value) =>
-                                  validate.changeCompanyName(value),
-                            ),
+                  ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0),
+                  child: Consumer<ValidationProvider>(
+                    builder: (ctx, validate, _) => TextFormField(
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        labelText: 'Район, город, область*',
+                        filled: true,
+                        errorText: validate.location.error,
+                        helperText:
+                            'Территориальное расположение организации, для которой требуется документ.',
+                        helperMaxLines: 2,
+                        errorMaxLines: 2,
+                      ),
+                      onChanged: (value) => validate.changeLocation(value),
+                    ),
+                  ),
+                ),
+                Consumer<ValidationProvider>(
+                  builder: (ctx, validate, _) => TextFormField(
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      filled: true,
+                      hintText: '(___) ___-__-__',
+                      labelText: 'Номер телефона*',
+                      prefixText: '+7 ',
+                      errorText: validate.phoneNumber.error,
+                    ),
+                    keyboardType: TextInputType.phone,
+                    onChanged: validate.changePhoneNumber,
+                    maxLength: 15,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      _phoneNumberFormatter,
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0, top: 10.0),
+                      child: Text(
+                        'Способ получения',
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Consumer<RadioProvider>(
+                          builder: (ctx, radioState, _) => RadioCell<DocType>(
+                            value: DocType.realDoc,
+                            groupValue: radioState.doc,
+                            onChanged: (value) => radioState.doc = value,
+                            label: 'Лично',
                           ),
                         ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 15.0),
-                        child: Consumer<ValidationProvider>(
-                          builder: (ctx, validate, _) => TextFormField(
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              labelText: 'Район, город, область*',
-                              filled: true,
-                              errorText: validate.location.error,
-                              helperText:
-                                  'Территориальное расположение организации, для которой требуется документ.',
-                              helperMaxLines: 2,
-                              errorMaxLines: 2,
-                            ),
-                            onChanged: (value) =>
-                                validate.changeLocation(value),
+                        Separator.spacer(space: 20),
+                        Consumer<RadioProvider>(
+                          builder: (ctx, radioState, _) => RadioCell<DocType>(
+                            value: DocType.eDoc,
+                            groupValue: radioState.doc,
+                            onChanged: (value) => radioState.doc = value,
+                            label: 'По электронной почте',
                           ),
                         ),
-                      ),
-                      Consumer<ValidationProvider>(
-                        builder: (ctx, validate, _) => TextFormField(
-                          textInputAction: TextInputAction.next,
-                          decoration: InputDecoration(
-                            filled: true,
-                            hintText: '(___) ___-__-__',
-                            labelText: 'Номер телефона*',
-                            prefixText: '+7 ',
-                            errorText: validate.phoneNumber.error,
-                          ),
-                          keyboardType: TextInputType.phone,
-                          onChanged: validate.changePhoneNumber,
-                          maxLength: 15,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly,
-                            _phoneNumberFormatter,
-                          ],
+                      ],
+                    ),
+                  ],
+                ),
+                Separator.spacer(space: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        context.read<ValidationProvider>().clearFields();
+                        Navigator.pop(context);
+                      },
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                          Theme.of(context).accentColor,
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 10.0, top: 10.0),
-                            child: Text(
-                              'Способ получения',
-                              style: Theme.of(context).textTheme.bodyText2,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Consumer<RadioProvider>(
-                                builder: (ctx, radioState, _) =>
-                                    RadioCell<DocType>(
-                                  value: DocType.realDoc,
-                                  groupValue: radioState.doc,
-                                  onChanged: (value) => radioState.doc = value,
-                                  label: 'Лично',
-                                ),
-                              ),
-                              Separator.spacer(space: 20),
-                              Consumer<RadioProvider>(
-                                builder: (ctx, radioState, _) =>
-                                    RadioCell<DocType>(
-                                  value: DocType.eDoc,
-                                  groupValue: radioState.doc,
-                                  onChanged: (value) => radioState.doc = value,
-                                  label: 'По электронной почте',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Separator.spacer(space: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              context.read<ValidationProvider>().clearFields();
-                              Navigator.pop(context);
+                      child: const Text('Отмена').scalable(),
+                    ),
+                    const SizedBox(width: 15),
+                    Consumer2<ValidationProvider, RadioProvider>(
+                      builder: (ctx, validate, radio, _) => ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith(
+                            (states) {
+                              if (!states.contains(MaterialState.disabled)) {
+                                return Theme.of(context).accentColor;
+                              }
                             },
-                            style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                Theme.of(context).accentColor,
-                              ),
-                            ),
-                            child: const Text('Отмена').scalable(),
                           ),
-                          const SizedBox(width: 15),
-                          Consumer2<ValidationProvider, RadioProvider>(
-                            builder: (ctx, validate, radio, _) =>
-                                ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith(
-                                  (states) {
-                                    if (!states
-                                        .contains(MaterialState.disabled)) {
-                                      return Theme.of(context).accentColor;
-                                    }
-                                  },
-                                ),
-                              ),
-                              onPressed: validate.isInquiryFormValid
-                                  ? () async {
-                                      _launchURL(
-                                        context,
-                                        emailForm(
-                                          group: 'ДИ-11',
-                                          userName: context
-                                              .read<AuthRepository>()
-                                              .user
-                                              .userName,
-                                          location: validate.location.value,
-                                          inquiry: inquiry ??
-                                              validate.organizationName.value,
-                                          phoneNumber:
-                                              validate.phoneNumber.value,
-                                          docType: radio.doc,
-                                        ).toString().replaceAll("+", "%20"),
-                                      );
-                                      validate.clearFields();
-                                      Navigator.pop(context);
-                                    }
-                                  : null,
-                              child: const Text('Подтвердить').scalable(),
-                            ),
-                          ),
-                        ],
+                        ),
+                        onPressed: validate.isInquiryFormValid
+                            ? () async {
+                                _launchURL(
+                                  context,
+                                  emailForm(
+                                    group: 'ДИ-11',
+                                    userName: context
+                                        .read<AuthRepository>()
+                                        .user
+                                        .userName,
+                                    location: validate.location.value,
+                                    inquiry: inquiry ??
+                                        validate.organizationName.value,
+                                    phoneNumber: validate.phoneNumber.value,
+                                    docType: radio.doc,
+                                  ).toString().replaceAll("+", "%20"),
+                                );
+                                validate.clearFields();
+                                Navigator.pop(context);
+                              }
+                            : null,
+                        child: const Text('Подтвердить').scalable(),
                       ),
-                    ]),
-              ),
-            ),
-          ],
+                    ),
+                  ],
+                ),
+              ]),
         ),
-      ),
+      ],
     );
   }
 
