@@ -183,7 +183,6 @@ class _CalendarScreenState extends State<CalendarScreen>
       tooltip: 'Сегодня',
       icon: const Icon(
         Icons.today,
-        // size: 25,
       ),
       splashRadius: 20,
       onPressed: () => context
@@ -304,8 +303,8 @@ class _CalendarHeader extends StatelessWidget {
           ),
         ),
         startingDayOfWeek: StartingDayOfWeek.monday,
-        firstDay: DateTime.now().subtract(Duration(days: 60)),
-        lastDay: DateTime.now().add(Duration(days: 60)),
+        firstDay: calendar.minDay.date,
+        lastDay: calendar.maxDay.date,
         focusedDay: calendar.focusedDay,
       ),
     );
@@ -425,17 +424,17 @@ class _TimingState extends State<_Timing> {
                   RowText(
                       '1 пара',
                       timing[_selectedIndex]['first']
-                          .reduce((a, b) => '$a  $b')),
+                          .reduce((a, b) => '$a\n$b')),
                   Separator.divider(),
                   RowText(
                       '2 пара',
                       timing[_selectedIndex]['second']
-                          .reduce((a, b) => '$a  $b')),
+                          .reduce((a, b) => '$a\n$b')),
                   Separator.divider(),
                   RowText(
                       '3 пара',
                       timing[_selectedIndex]['third']
-                          .reduce((a, b) => '$a  $b')),
+                          .reduce((a, b) => '$a\n$b')),
                 ],
               ),
             if (timing[_selectedIndex]['shift'].contains('2'))
@@ -444,15 +443,15 @@ class _TimingState extends State<_Timing> {
                   RowText(
                       '4 пара',
                       timing[_selectedIndex]['four']
-                          .reduce((a, b) => '$a  $b')),
+                          .reduce((a, b) => '$a\n$b')),
                   Separator.divider(),
                   RowText(
                       '5 пара',
                       timing[_selectedIndex]['five']
-                          .reduce((a, b) => '$a  $b')),
+                          .reduce((a, b) => '$a\n$b')),
                   Separator.divider(),
                   RowText('6 пара',
-                      timing[_selectedIndex]['six'].reduce((a, b) => '$a  $b')),
+                      timing[_selectedIndex]['six'].reduce((a, b) => '$a\n$b')),
                   ExpandChild(
                     child: RowLayout(
                       children: [
@@ -466,17 +465,17 @@ class _TimingState extends State<_Timing> {
                         RowText(
                             '1 пара',
                             timing[_selectedIndex]['first']
-                                .reduce((a, b) => '$a  $b')),
+                                .reduce((a, b) => '$a\n$b')),
                         Separator.divider(),
                         RowText(
                             '2 пара',
                             timing[_selectedIndex]['second']
-                                .reduce((a, b) => '$a  $b')),
+                                .reduce((a, b) => '$a\n$b')),
                         Separator.divider(),
                         RowText(
                             '3 пара',
                             timing[_selectedIndex]['third']
-                                .reduce((a, b) => '$a  $b')),
+                                .reduce((a, b) => '$a\n$b')),
                       ],
                     ),
                   ),

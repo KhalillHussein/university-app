@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mtusiapp/repositories/notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:row_collection/row_collection.dart';
@@ -15,18 +16,39 @@ import '../widgets/index.dart';
 class AccountTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final notify = context.read<NotificationsRepository>();
     return Consumer<AuthRepository>(
       builder: (ctx, userData, _) => SimpleTab<AuthRepository>(
-        title: userData.user.userName,
+        title: 'Аккаунт',
         actions: [
-          IconButton(
-            splashRadius: 20,
-            icon: const Icon(
-              MdiIcons.bell,
-              size: 25,
+          Consumer<NotificationsRepository>(
+            builder: (ctx, model, _) => IconButton(
+              splashRadius: 20,
+              tooltip: 'Уведомления',
+              icon: Icon(
+                model.isNotify ? MdiIcons.bell : MdiIcons.bellOff,
+                size: 25,
+              ),
+              color: model.isNotify
+                  ? Theme.of(context).accentColor
+                  : Theme.of(context).textTheme.caption.color,
+              onPressed: model.isLoading
+                  ? null
+                  : () => model.isNotify
+                      ? model.disableNotifications().then((value) => _showSnackBar(
+                          context, model.loadingFailed ? model.errorMessage : 'Все уведомления отключены.',
+                          color: model.loadingFailed
+                              ? Theme.of(context).errorColor
+                              : Theme.of(context).textTheme.caption.color))
+                      : model.loadData().then((value) => _showSnackBar(
+                          context,
+                          model.loadingFailed
+                              ? model.errorMessage
+                              : 'Уведомления о новостях и расписании успешно подключены.',
+                          color: model.loadingFailed
+                              ? Theme.of(context).errorColor
+                              : Theme.of(context).textTheme.caption.color)),
             ),
-            color: Theme.of(context).primaryIconTheme.color,
-            onPressed: null,
           ),
           IconButton(
             splashRadius: 20,
@@ -61,7 +83,15 @@ class AccountTab extends StatelessWidget {
               onSelected: (text) {
                 switch (text) {
                   case 'Выход':
-                    _showDialog(context, userData);
+                    showModalDialog(context,
+                        title: 'Выход',
+                        content:
+                            'При выходе из учетной записи будут удалены все связанные с нею данные.',
+                        onPressed: () async {
+                      await notify.disableNotifications();
+                      userData.logout();
+                      Navigator.of(ctx).pop();
+                    });
                     break;
                   case 'Настройки':
                     Navigator.pushNamed(context, SettingsScreen.route);
@@ -82,35 +112,45 @@ class AccountTab extends StatelessWidget {
     );
   }
 
-  void _showDialog(BuildContext context, AuthRepository userData) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Theme.of(context).appBarTheme.color,
-        title: const Text(
-          'Выход',
-        ).scalable(),
-        content: Text(
-          'При выходе из учетной записи будут удалены все связанные с нею данные.',
-          style:
-              GoogleFonts.rubikTextTheme(Theme.of(context).textTheme).bodyText2,
-        ).scalable(),
-        actions: <Widget>[
-          TextButton(
-            onPressed: Navigator.of(ctx).pop,
-            child: const Text(
-              'ОТМЕНА',
-            ).scalable(),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(userData.logout()),
-            child: const Text(
-              'ОК',
-            ).scalable(),
-          ),
-        ],
-      ),
-    );
+  void _showSnackBar(BuildContext context, String message,
+      {Color color, IconData icon}) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: color ?? Theme.of(context).errorColor,
+          content: icon != null
+              ? Row(
+                  children: [
+                    Icon(
+                      icon,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    Separator.spacer(),
+                    Expanded(
+                      child: Text(
+                        message,
+                        softWrap: true,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ).scalable(),
+                    ),
+                  ],
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(
+                    message,
+                    softWrap: true,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ).scalable(),
+                ),
+          duration: const Duration(seconds: 2),
+        ),
+      );
   }
 }
 

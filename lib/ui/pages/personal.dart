@@ -111,12 +111,11 @@ class PersonalPage extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             spreadRadius: 2,
             blurRadius: 7,
-            offset: Offset(0, 0),
           ),
         ],
       ),

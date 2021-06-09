@@ -11,7 +11,7 @@ import 'index.dart';
 enum Categories { group, auditory, lecturer }
 
 /// Repository that holds timetable data.
-class TimetableRepository extends BaseRepository<TimetableService> {
+class TimetableRepository extends BaseDbRepository<TimetableService> {
   Database db;
 
   String userCategory;
@@ -19,7 +19,6 @@ class TimetableRepository extends BaseRepository<TimetableService> {
   List<Timetable> _timetable = [];
 
   TimetableRepository(TimetableService service) : super(service) {
-    startLoading();
     loadData();
     init();
   }
@@ -28,6 +27,7 @@ class TimetableRepository extends BaseRepository<TimetableService> {
 
   @override
   Future<void> loadData() async {
+    startLoading();
     try {
       //load data from api
       final timetableResponse = await service.getTimetable();
@@ -60,6 +60,7 @@ class TimetableRepository extends BaseRepository<TimetableService> {
     notifyListeners();
   }
 
+  @override
   Future<void> loadDataFromDb() async {
     try {
       final dbResult = await service.getDbRecords();
@@ -110,7 +111,7 @@ class TimetableRepository extends BaseRepository<TimetableService> {
   List<Timetable> get timetable => _timetable;
 
   List<String> get groups {
-    return {for (final item in _timetable) item.group}.toList();
+    return {for (final item in _timetable) item.group}.toList()..sort();
   }
 
   List<String> get lecturers {

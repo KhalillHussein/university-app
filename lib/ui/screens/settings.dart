@@ -97,7 +97,7 @@ class SettingsScreen extends StatelessWidget {
             subtitle:
                 'Освободить место на устройстве, путем удаления временных файлов',
             isThreeLine: true,
-            onTap: () => _showDialog(
+            onTap: () => showModalDialog(
               context,
               title: 'Удалить данные?',
               content: 'Будут удалены кэшированные данные приложения.',
@@ -136,7 +136,7 @@ class SettingsScreen extends StatelessWidget {
             title: 'Напишите нам',
             subtitle: 'Сообщения о найденных ошибках, запрос новых функций',
             isThreeLine: true,
-            onTap: () => _showDialog(context,
+            onTap: () => showModalDialog(context,
                 title: 'Перед отправкой',
                 contentWidget: MarkdownBody(
                   data: messageRequirements,
@@ -321,44 +321,6 @@ class SettingsScreen extends StatelessWidget {
           ).scalable(),
         ),
       ],
-    );
-  }
-
-  void _showDialog(
-    BuildContext context, {
-    String title,
-    String content,
-    Widget contentWidget,
-    VoidCallback onPressed,
-  }) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Theme.of(context).appBarTheme.color,
-        title: Text(
-          title,
-        ).scalable(),
-        content: contentWidget ??
-            Text(
-              content,
-              style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-                  .bodyText2,
-            ).scalable(),
-        actions: <Widget>[
-          TextButton(
-            onPressed: Navigator.of(ctx).pop,
-            child: const Text(
-              'ОТМЕНА',
-            ).scalable(),
-          ),
-          TextButton(
-            onPressed: onPressed,
-            child: const Text(
-              'ОК',
-            ).scalable(),
-          ),
-        ],
-      ),
     );
   }
 

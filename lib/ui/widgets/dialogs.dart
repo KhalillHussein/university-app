@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:row_collection/row_collection.dart';
 
 import '../../util/extensions.dart';
@@ -38,6 +39,46 @@ Future<T> showBottomDialog<T>({
           ),
         ),
       ]),
+    ),
+  );
+}
+
+void showModalDialog(
+  BuildContext context, {
+  String title,
+  String content,
+  Widget contentWidget,
+  VoidCallback onPressed,
+  List<Widget> actions,
+}) {
+  showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: Theme.of(context).appBarTheme.color,
+      title: Text(
+        title,
+      ).scalable(),
+      content: contentWidget ??
+          Text(
+            content,
+            style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+                .bodyText2,
+          ).scalable(),
+      actions: actions ??
+          <Widget>[
+            TextButton(
+              onPressed: Navigator.of(ctx).pop,
+              child: const Text(
+                'ОТМЕНА',
+              ).scalable(),
+            ),
+            TextButton(
+              onPressed: onPressed,
+              child: const Text(
+                'ОК',
+              ).scalable(),
+            ),
+          ],
     ),
   );
 }

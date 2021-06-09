@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
-import 'package:row_collection/row_collection.dart';
 
 import '../../models/index.dart';
 import '../../repositories/index.dart';
@@ -17,11 +16,10 @@ class LecturersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReloadableSimplePage<LecturersRepository>(
-      placeholder: LecturersPlaceholder(),
+    return SimplePage(
       title: 'Коллектив $kafedra',
       body: _buildLecturerCard(context, kafedra),
-    );
+    ).reloadablePage<LecturersRepository>(placeholder: LecturersPlaceholder());
   }
 
   Widget _buildLecturerCard(BuildContext context, String kafedra) {

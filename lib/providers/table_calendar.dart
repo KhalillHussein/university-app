@@ -18,6 +18,12 @@ class TableCalendarProvider with ChangeNotifier {
     selectedEvents = getEventsForDay(selectedDay);
   }
 
+  Timetable get maxDay =>
+      timetableList.reduce((a, b) => a.date.isAfter(b.date) ? a : b);
+
+  Timetable get minDay =>
+      timetableList.reduce((a, b) => a.date.isBefore(b.date) ? a : b);
+
   List<Timetable> getEventsForDay(DateTime day) {
     return [
       for (final item in timetableList)

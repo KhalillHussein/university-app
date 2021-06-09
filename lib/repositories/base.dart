@@ -10,8 +10,6 @@ enum Status { loading, error, loaded, dbFetching }
 /// A repository has the purpose to load and parse the data
 
 abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
-  DateTime timestamp;
-
   /// System to perform data manipulation operations
   final T service;
 
@@ -30,9 +28,10 @@ abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
   Future<void> refreshData() => loadData();
 
   bool get isLoading => _status == Status.loading;
+
   bool get loadingFailed => _status == Status.error;
+
   bool get isLoaded => _status == Status.loaded;
-  bool get databaseFetch => _status == Status.dbFetching;
 
   /// Signals that information is being downloaded.
   void startLoading() {
@@ -46,11 +45,6 @@ abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
     notifyListeners();
   }
 
-  void databaseFetching() {
-    _status = Status.dbFetching;
-    notifyListeners();
-  }
-
   /// Signals that there has been an error downloading data.
   void receivedError(String error) {
     _status = Status.error;
@@ -60,41 +54,77 @@ abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
   }
 }
 
-abstract class BasePaginatedRepository<M, T extends BaseService>
-    with ChangeNotifier {
-  /// System to perform data manipulation operations
-  final T service;
+///repository that realize database fetching logic.
+abstract class BaseDbRepository<T extends BaseService>
+    extends BaseRepository<T> {
+  ///Timestamp that used as the last date data loading
+  DateTime timestamp;
 
-  List<M> dataList;
+  BaseDbRepository(T service) : super(service);
 
+  bool get databaseFetch => _status == Status.dbFetching;
+
+  ///Overridable method, used to load model's data from database
+  Future<void> loadDataFromDb();
+
+  ///Signals that information loading from database
+  void databaseFetching() {
+    _status = Status.dbFetching;
+    notifyListeners();
+  }
+}
+
+///Base repository that realize server pagination logic.
+abstract class BasePaginationRepository<M, T extends BaseService>
+    extends BaseRepository<T> {
+  PagingState pagingState = PagingState<int, M>();
+  final int limit = 12;
+  List<M> itemList;
   int pageIndex;
 
-  PagingState pagingState = PagingState<int, M>();
-
-  BasePaginatedRepository(this.service);
-
-  /// Overridable method, used to load the model's data.
-  Future<void> loadData();
-
-  void refreshData() {
-    pagingState = PagingState<int, M>(
-      nextPageKey: pageIndex = 1,
-    );
-    loadData();
-  }
+  BasePaginationRepository(T service) : super(service);
 
   void retryLastFailedRequest() => loadData();
 
-  /// The current error, if any. Initially `null`.
-  dynamic get error => pagingState.error;
+  void nextPage() {
+    final bool isLastPage = itemList.length < limit;
+    if (isLastPage) {
+      appendPage(itemList, null);
+    } else {
+      final nextPageKey = pageIndex + 1;
+      appendPage(itemList, nextPageKey);
+    }
+  }
 
-  set error(dynamic newError) {
+  @override
+  void receivedError(String error) {
     pagingState = PagingState<int, M>(
-      error: newError,
+      error: error,
       itemList: pagingState.itemList,
       nextPageKey: pageIndex,
     );
-    debugPrint(newError);
+    errorMessage = error;
+    _status = Status.error;
+    notifyListeners();
+    debugPrint(error);
+  }
+
+  @override
+  Future<void> refreshData() {
+    pagingState = PagingState<int, M>(
+      nextPageKey: pageIndex = 1,
+    );
+    return loadData();
+  }
+
+  void appendPage(List<M> newItems, int nextPageKey) {
+    final List<M> previousItems = pagingState.itemList ?? [];
+    final List<M> newList = {...previousItems, ...itemList}.toList();
+    // ..sort((a, b) => b.date.compareTo(a.date));
+    pagingState = PagingState<int, M>(
+      itemList: newList,
+      nextPageKey: nextPageKey,
+    );
     notifyListeners();
   }
 }

@@ -95,44 +95,17 @@ class SimplePage extends StatelessWidget {
   }
 }
 
-/// Basic page which has reloading properties.
-/// It uses the [BlankPage] widget inside it.
-class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
-  final String title;
-  final List<Widget> actions;
-  final Widget body,
-      fab,
-      placeholder,
-      leading,
-      titleWidget,
-      bottomNavigationBar;
-  final double elevation;
-  final PreferredSizeWidget bottom;
-
-  const ReloadableSimplePage({
-    this.title,
-    @required this.body,
-    this.titleWidget,
-    this.elevation,
-    this.actions,
-    this.placeholder,
-    this.fab,
-    this.leading,
-    this.bottom,
-    this.bottomNavigationBar,
-  }) : assert(title != null || titleWidget != null);
-
-  @override
-  Widget build(BuildContext context) {
+extension ReloadableSimplePage on SimplePage {
+  Widget reloadablePage<T extends BaseRepository>({Widget placeholder}) {
     return SimplePage(
-      actions: actions,
       title: title,
-      elevation: elevation,
       titleWidget: titleWidget,
+      actions: actions,
       fab: fab,
       leading: leading,
-      bottom: bottom,
       bottomNavigationBar: bottomNavigationBar,
+      elevation: elevation,
+      bottom: bottom,
       body: Consumer<T>(
         builder: (context, model, child) => RefreshIndicator(
           onRefresh: () => onRefresh(context, model),
@@ -149,6 +122,61 @@ class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
     );
   }
 }
+
+/// Basic page which has reloading properties.
+/// It uses the [BlankPage] widget inside it.
+// class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
+//   final String title;
+//   final List<Widget> actions;
+//   final Widget body,
+//       fab,
+//       placeholder,
+//       leading,
+//       titleWidget,
+//       bottomNavigationBar;
+//   final double elevation;
+//   final PreferredSizeWidget bottom;
+//
+//   const ReloadableSimplePage({
+//     this.title,
+//     @required this.body,
+//     this.titleWidget,
+//     this.elevation,
+//     this.actions,
+//     this.placeholder,
+//     this.fab,
+//     this.leading,
+//     this.bottom,
+//     this.bottomNavigationBar,
+//   }) : assert(title != null || titleWidget != null);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return SimplePage(
+//       actions: actions,
+//       title: title,
+//       elevation: elevation,
+//       titleWidget: titleWidget,
+//       fab: fab,
+//       leading: leading,
+//       bottom: bottom,
+//       bottomNavigationBar: bottomNavigationBar,
+//       body: Consumer<T>(
+//         builder: (context, model, child) => RefreshIndicator(
+//           onRefresh: () => onRefresh(context, model),
+//           child: model.isLoading
+//               ? placeholder ?? _loadingIndicator
+//               : model.loadingFailed
+//                   ? ChangeNotifierProvider.value(
+//                       value: model,
+//                       child: ConnectionError<T>(),
+//                     )
+//                   : body,
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 class ReloadableTab<T extends BaseRepository> extends StatelessWidget {
   final String title;
@@ -268,13 +296,12 @@ class SimpleTab<T extends BaseRepository> extends StatelessWidget {
   }
 }
 
-class ReloadablePaginatedTab<M, T extends BaseRepository>
+class ReloadablePaginatedTab<M, T extends BasePaginationRepository>
     extends StatelessWidget {
   final String title;
   final List<Widget> actions;
   final Widget fab, placeholder, leading, titleWidget;
   final Function itemBuilder;
-  final VoidCallback onTryAgain;
   final PagingController pagingController;
   final PreferredSizeWidget bottom;
   final double elevation;
@@ -285,7 +312,6 @@ class ReloadablePaginatedTab<M, T extends BaseRepository>
     this.elevation,
     this.bottom,
     this.actions,
-    this.onTryAgain,
     this.placeholder,
     this.fab,
     this.leading,
@@ -329,9 +355,7 @@ class ReloadablePaginatedTab<M, T extends BaseRepository>
                 itemBuilder: itemBuilder,
                 firstPageProgressIndicatorBuilder: (_) => placeholder,
                 firstPageErrorIndicatorBuilder: (_) => ConnectionError<T>(),
-                newPageErrorIndicatorBuilder: (_) => PageErrorIndicator(
-                  onTryAgain: onTryAgain,
-                ),
+                newPageErrorIndicatorBuilder: (_) => PageErrorIndicator<T>(),
                 newPageProgressIndicatorBuilder: (_) => Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Center(
@@ -373,10 +397,10 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
         subtitle: Column(
           children: [
             Text(
-              'При загрузке данных произошла ошибка.\nПовторите попытку позже.',
-              textScaleFactor: 0.9,
+              'При загрузке данных произошла ошибка.\nПовторите попытку позже',
+              textScaleFactor: 1.2,
               style: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-                  .bodyText2
+                  .caption
                   .copyWith(height: 1.3),
             ).scalable(),
             Separator.spacer(),
@@ -400,7 +424,7 @@ class ConnectionError<T extends BaseRepository> extends StatelessWidget {
   }
 }
 
-class Message<T extends BaseRepository> extends StatelessWidget {
+class Message<T extends BaseDbRepository> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<T>(
@@ -441,17 +465,14 @@ class Message<T extends BaseRepository> extends StatelessWidget {
   }
 }
 
-class PageErrorIndicator extends StatelessWidget {
-  final VoidCallback onTryAgain;
-
-  const PageErrorIndicator({
-    this.onTryAgain,
-  });
-
+class PageErrorIndicator<T extends BasePaginationRepository>
+    extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTryAgain,
+      onTap: () {
+        context.read<T>().retryLastFailedRequest();
+      },
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(

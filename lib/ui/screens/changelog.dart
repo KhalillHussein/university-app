@@ -16,8 +16,7 @@ class ChangelogScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ChangelogRepository>(
-      builder: (context, model, child) =>
-          ReloadableSimplePage<ChangelogRepository>(
+      builder: (context, model, child) => SimplePage(
         title: 'Список изменений',
         body: RawScrollbar(
           thickness: 3,
@@ -40,7 +39,7 @@ class ChangelogScreen extends StatelessWidget {
             ),
           ).scalable(),
         ),
-      ),
+      ).reloadablePage<ChangelogRepository>(),
     );
   }
 }

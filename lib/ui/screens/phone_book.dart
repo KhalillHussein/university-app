@@ -19,7 +19,7 @@ class PhoneBookScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<PhoneBookRepository>(
-      builder: (ctx, model, _) => ReloadableSimplePage<PhoneBookRepository>(
+      builder: (ctx, model, _) => SimplePage(
         title: 'Телефонный справочник',
         fab: FloatingActionButton(
           tooltip: 'Поиск',
@@ -94,7 +94,6 @@ class PhoneBookScreen extends StatelessWidget {
               : null,
           child: const Icon(Icons.search),
         ),
-        placeholder: PhoneBookPlaceholder(),
         body: Consumer<PhoneBookRepository>(
           builder: (ctx, model, _) => RawScrollbar(
             thickness: 3,
@@ -116,7 +115,8 @@ class PhoneBookScreen extends StatelessWidget {
                 }),
           ),
         ),
-      ),
+      ).reloadablePage<PhoneBookRepository>(
+          placeholder: PhoneBookPlaceholder()),
     );
   }
 

@@ -43,7 +43,9 @@ class TimetableCard extends StatelessWidget {
                 lessonNumber,
                 style: GoogleFonts.rubikTextTheme(
                   Theme.of(context).textTheme,
-                ).headline5,
+                ).headline5.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).textTheme.caption.color),
               ).scalable(),
             ),
             Expanded(
@@ -74,7 +76,7 @@ class TimetableCard extends StatelessWidget {
                       softWrap: true,
                       textScaleFactor: 1.2,
                     ).scalable(),
-                    Separator.spacer(space: 2),
+                    Separator.spacer(space: 8),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

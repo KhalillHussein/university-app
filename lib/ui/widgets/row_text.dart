@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../util/extensions.dart';
 
@@ -17,10 +18,12 @@ class RowText extends StatelessWidget {
       title,
       description,
       maxLines: 4,
-      titleStyle: Theme.of(context).textTheme.bodyText2,
-      descriptionStyle: Theme.of(context).textTheme.bodyText2.copyWith(
-            color: Theme.of(context).textTheme.caption.color,
-          ),
+      titleStyle: GoogleFonts.rubikTextTheme(
+        Theme.of(context).textTheme,
+      ).bodyText2,
+      descriptionStyle: GoogleFonts.rubikTextTheme(
+        Theme.of(context).textTheme,
+      ).caption.copyWith(fontSize: 13),
     );
   }
 }

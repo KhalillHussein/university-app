@@ -149,37 +149,30 @@ class _NavigationScreenState extends State<NavigationScreen> {
   }
 
   void _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: Theme.of(context).appBarTheme.color,
-        title: Text(
-          'Добро пожаловать!',
-        ).scalable(),
-        content: MarkdownBody(
-          data: welcomeMessage,
-          listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
-          styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-            blockSpacing: 10,
-            strong: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-                .bodyText2
-                .copyWith(
-                  fontWeight: FontWeight.w900,
-                ),
-            p: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
-                .bodyText2,
-          ),
+    showModalDialog(
+      context,
+      title: 'Добро пожаловать!',
+      contentWidget: MarkdownBody(
+        data: welcomeMessage,
+        listItemCrossAxisAlignment: MarkdownListItemCrossAxisAlignment.start,
+        styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+          blockSpacing: 10,
+          strong: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme)
+              .bodyText2
+              .copyWith(
+                fontWeight: FontWeight.w900,
+              ),
+          p: GoogleFonts.rubikTextTheme(Theme.of(context).textTheme).bodyText2,
         ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: Navigator.of(ctx).pop,
-            child: const Text(
-              'ЗАКРЫТЬ',
-            ).scalable(),
-          ),
-        ],
-      ),
+      ).scalable(),
+      actions: <Widget>[
+        TextButton(
+          onPressed: Navigator.of(context).pop,
+          child: const Text(
+            'ЗАКРЫТЬ',
+          ).scalable(),
+        ),
+      ],
     );
   }
 }

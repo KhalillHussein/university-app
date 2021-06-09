@@ -7,7 +7,7 @@ const ImageQuality _defaultQuality = ImageQuality.medium;
 
 /// Saves and loads information regarding the image quality setting.
 class ImageQualityProvider with ChangeNotifier {
-  ImageQuality _imageQuality = ImageQuality.medium;
+  ImageQuality _imageQuality = ImageQuality.high;
 
   ImageQualityProvider() {
     init();
