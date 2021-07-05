@@ -7,23 +7,30 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:row_collection/row_collection.dart';
 
-import '../../providers/index.dart';
-import '../../repositories/index.dart';
-import '../../util/index.dart';
-import '../widgets/index.dart';
+import '../../../providers/index.dart';
+import '../../../repositories/index.dart';
+import '../../../util/index.dart';
+import '../../widgets/index.dart';
+import 'index.dart';
 
 class InquiriesScreen extends StatelessWidget {
   static const route = '/inquiries';
 
-  final _RuNumberTextInputFormatter _phoneNumberFormatter =
-      _RuNumberTextInputFormatter();
+  final RuNumberTextInputFormatter _phoneNumberFormatter =
+      RuNumberTextInputFormatter();
 
   @override
   Widget build(BuildContext context) {
-    return SimplePage(
+    return BasicPage(
       title: 'Заказ справок',
       fab: FloatingActionButton(
-        onPressed: () => _showForm(context, null, isUserInquiry: true),
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyInquiry(),
+            fullscreenDialog: true,
+          ),
+        ),
         tooltip: 'Моя справка',
         child: Icon(Icons.edit_outlined),
       ),
@@ -84,13 +91,10 @@ class InquiriesScreen extends StatelessWidget {
 
   ///Метод, реализующий построение всплывающего диалога с формой,
   ///для ввода новых данных.
-  void _showForm(BuildContext context, String inquiry,
-      {bool isUserInquiry = false}) {
+  void _showForm(BuildContext context, String inquiry) {
     showBottomDialog(
       context: context,
-      isDismissible: false,
       enableDrag: false,
-      title: isUserInquiry ? 'МОЯ СПРАВКА' : null,
       children: [
         Theme(
           data: Theme.of(context).copyWith(
@@ -102,25 +106,6 @@ class InquiriesScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                if (isUserInquiry)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 15.0),
-                    child: Consumer<ValidationProvider>(
-                      builder: (ctx, validate, _) => TextFormField(
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          labelText: 'Наименование учреждения*',
-                          filled: true,
-                          errorText: validate.organizationName.error,
-                          helperText:
-                              'Название учреждения, которому требуется предоставить документ.',
-                          helperMaxLines: 2,
-                          errorMaxLines: 2,
-                        ),
-                        onChanged: (value) => validate.changeCompanyName(value),
-                      ),
-                    ),
-                  ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 15.0),
                   child: Consumer<ValidationProvider>(
@@ -171,7 +156,7 @@ class InquiriesScreen extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Consumer<RadioProvider>(
+                        Consumer<InquiryProvider>(
                           builder: (ctx, radioState, _) => RadioCell<DocType>(
                             value: DocType.realDoc,
                             groupValue: radioState.doc,
@@ -180,7 +165,7 @@ class InquiriesScreen extends StatelessWidget {
                           ),
                         ),
                         Separator.spacer(space: 20),
-                        Consumer<RadioProvider>(
+                        Consumer<InquiryProvider>(
                           builder: (ctx, radioState, _) => RadioCell<DocType>(
                             value: DocType.eDoc,
                             groupValue: radioState.doc,
@@ -209,17 +194,8 @@ class InquiriesScreen extends StatelessWidget {
                       child: const Text('Отмена').scalable(),
                     ),
                     const SizedBox(width: 15),
-                    Consumer2<ValidationProvider, RadioProvider>(
+                    Consumer2<ValidationProvider, InquiryProvider>(
                       builder: (ctx, validate, radio, _) => ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.resolveWith(
-                            (states) {
-                              if (!states.contains(MaterialState.disabled)) {
-                                return Theme.of(context).accentColor;
-                              }
-                            },
-                          ),
-                        ),
                         onPressed: validate.isInquiryFormValid
                             ? () async {
                                 _launchURL(
@@ -231,8 +207,7 @@ class InquiriesScreen extends StatelessWidget {
                                         .user
                                         .userName,
                                     location: validate.location.value,
-                                    inquiry: inquiry ??
-                                        validate.organizationName.value,
+                                    inquiry: validate.organizationName.value,
                                     phoneNumber: validate.phoneNumber.value,
                                     docType: radio.doc,
                                   ).toString().replaceAll("+", "%20"),
@@ -249,7 +224,9 @@ class InquiriesScreen extends StatelessWidget {
               ]),
         ),
       ],
-    );
+    ).whenComplete(() {
+      context.read<ValidationProvider>().clearFields();
+    });
   }
 
   Future<void> _launchURL(BuildContext context, String url) async {
@@ -275,42 +252,5 @@ class InquiriesScreen extends StatelessWidget {
           ),
         );
     }
-  }
-}
-
-/// Format incoming numeric text to fit the format of (###) ###-##-##
-class _RuNumberTextInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    final newTextLength = newValue.text.length;
-    final newText = StringBuffer();
-    var selectionIndex = newValue.selection.end;
-    var usedSubstringIndex = 0;
-    if (newTextLength >= 1) {
-      newText.write('(');
-      if (newValue.selection.end >= 1) selectionIndex++;
-    }
-    if (newTextLength >= 4) {
-      newText.write('${newValue.text.substring(0, usedSubstringIndex = 3)}) ');
-      if (newValue.selection.end >= 3) selectionIndex += 2;
-    }
-    if (newTextLength >= 7) {
-      newText.write('${newValue.text.substring(3, usedSubstringIndex = 6)}-');
-      if (newValue.selection.end >= 6) selectionIndex++;
-    }
-    if (newTextLength >= 9) {
-      newText.write('${newValue.text.substring(6, usedSubstringIndex = 8)}-');
-      if (newValue.selection.end >= 8) selectionIndex++;
-    }
-    if (newTextLength >= usedSubstringIndex) {
-      newText.write(newValue.text.substring(usedSubstringIndex));
-    }
-    return TextEditingValue(
-      text: newText.toString(),
-      selection: TextSelection.collapsed(offset: selectionIndex),
-    );
   }
 }

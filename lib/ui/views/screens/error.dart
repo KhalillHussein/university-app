@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:big_tip/big_tip.dart';
-import '../../util/extensions.dart';
+import '../../../util/extensions.dart';
 
 class ErrorScreen extends StatelessWidget {
   @override

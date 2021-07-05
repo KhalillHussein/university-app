@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mtusiapp/ui/screens/changelog.dart';
-import 'package:mtusiapp/ui/screens/news_create.dart';
-import 'package:mtusiapp/ui/screens/settings.dart';
 
-import '../ui/pages/index.dart';
-import '../ui/screens/index.dart';
-import '../ui/screens/inquiries.dart';
+import '../ui/views/pages/index.dart';
+import '../ui/views/screens/index.dart';
+import '../ui/views/screens/inquiries.dart';
 
 /// Class that holds both route names & generate methods.
 /// Used by the Flutter routing system

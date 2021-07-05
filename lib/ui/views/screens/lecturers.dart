@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
-import '../../models/index.dart';
-import '../../repositories/index.dart';
-import '../../ui/widgets/index.dart';
+import '../../../models/index.dart';
+import '../../../repositories/index.dart';
+import '../../../ui/widgets/index.dart';
 import '../pages/index.dart';
 
 class LecturersScreen extends StatelessWidget {
@@ -16,7 +16,7 @@ class LecturersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimplePage(
+    return BasicPage(
       title: 'Коллектив $kafedra',
       body: _buildLecturerCard(context, kafedra),
     ).reloadablePage<LecturersRepository>(placeholder: LecturersPlaceholder());

@@ -1,32 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:row_collection/row_collection.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../util/index.dart';
-import '../screens/index.dart';
-import '../widgets/index.dart';
+import '../../../util/index.dart';
+
+import '../../widgets/index.dart';
 
 class AboutTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SimplePage(
+    return BasicTab(
       title: 'О нас',
-      leading: IconButton(
-        splashRadius: 20,
-        icon: const Icon(MdiIcons.menu),
-        onPressed: Scaffold.of(context).openDrawer,
-      ),
-      actions: [
-        ThemeSwitchIcon(),
-        IconButton(
-          splashRadius: 20,
-          icon: const Icon(MdiIcons.cogOutline),
-          onPressed: () => Navigator.pushNamed(context, SettingsScreen.route),
-        ),
-      ],
       body: RawScrollbar(
         thickness: 3,
         child: ListView(

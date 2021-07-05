@@ -1,57 +1,44 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:row_collection/row_collection.dart';
 
-import '../../providers/index.dart';
-import '../../repositories/index.dart';
-import '../../util/index.dart';
-import '../screens/index.dart';
-import '../widgets/index.dart';
+import '../../../providers/index.dart';
+import '../../../repositories/index.dart';
+import '../../../util/index.dart';
+import '../../widgets/index.dart';
 
 class AuthTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SimplePage(
+    return BasicTab(
       title: 'Авторизация',
-      leading: IconButton(
-        splashRadius: 20,
-        tooltip: 'Меню',
-        icon: const Icon(MdiIcons.menu),
-        onPressed: Scaffold.of(context).openDrawer,
-      ),
-      actions: [
-        ThemeSwitchIcon(),
-        IconButton(
-          splashRadius: 20,
-          icon: const Icon(MdiIcons.cogOutline),
-          onPressed: () => Navigator.pushNamed(context, SettingsScreen.route),
-        ),
-      ],
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 35.0),
-          child: Column(
-            children: [
-              Separator.spacer(
-                  space: MediaQuery.of(context).size.height * 0.14),
-              _buildTextFieldEmail(context),
-              Separator.spacer(),
-              _buildTextFieldPwd(context),
-              Separator.spacer(),
-              _buildAuthButton(context),
-              Separator.spacer(),
-              Text(
-                'Функционал личного кабинета в разработке и на данный момент недоступен.',
-                style: TextStyle(
-                  color: Theme.of(context).errorColor,
-                ),
-                textScaleFactor: 0.95,
-                textAlign: TextAlign.center,
-              ).scalable(),
-            ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 30.0, horizontal: 35.0),
+            child: Column(
+              children: [
+                // Separator.spacer(
+                //     space: MediaQuery.of(context).size.height * 0.14),
+                _buildTextFieldEmail(context),
+                Separator.spacer(),
+                _buildTextFieldPwd(context),
+                Separator.spacer(),
+                _buildAuthButton(context),
+                Separator.spacer(),
+                Text(
+                  'Функционал личного кабинета в разработке и на данный момент недоступен.',
+                  style: TextStyle(
+                    color: Theme.of(context).errorColor,
+                  ),
+                  textScaleFactor: 0.95,
+                  textAlign: TextAlign.center,
+                ).scalable(),
+              ],
+            ),
           ),
         ),
       ),

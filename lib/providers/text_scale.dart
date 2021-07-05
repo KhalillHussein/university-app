@@ -6,8 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 const double initialScale = 1.0;
 
 class TextScaleProvider with ChangeNotifier {
-  // double _scaleFactor;
-
   static double _scaleFactor = initialScale;
 
   TextScaleProvider() {

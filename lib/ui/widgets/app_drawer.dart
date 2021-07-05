@@ -4,10 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:row_collection/row_collection.dart';
 
+import '../../models/index.dart';
 import '../../providers/index.dart';
 import '../../repositories/auth.dart';
 import '../../util/index.dart';
-import '../screens/index.dart';
+import '../views/screens/index.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -15,7 +16,7 @@ class AppDrawer extends StatelessWidget {
     final userData = context.read<AuthRepository>();
     final Size size = MediaQuery.of(context).size;
     return Drawer(
-      child: Scrollbar(
+      child: RawScrollbar(
         thickness: 3.0,
         child: ListView(
           shrinkWrap: true,
@@ -25,7 +26,7 @@ class AppDrawer extends StatelessWidget {
             if (userData.isAuth) SizedBox(height: size.height * 0.2),
             Separator.divider(),
             _buildMainInfo(context),
-            if (userData.getUserPosition() == Positions.student)
+            if (userData.user?.getUserPosition() == Positions.student)
               _buildAdditional(context),
             _buildDownloadableResources(context),
             _buildExternalResources(context),

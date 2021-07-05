@@ -33,6 +33,7 @@ extension ScalableMarkdownBody on MarkdownBody {
         shrinkWrap: shrinkWrap,
         selectable: selectable,
         fitContent: fitContent,
+        onTapLink: onTapLink,
         styleSheet: MarkdownStyleSheet(
           p: styleSheet.p,
           textScaleFactor: styleSheet.textScaleFactor != null

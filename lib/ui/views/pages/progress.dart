@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:row_collection/row_collection.dart';
 
-import '../../util/index.dart';
+import '../../../util/index.dart';
 
 class Progress extends StatelessWidget {
   Color getStatusColor(BuildContext context, double percent) {

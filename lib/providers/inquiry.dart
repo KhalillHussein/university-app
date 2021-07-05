@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 enum DocType { eDoc, realDoc }
 
-class RadioProvider with ChangeNotifier {
+class InquiryProvider with ChangeNotifier {
   DocType _doc = DocType.realDoc;
 
   DocType get doc => _doc;

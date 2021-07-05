@@ -1,7 +1,10 @@
+export 'image_quality.dart';
+export 'inquiry.dart';
 export 'navigation.dart';
+export 'news_create.dart';
 export 'notifications.dart';
-export 'radio.dart';
 export 'table_calendar.dart';
 export 'text_scale.dart';
 export 'themes.dart';
+export 'timetable_upload.dart';
 export 'validation.dart';

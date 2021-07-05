@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:mtusiapp/providers/image_quality.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -12,12 +11,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:row_collection/row_collection.dart';
 
-import '../../providers/index.dart';
-import '../../repositories/changelog.dart';
-import '../../services/changelog.dart';
-import '../../util/index.dart';
+import '../../../providers/index.dart';
+import '../../../repositories/changelog.dart';
+import '../../../services/changelog.dart';
+import '../../../util/index.dart';
+import '../../widgets/index.dart';
 import '../screens/changelog.dart';
-import '../widgets/index.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const route = '/settings';
@@ -25,7 +24,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = Dio();
-    return SimplePage(
+    return BasicPage(
       title: 'Настройки',
       body: ListView(
         children: [
@@ -44,7 +43,7 @@ class SettingsScreen extends StatelessWidget {
             context,
             icon: MdiIcons.imageAutoAdjust,
             title: 'Качество изображений',
-            subtitle: 'Настройка степени сжатия изображений',
+            subtitle: 'Степень сжатия изображений',
             onTap: () => showBottomDialog(
               context: context,
               title: 'КАЧЕСТВО ИЗОБРАЖЕНИЙ',
@@ -94,9 +93,7 @@ class SettingsScreen extends StatelessWidget {
             context,
             icon: Icons.cleaning_services,
             title: 'Удаление данных',
-            subtitle:
-                'Освободить место на устройстве, путем удаления временных файлов',
-            isThreeLine: true,
+            subtitle: 'Удаление временных файлов',
             onTap: () => showModalDialog(
               context,
               title: 'Удалить данные?',

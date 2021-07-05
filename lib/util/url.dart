@@ -12,12 +12,16 @@ class Url {
   //Lecturers URL
   static const lecturersAll = '$baseUrl/lecturers/all';
 
-  //Schedule URL
-  static const schedule = '$baseUrl/timetable';
-  static const allSchedule = '$schedule/all';
+  //Timetable URL
+  static const timetable = '$baseUrl/timetable';
+  static const allTimetable = '$timetable/all';
+  static const uploadTimetable = '$timetable/dbf';
 
   //Auth URLs
   static const loginUrl = '$baseUrl/login';
+
+  //User URL
+  static const userUrl = '$baseUrl/users';
 
   //Alternative Lecturers URL
   static const lecturers =

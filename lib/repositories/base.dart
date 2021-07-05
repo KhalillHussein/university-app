@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../services/base.dart';
 
 enum Status { loading, error, loaded, dbFetching }
@@ -19,7 +19,17 @@ abstract class BaseRepository<T extends BaseService> with ChangeNotifier {
   /// String that saves information about the latest error
   String errorMessage;
 
-  BaseRepository(this.service);
+  /// Call the [loadData] method upon object initialization.
+  ///
+  /// Default is set to [true].
+  final bool autoLoad;
+
+  BaseRepository(this.service, {this.autoLoad = true}) {
+    if (autoLoad) {
+      startLoading();
+      loadData();
+    }
+  }
 
   /// Overridable method, used to load the model's data.
   Future<void> loadData();
@@ -60,7 +70,8 @@ abstract class BaseDbRepository<T extends BaseService>
   ///Timestamp that used as the last date data loading
   DateTime timestamp;
 
-  BaseDbRepository(T service) : super(service);
+  BaseDbRepository(T service, {autoLoad = true})
+      : super(service, autoLoad: autoLoad);
 
   bool get databaseFetch => _status == Status.dbFetching;
 
@@ -82,7 +93,8 @@ abstract class BasePaginationRepository<M, T extends BaseService>
   List<M> itemList;
   int pageIndex;
 
-  BasePaginationRepository(T service) : super(service);
+  BasePaginationRepository(T service, {autoLoad = true})
+      : super(service, autoLoad: autoLoad);
 
   void retryLastFailedRequest() => loadData();
 
@@ -120,7 +132,6 @@ abstract class BasePaginationRepository<M, T extends BaseService>
   void appendPage(List<M> newItems, int nextPageKey) {
     final List<M> previousItems = pagingState.itemList ?? [];
     final List<M> newList = {...previousItems, ...itemList}.toList();
-    // ..sort((a, b) => b.date.compareTo(a.date));
     pagingState = PagingState<int, M>(
       itemList: newList,
       nextPageKey: nextPageKey,

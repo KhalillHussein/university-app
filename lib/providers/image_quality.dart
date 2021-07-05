@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum ImageQuality { low, medium, high }
@@ -23,13 +24,11 @@ class ImageQualityProvider with ChangeNotifier {
   /// Load image quality information from local storage
   Future<void> init() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
     try {
       imageQuality = ImageQuality.values[prefs.getInt('quality')];
     } catch (e) {
       prefs.setInt('quality', ImageQuality.values.indexOf(_defaultQuality));
     }
-
     notifyListeners();
   }
 

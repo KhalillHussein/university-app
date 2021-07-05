@@ -1,17 +1,13 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'dart:async';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  debugPrint('Handling a background message ${message.messageId}');
-}
+import 'package:flutter/foundation.dart';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Serves as a way to communicate with the notification system.
 class NotificationsProvider with ChangeNotifier {
-  String _token;
-
   final AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
@@ -26,41 +22,41 @@ class NotificationsProvider with ChangeNotifier {
     init();
   }
 
-  Stream<String> fcmStream =
-      FirebaseMessaging.instance.onTokenRefresh.distinct();
-
   Future<void> init() async {
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
-
     final initializationAndroidSettings =
         AndroidInitializationSettings('@drawable/ic_stat_app_icon');
     final initializationSettings =
         InitializationSettings(android: initializationAndroidSettings);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    onMessage();
+  }
+
+  StreamSubscription<RemoteMessage> onMessage() {
+    return FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      int messageCount = 0;
       final RemoteNotification notification = message.notification;
       final AndroidNotification android = message.notification?.android;
       if (notification != null && android != null) {
         flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channel.description,
-                icon: 'ic_stat_app_icon',
-              ),
-            ));
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+              importance: channel.importance,
+              icon: 'ic_stat_app_icon',
+            ),
+          ),
+        );
+        FlutterAppBadger.updateBadgeCount(++messageCount);
       }
     });
-    _token = await FirebaseMessaging.instance.getToken();
   }
-
-  String get token => _token;
 }

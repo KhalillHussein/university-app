@@ -4,5 +4,7 @@ export 'changelog.dart';
 export 'lecturers.dart';
 export 'news.dart';
 export 'news_create.dart';
+export 'notifications.dart';
 export 'phone_book.dart';
 export 'timetable.dart';
+export 'timetable_upload.dart';

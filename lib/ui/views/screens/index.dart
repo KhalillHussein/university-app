@@ -4,6 +4,7 @@ export 'error.dart';
 export 'gallery.dart';
 export 'inquiries.dart';
 export 'lecturers.dart';
+export 'my_inquiry.dart';
 export 'navigation.dart';
 export 'news_create.dart';
 export 'phone_book.dart';

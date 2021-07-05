@@ -4,9 +4,9 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import '../../repositories/index.dart';
-import '../../util/index.dart';
-import '../widgets/index.dart';
+import '../../../repositories/index.dart';
+import '../../../util/index.dart';
+import '../../widgets/index.dart';
 
 /// This screen loads the [CHANGELOG.md] file from GitHub,
 /// and displays its content, using the Markdown plugin.
@@ -16,7 +16,7 @@ class ChangelogScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<ChangelogRepository>(
-      builder: (context, model, child) => SimplePage(
+      builder: (context, model, child) => BasicPage(
         title: 'Список изменений',
         body: RawScrollbar(
           thickness: 3,

@@ -9,28 +9,24 @@ import '../services/index.dart';
 import '../util/index.dart';
 import 'index.dart';
 
-enum Positions { student, lecturer, admin, stuff, unauthorized }
-
 ///Repository that manage authentication process
 class AuthRepository extends BaseRepository<AuthService> {
-  String _token;
-
   User _user;
+  String _token;
 
   SharedPreferences _prefs;
 
-  AuthRepository(AuthService service) : super(service) {
-    startLoading();
-    loadData();
+  AuthRepository(AuthService service) : super(service, autoLoad: false) {
+    init();
   }
 
   bool get isAuth => _token != null;
 
   User get user => _user;
+  String get token => _token;
 
   ///Function that checks if token contains in local memory
-  @override
-  Future<void> loadData() async {
+  Future<void> init() async {
     try {
       _prefs = await SharedPreferences.getInstance();
       if (!_prefs.containsKey('userData')) {
@@ -41,7 +37,7 @@ class AuthRepository extends BaseRepository<AuthService> {
           json.decode(_prefs.getString('userData')) as Map<String, dynamic>;
       _user = User.fromJson(extractedUserData);
       _token = _user.token;
-      finishLoading();
+      loadData();
     } catch (e) {
       receivedError(e.toString());
     }
@@ -51,11 +47,11 @@ class AuthRepository extends BaseRepository<AuthService> {
   Future<void> authenticate(String email, String password) async {
     startLoading();
     try {
-      final userResponse = await service.getUser(login: email, pwd: password);
+      final userResponse = await service.auth(login: email, pwd: password);
       _user = User.fromJson(userResponse.data['result']);
-      _token = _user.token;
       finishLoading();
-      final userData = _toStr(_user);
+      final userData = _toStr();
+      _token = _user.token;
       _prefs.setString('userData', userData);
     } on DioError catch (dioError) {
       try {
@@ -70,41 +66,37 @@ class AuthRepository extends BaseRepository<AuthService> {
   }
 
   ///Parse data to json for saving on device local storage
-  String _toStr(User user) {
+  String _toStr() {
     return json.encode({
-      'token': user.token,
-      'userId': user.userId,
-      'username': user.userName,
-      'email': user.email,
-      'role': user.role,
+      'token': _user.token,
+      'userId': _user.userId,
+      'username': _user.userName,
+      'email': _user.email,
+      'role': _user.role,
     });
-  }
-
-  Positions getUserPosition() {
-    switch (_user?.role) {
-      case 'student':
-        return Positions.student;
-        break;
-      case 'lecturer':
-        return Positions.lecturer;
-        break;
-      case 'admin':
-        return Positions.admin;
-      case 'stuff':
-        return Positions.stuff;
-        break;
-      default:
-        return Positions.unauthorized;
-        break;
-    }
   }
 
   ///Function that delete user from memory
   Future<void> logout() async {
-    _user = User.fromJson({});
+    _user = null;
     _token = null;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     prefs.remove('userData');
+  }
+
+  ///Function that get user from API
+  @override
+  Future<void> loadData() async {
+    try {
+      final userResponse =
+          await service.getUser(uid: _user.userId, token: token);
+      _user = User.fromJson(userResponse.data['result']);
+      finishLoading();
+    } on DioError catch (dioError) {
+      receivedError(ApiException.fromDioError(dioError).message);
+    } catch (_) {
+      receivedError('Internal error');
+    }
   }
 }

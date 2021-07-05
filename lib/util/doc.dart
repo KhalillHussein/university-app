@@ -12,20 +12,20 @@ const List<Map> info = [
     'name': 'Адрес',
     'desc': '344002, г.Ростов-на-Дону, ул.Серафимовича, 62.',
     'icon': MdiIcons.mapMarker,
-    'url':
-        'https://www.google.com/maps/place/Северо-Кавказский+Филиал+МТУСИ/@47.219186,39.712502,15z/data=!4m5!3m4!1s0x0:0xa80a645ed8e1ba37!8m2!3d47.219186!4d39.712502',
+    // 'url':
+    //     'https://www.google.com/maps/place/Северо-Кавказский+Филиал+МТУСИ/@47.219186,39.712502,15z/data=!4m5!3m4!1s0x0:0xa80a645ed8e1ba37!8m2!3d47.219186!4d39.712502',
   },
   {
     'name': 'Телефон',
     'desc': '(863) 310-69-60',
     'icon': MdiIcons.phoneClassic,
-    'url': 'tel:+7(863)3706960',
+    // 'url': 'tel:+7(863)3706960',
   },
   {
     'name': 'Факс',
     'desc': '(863) 310-69-68',
     'icon': MdiIcons.deskphone,
-    'url': 'tel:+7(863)3106968',
+    // 'url': 'tel:+7(863)3106968',
   },
   {
     'name': 'Телекс',
@@ -36,19 +36,19 @@ const List<Map> info = [
     'name': 'Веб-сайт',
     'desc': 'www.skf-mtusi.ru',
     'icon': MdiIcons.earth,
-    'url': 'https://www.skf-mtusi.ru',
+    // 'url': 'https://www.skf-mtusi.ru',
   },
   {
     'name': 'Email',
     'desc': 'mаil@skf-mtusi.ru',
     'icon': MdiIcons.at,
-    'url': 'mailto:mаil@skf-mtusi.ru',
+    // 'url': 'mailto:mаil@skf-mtusi.ru',
   },
   {
     'name': 'Instagram',
-    'desc': '@skf_mtusi',
+    'desc': '@skfmtuci',
     'icon': MdiIcons.instagram,
-    'url': 'https://www.instagram.com/skf_mtuci/'
+    // 'url': 'https://www.instagram.com/skfmtuci/'
   },
   {
     'name': 'График работы',

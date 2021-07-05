@@ -1,4 +1,6 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 import 'package:provider/provider.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -8,11 +10,11 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:quick_actions/quick_actions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../providers/index.dart';
-import '../../repositories/index.dart';
-import '../../util/index.dart';
+import '../../../providers/index.dart';
+import '../../../repositories/index.dart';
+import '../../../util/index.dart';
+import '../../widgets/index.dart';
 import '../tabs/index.dart';
-import '../widgets/index.dart';
 import 'index.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -37,6 +39,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   @override
   void initState() {
     // Reading app shortcuts input
+    FlutterAppBadger.removeBadge();
     final QuickActions quickActions = QuickActions();
     quickActions.initialize((type) {
       switch (type) {
@@ -75,6 +78,34 @@ class _NavigationScreenState extends State<NavigationScreen> {
       ]);
     });
     showStartDialog();
+    context.read<NotificationsProvider>().onMessage().onData((data) {
+      if (data.notification != null) {
+        if (data.notification.title.toLowerCase().contains('расписание')) {
+          context.read<TimetableRepository>().refreshData();
+        }
+        if (data.notification.title.toLowerCase().contains('запись')) {
+          context.read<NewsRepository>().refreshData();
+        }
+      }
+    });
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage message) async {
+      if (message != null) {
+        if (message.notification.title.toLowerCase().contains('расписание')) {
+          context.read<NavigationProvider>().currentIndex =
+              Tabs.timetable.index;
+          FlutterAppBadger.removeBadge();
+        }
+        if (message.notification.title.toLowerCase().contains('запись')) {
+          context.read<NavigationProvider>().currentIndex = Tabs.news.index;
+          FlutterAppBadger.removeBadge();
+        }
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      FlutterAppBadger.removeBadge();
+    });
     super.initState();
   }
 

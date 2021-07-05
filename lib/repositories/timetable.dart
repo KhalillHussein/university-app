@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/db_helper.dart';
 import '../models/index.dart';
@@ -19,7 +21,6 @@ class TimetableRepository extends BaseDbRepository<TimetableService> {
   List<Timetable> _timetable = [];
 
   TimetableRepository(TimetableService service) : super(service) {
-    loadData();
     init();
   }
 
@@ -27,7 +28,6 @@ class TimetableRepository extends BaseDbRepository<TimetableService> {
 
   @override
   Future<void> loadData() async {
-    startLoading();
     try {
       //load data from api
       final timetableResponse = await service.getTimetable();
@@ -46,9 +46,11 @@ class TimetableRepository extends BaseDbRepository<TimetableService> {
       finishLoading();
     } on DioError catch (dioError) {
       errorMessage = ApiException.fromDioError(dioError).message;
+      debugPrint(errorMessage);
       loadDataFromDb();
     } catch (error) {
       errorMessage = error.toString();
+      debugPrint(errorMessage);
       loadDataFromDb();
       // receivedError(error);
     }

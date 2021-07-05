@@ -9,12 +9,12 @@ import 'package:provider/provider.dart';
 import 'package:row_collection/row_collection.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../models/index.dart';
-import '../../providers/index.dart';
-import '../../repositories/index.dart';
-import '../../util/index.dart';
+import '../../../models/index.dart';
+import '../../../providers/index.dart';
+import '../../../repositories/index.dart';
+import '../../../util/index.dart';
+import '../../widgets/index.dart';
 import '../screens/index.dart';
-import '../widgets/index.dart';
 
 const Duration _kExpand = Duration(milliseconds: 350);
 
@@ -55,7 +55,7 @@ class _CalendarScreenState extends State<CalendarScreen>
 
   @override
   Widget build(BuildContext context) {
-    return SimpleTab<TimetableRepository>(
+    return BasicPage(
       titleWidget: _buildTitle(),
       actions: [
         _buildTimingIconButton(),
@@ -78,7 +78,7 @@ class _CalendarScreenState extends State<CalendarScreen>
           _buildBody()
         ],
       ),
-    );
+    ).contentTab<TimetableRepository>(context);
   }
 
   Widget _buildIconMore() {
@@ -193,7 +193,8 @@ class _CalendarScreenState extends State<CalendarScreen>
 
   Widget _buildBody() {
     return Consumer2<TableCalendarProvider, TimetableRepository>(
-      builder: (context, calendar, model, _) => SingleChildScrollView(
+        builder: (context, calendar, model, _) {
+      return SingleChildScrollView(
         child: Column(
           children: [
             if (model.databaseFetch) Message<TimetableRepository>(),
@@ -266,8 +267,8 @@ class _CalendarScreenState extends State<CalendarScreen>
               ),
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -303,8 +304,8 @@ class _CalendarHeader extends StatelessWidget {
           ),
         ),
         startingDayOfWeek: StartingDayOfWeek.monday,
-        firstDay: calendar.minDay.date,
-        lastDay: calendar.maxDay.date,
+        firstDay: DateTime.now().subtract(Duration(days: 40)),
+        lastDay: DateTime.now().add(Duration(days: 40)),
         focusedDay: calendar.focusedDay,
       ),
     );

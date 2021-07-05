@@ -26,7 +26,7 @@ class TimetableService extends BaseService {
 
   /// Retrieves a list featuring the timetable.
   Future<Response> getTimetable() async {
-    return client.get(Url.allSchedule);
+    return client.get(Url.allTimetable);
   }
 
   Future<List<Object>> getDbRecords() {

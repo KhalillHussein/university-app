@@ -8,10 +8,10 @@ import 'package:big_tip/big_tip.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grouped_list/grouped_list.dart';
 
-import '../../models/index.dart';
-import '../../repositories/index.dart';
-import '../../util/extensions.dart';
-import '../widgets/index.dart';
+import '../../../models/index.dart';
+import '../../../repositories/index.dart';
+import '../../../util/extensions.dart';
+import '../../widgets/index.dart';
 
 class PhoneBookScreen extends StatelessWidget {
   static const route = '/phone_book';
@@ -19,7 +19,7 @@ class PhoneBookScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<PhoneBookRepository>(
-      builder: (ctx, model, _) => SimplePage(
+      builder: (ctx, model, _) => BasicPage(
         title: 'Телефонный справочник',
         fab: FloatingActionButton(
           tooltip: 'Поиск',

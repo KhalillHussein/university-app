@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mtusiapp/providers/image_quality.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/index.dart';
 import 'index.dart';
 
 class CacheImage extends StatelessWidget {
@@ -40,7 +39,7 @@ class CacheImage extends StatelessWidget {
     return CacheImage(
       url,
       size: _smallSize,
-      placeholder: Icon(MdiIcons.accountTie, size: 50, color: Colors.white12),
+      placeholder: _AvatarPlaceholder(),
     );
   }
 
@@ -81,5 +80,15 @@ class CacheImage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _AvatarPlaceholder extends StatelessWidget {
+  const _AvatarPlaceholder({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(MdiIcons.accountTie,
+        size: 50, color: Theme.of(context).dividerColor);
   }
 }

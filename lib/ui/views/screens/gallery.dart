@@ -5,8 +5,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-import '../../util/index.dart';
-import '../widgets/index.dart';
+import '../../../util/index.dart';
+import '../../widgets/index.dart';
 
 class GalleryScreen extends StatefulWidget {
   final List<String> galleryItems;

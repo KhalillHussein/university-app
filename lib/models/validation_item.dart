@@ -2,7 +2,7 @@ class ValidationItem {
   final String value;
   final String error;
 
-  ValidationItem(
+  const ValidationItem(
     this.value,
     this.error,
   );

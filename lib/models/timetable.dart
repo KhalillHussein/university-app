@@ -34,7 +34,9 @@ class Timetable {
       name: json['NAME'],
       subject: json['SUBJECT'],
       subjectType: json['SUBJ_TYPE'],
-      date: DateFormat('dd-MM-yyyy').parse(json['DATE']),
+      date: json['DATE'] == ""
+          ? DateTime.now()
+          : DateFormat('dd-MM-yyyy').parse(json['DATE']),
       cafedra: json['CAFEDRA'],
       timestamp: json['timestamp'],
     );

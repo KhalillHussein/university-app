@@ -1,24 +1,26 @@
 import 'dart:ui';
 
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mtusiapp/repositories/notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:row_collection/row_collection.dart';
 
-import '../../repositories/index.dart';
-import '../../util/index.dart';
+import '../../../models/index.dart';
+import '../../../providers/index.dart';
+import '../../../repositories/index.dart';
+import '../../../util/index.dart';
+import '../../widgets/index.dart';
 import '../pages/index.dart';
 import '../screens/index.dart';
-import '../widgets/index.dart';
 
 class AccountTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final notify = context.read<NotificationsRepository>();
     return Consumer<AuthRepository>(
-      builder: (ctx, userData, _) => SimpleTab<AuthRepository>(
+      builder: (ctx, userData, _) => BasicPage(
         title: 'Аккаунт',
         actions: [
           Consumer<NotificationsRepository>(
@@ -35,19 +37,28 @@ class AccountTab extends StatelessWidget {
               onPressed: model.isLoading
                   ? null
                   : () => model.isNotify
-                      ? model.disableNotifications().then((value) => _showSnackBar(
-                          context, model.loadingFailed ? model.errorMessage : 'Все уведомления отключены.',
-                          color: model.loadingFailed
-                              ? Theme.of(context).errorColor
-                              : Theme.of(context).textTheme.caption.color))
-                      : model.loadData().then((value) => _showSnackBar(
-                          context,
-                          model.loadingFailed
-                              ? model.errorMessage
-                              : 'Уведомления о новостях и расписании успешно подключены.',
-                          color: model.loadingFailed
-                              ? Theme.of(context).errorColor
-                              : Theme.of(context).textTheme.caption.color)),
+                      ? model.disableNotifications().then(
+                            (value) => _showSnackBar(
+                              context,
+                              model.loadingFailed
+                                  ? model.errorMessage
+                                  : 'Все уведомления отключены.',
+                              color: model.loadingFailed
+                                  ? Theme.of(context).errorColor
+                                  : Theme.of(context).textTheme.caption.color,
+                            ),
+                          )
+                      : model.loadData().then(
+                            (value) => _showSnackBar(
+                              context,
+                              model.loadingFailed
+                                  ? model.errorMessage
+                                  : 'Уведомления о новостях и расписании успешно подключены.',
+                              color: model.loadingFailed
+                                  ? Theme.of(context).errorColor
+                                  : Theme.of(context).textTheme.caption.color,
+                            ),
+                          ),
             ),
           ),
           IconButton(
@@ -99,16 +110,16 @@ class AccountTab extends StatelessWidget {
                 }
               }),
         ],
-        body: userData.getUserPosition() == Positions.student
+        body: userData.user.getUserPosition() == Positions.student
             ? _Student()
-            : userData.getUserPosition() == Positions.lecturer
+            : userData.user.getUserPosition() == Positions.lecturer
                 ? _Lecturer()
-                : userData.getUserPosition() == Positions.admin
+                : userData.user.getUserPosition() == Positions.admin
                     ? _Master()
                     : const Center(
                         child: Text('Отсутствуют данные для просмотра'),
                       ),
-      ),
+      ).contentTab<AuthRepository>(context),
     );
   }
 
@@ -219,7 +230,7 @@ class _Master extends StatelessWidget {
             _buildCardSection(
               context,
               title: 'Новости',
-              subtitle: 'Добавление новости',
+              subtitle: 'Создание новости',
               icon: MdiIcons.newspaperVariantMultipleOutline,
               onTap: () => Navigator.push(
                 context,
@@ -232,8 +243,9 @@ class _Master extends StatelessWidget {
             _buildCardSection(
               context,
               title: 'Расписание',
-              subtitle: 'Управление расписанием',
+              subtitle: 'Загрузка расписания',
               icon: MdiIcons.archiveAlertOutline,
+              onTap: () async => _showBottomDialog(context),
             ),
             _buildCardSection(
               context,
@@ -248,6 +260,126 @@ class _Master extends StatelessWidget {
               icon: MdiIcons.accountGroupOutline,
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showBottomDialog(BuildContext context) {
+    return showBottomDialog(
+      context: context,
+      title: 'ЗАГРУЗКА РАСПИСАНИЯ',
+      children: [
+        Consumer<TimetableUploadProvider>(
+          builder: (ctx, uploader, _) => TextFormField(
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+              labelText: 'Название*',
+              filled: true,
+              hintText: 'Что было изменено?',
+              helperText: 'Краткое название. Не будьте многословны',
+              errorText: uploader.title.error,
+              errorMaxLines: 1,
+            ),
+            onChanged: (value) => uploader.changeTitle(value),
+          ),
+        ),
+        Separator.spacer(space: 16),
+        Consumer<TimetableUploadProvider>(
+          builder: (ctx, uploader, _) => TextFormField(
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            decoration: InputDecoration(
+              hintText: 'Каких групп коснулись изменения?',
+              labelText: 'Описание*',
+              helperText: 'Краткое описание. Не будьте многословны',
+              filled: true,
+              errorText: uploader.description.error,
+              errorMaxLines: 1,
+            ),
+            onChanged: (value) => uploader.changeDescription(value),
+          ),
+        ),
+        Separator.spacer(space: 16),
+        DottedBorder(
+          dashPattern: const [6, 6],
+          color: Theme.of(context).dividerColor,
+          radius: const Radius.circular(10),
+          strokeWidth: 2,
+          child: InkWell(
+            onTap: context.read<TimetableUploadProvider>().openFileExplorer,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Consumer<TimetableUploadProvider>(
+                builder: (ctx, uploader, _) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    uploader.filePicked
+                        ? Icon(
+                            Icons.file_present,
+                            color: Theme.of(context).textTheme.caption.color,
+                            size: 40,
+                          )
+                        : Icon(
+                            Icons.upload_sharp,
+                            color: Theme.of(context).textTheme.caption.color,
+                            size: 40,
+                          ),
+                    Separator.spacer(space: 4),
+                    uploader.filePicked
+                        ? Text(
+                            'Файл выбран',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.caption,
+                          )
+                        : Text(
+                            'Нажмите сюда, чтобы выбрать DBF файл',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Separator.spacer(),
+        Consumer2<TimetableUploadRepository, TimetableUploadProvider>(
+          builder: (ctx, model, provider, _) => ElevatedButton(
+            onPressed: model.isLoading || !provider.isFormValid
+                ? null
+                : () async {
+                    model.formData =
+                        context.read<TimetableUploadProvider>().toMap();
+                    await context.read<TimetableUploadRepository>().loadData();
+                    context.read<TimetableRepository>().refreshData();
+                    Navigator.pop(context);
+                  },
+            child: model.isLoading
+                ? _buildLoadingSpinner(context)
+                : const Text('Загрузить файл'),
+          ),
+        ),
+      ],
+    ).whenComplete(context.read<TimetableUploadProvider>().cleanSelectable);
+  }
+
+  Widget _buildLoadingSpinner(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Center(
+        heightFactor: 1,
+        widthFactor: 1,
+        child: SizedBox(
+          height: 10,
+          width: 10,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.5,
+            valueColor: AlwaysStoppedAnimation<Color>(
+              Colors.white,
+            ),
+          ),
         ),
       ),
     );
@@ -350,7 +482,6 @@ class _Lecturer extends StatelessWidget {
             Expanded(
               child: TabBarView(
                 children: [
-                  // Schedule('Ткачук Е.О.'),
                   Center(child: Text('МРС').scalable()),
                 ],
               ),

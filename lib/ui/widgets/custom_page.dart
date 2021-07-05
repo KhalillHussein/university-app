@@ -12,7 +12,7 @@ import 'package:row_collection/row_collection.dart';
 
 import '../../repositories/index.dart';
 import '../../util/index.dart';
-import '../screens/settings.dart';
+import '../views/screens/settings.dart';
 import 'index.dart';
 
 /// Centered [CircularProgressIndicator] widget.
@@ -59,17 +59,17 @@ Future<void> onRefresh(BuildContext context, BaseRepository repository) {
 
 /// Basic screen.
 /// Used when the desired page doesn't have reloading.
-class SimplePage extends StatelessWidget {
+class BasicPage extends StatelessWidget {
   final String title;
   final Widget body, fab, leading, titleWidget, bottomNavigationBar;
   final PreferredSizeWidget bottom;
   final List<Widget> actions;
   final double elevation;
 
-  const SimplePage({
+  const BasicPage({
     this.title,
     this.bottom,
-    @required this.body,
+    this.body,
     this.elevation,
     this.titleWidget,
     this.leading,
@@ -95,9 +95,62 @@ class SimplePage extends StatelessWidget {
   }
 }
 
-extension ReloadableSimplePage on SimplePage {
+class BasicTab extends StatelessWidget {
+  final String title;
+  final Widget body, fab, leading, titleWidget, bottomNavigationBar;
+  final PreferredSizeWidget bottom;
+  final List<Widget> actions;
+  final double elevation;
+
+  const BasicTab({
+    this.title,
+    this.bottom,
+    @required this.body,
+    this.elevation,
+    this.titleWidget,
+    this.leading,
+    this.fab,
+    this.actions,
+    this.bottomNavigationBar,
+  }) : assert(title != null || titleWidget != null);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          splashRadius: 20,
+          tooltip: 'Меню',
+          icon: const Icon(MdiIcons.menu),
+          onPressed: Scaffold.of(context).openDrawer,
+        ),
+        elevation: elevation,
+        title: titleWidget ?? Text(title),
+        actions: actions ??
+            [
+              ThemeSwitchIcon(),
+              IconButton(
+                splashRadius: 20,
+                tooltip: 'Настройки',
+                icon: const Icon(MdiIcons.cogOutline),
+                onPressed: () =>
+                    Navigator.pushNamed(context, SettingsScreen.route),
+              ),
+            ],
+        bottom: bottom,
+      ),
+      bottomNavigationBar: bottomNavigationBar,
+      body: body,
+      floatingActionButton: fab,
+    );
+  }
+}
+
+/// Extension on Basic page which has reloading properties.
+/// It uses the [BlankPage] widget inside it.
+extension CustomPage on BasicPage {
   Widget reloadablePage<T extends BaseRepository>({Widget placeholder}) {
-    return SimplePage(
+    return BasicPage(
       title: title,
       titleWidget: titleWidget,
       actions: actions,
@@ -121,107 +174,20 @@ extension ReloadableSimplePage on SimplePage {
       ),
     );
   }
-}
 
-/// Basic page which has reloading properties.
-/// It uses the [BlankPage] widget inside it.
-// class ReloadableSimplePage<T extends BaseRepository> extends StatelessWidget {
-//   final String title;
-//   final List<Widget> actions;
-//   final Widget body,
-//       fab,
-//       placeholder,
-//       leading,
-//       titleWidget,
-//       bottomNavigationBar;
-//   final double elevation;
-//   final PreferredSizeWidget bottom;
-//
-//   const ReloadableSimplePage({
-//     this.title,
-//     @required this.body,
-//     this.titleWidget,
-//     this.elevation,
-//     this.actions,
-//     this.placeholder,
-//     this.fab,
-//     this.leading,
-//     this.bottom,
-//     this.bottomNavigationBar,
-//   }) : assert(title != null || titleWidget != null);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return SimplePage(
-//       actions: actions,
-//       title: title,
-//       elevation: elevation,
-//       titleWidget: titleWidget,
-//       fab: fab,
-//       leading: leading,
-//       bottom: bottom,
-//       bottomNavigationBar: bottomNavigationBar,
-//       body: Consumer<T>(
-//         builder: (context, model, child) => RefreshIndicator(
-//           onRefresh: () => onRefresh(context, model),
-//           child: model.isLoading
-//               ? placeholder ?? _loadingIndicator
-//               : model.loadingFailed
-//                   ? ChangeNotifierProvider.value(
-//                       value: model,
-//                       child: ConnectionError<T>(),
-//                     )
-//                   : body,
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-class ReloadableTab<T extends BaseRepository> extends StatelessWidget {
-  final String title;
-  final List<Widget> actions;
-  final Widget body, fab, placeholder, leading, titleWidget;
-  final PreferredSizeWidget bottom;
-  final double elevation;
-
-  const ReloadableTab({
-    this.title,
-    @required this.body,
-    this.titleWidget,
-    this.elevation,
-    this.bottom,
-    this.actions,
-    this.placeholder,
-    this.fab,
-    this.leading,
-  }) : assert(title != null || titleWidget != null);
-
-  @override
-  Widget build(BuildContext context) {
-    return SimplePage(
-      actions: actions ??
-          [
-            ThemeSwitchIcon(),
-            IconButton(
-              splashRadius: 20,
-              tooltip: 'Настройки',
-              icon: const Icon(MdiIcons.cogOutline),
-              onPressed: () =>
-                  Navigator.pushNamed(context, SettingsScreen.route),
-            ),
-          ],
+  Widget reloadableTab<T extends BaseRepository>(
+    BuildContext context, {
+    Widget placeholder,
+  }) {
+    return BasicTab(
       title: title,
-      elevation: elevation,
       titleWidget: titleWidget,
+      actions: actions,
       fab: fab,
+      leading: leading,
+      bottomNavigationBar: bottomNavigationBar,
+      elevation: elevation,
       bottom: bottom,
-      leading: IconButton(
-        splashRadius: 20,
-        tooltip: 'Меню',
-        icon: const Icon(MdiIcons.menu),
-        onPressed: Scaffold.of(context).openDrawer,
-      ),
       body: Consumer<T>(
         builder: (context, model, child) => RefreshIndicator(
           onRefresh: () => onRefresh(context, model),
@@ -237,51 +203,20 @@ class ReloadableTab<T extends BaseRepository> extends StatelessWidget {
       ),
     );
   }
-}
 
-class SimpleTab<T extends BaseRepository> extends StatelessWidget {
-  final String title;
-  final List<Widget> actions;
-  final Widget body, fab, placeholder, leading, titleWidget;
-  final PreferredSizeWidget bottom;
-  final double elevation;
-
-  const SimpleTab({
-    this.title,
-    @required this.body,
-    this.titleWidget,
-    this.elevation,
-    this.actions,
-    this.placeholder,
-    this.fab,
-    this.bottom,
-    this.leading,
-  }) : assert(title != null || titleWidget != null);
-
-  @override
-  Widget build(BuildContext context) {
-    return SimplePage(
-      actions: actions ??
-          [
-            ThemeSwitchIcon(),
-            IconButton(
-              splashRadius: 20,
-              icon: const Icon(MdiIcons.cogOutline),
-              onPressed: () =>
-                  Navigator.pushNamed(context, SettingsScreen.route),
-            ),
-          ],
+  Widget contentTab<T extends BaseRepository>(
+    BuildContext context, {
+    Widget placeholder,
+  }) {
+    return BasicTab(
       title: title,
-      elevation: elevation,
       titleWidget: titleWidget,
-      bottom: bottom,
+      actions: actions,
       fab: fab,
-      leading: IconButton(
-        splashRadius: 20,
-        tooltip: 'Меню',
-        icon: const Icon(MdiIcons.menu),
-        onPressed: Scaffold.of(context).openDrawer,
-      ),
+      leading: leading,
+      bottomNavigationBar: bottomNavigationBar,
+      elevation: elevation,
+      bottom: bottom,
       body: Consumer<T>(
         builder: (context, model, child) => model.isLoading
             ? placeholder ?? _loadingIndicator
@@ -294,61 +229,28 @@ class SimpleTab<T extends BaseRepository> extends StatelessWidget {
       ),
     );
   }
-}
 
-class ReloadablePaginatedTab<M, T extends BasePaginationRepository>
-    extends StatelessWidget {
-  final String title;
-  final List<Widget> actions;
-  final Widget fab, placeholder, leading, titleWidget;
-  final Function itemBuilder;
-  final PagingController pagingController;
-  final PreferredSizeWidget bottom;
-  final double elevation;
-
-  const ReloadablePaginatedTab({
-    this.title,
-    this.titleWidget,
-    this.elevation,
-    this.bottom,
-    this.actions,
-    this.placeholder,
-    this.fab,
-    this.leading,
-    @required this.itemBuilder,
-    @required this.pagingController,
-  }) : assert(title != null || titleWidget != null);
-
-  @override
-  Widget build(BuildContext context) {
-    return SimplePage(
-      actions: actions ??
-          [
-            ThemeSwitchIcon(),
-            IconButton(
-              splashRadius: 20,
-              tooltip: 'Настройки',
-              icon: const Icon(MdiIcons.cogOutline),
-              onPressed: () =>
-                  Navigator.pushNamed(context, SettingsScreen.route),
-            ),
-          ],
+  Widget paginatedTab<M, T extends BasePaginationRepository>(
+    BuildContext context,
+    Function itemBuilder,
+    PagingController pagingController, {
+    Widget placeholder,
+  }) {
+    return BasicTab(
       title: title,
-      elevation: elevation,
       titleWidget: titleWidget,
+      actions: actions,
       fab: fab,
+      leading: leading,
+      bottomNavigationBar: bottomNavigationBar,
+      elevation: elevation,
       bottom: bottom,
-      leading: IconButton(
-        splashRadius: 20,
-        tooltip: 'Меню',
-        icon: const Icon(MdiIcons.menu),
-        onPressed: Scaffold.of(context).openDrawer,
-      ),
       body: Consumer<T>(
         builder: (context, model, child) => RefreshIndicator(
           onRefresh: () => onRefresh(context, model),
           child: RawScrollbar(
             thickness: 3.0,
+            interactive: false,
             child: PagedListView<int, M>(
               pagingController: pagingController,
               builderDelegate: PagedChildBuilderDelegate<M>(
@@ -449,7 +351,7 @@ class Message<T extends BaseDbRepository> extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
               textScaleFactor: 0.85,
-            ).scalable(),
+            ),
           ),
         ],
         content: FittedBox(
@@ -489,35 +391,5 @@ class PageErrorIndicator<T extends BasePaginationRepository>
         ),
       ),
     );
-  }
-
-  void _showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(
-          elevation: 0,
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Theme.of(context).errorColor,
-          content: Row(
-            children: [
-              Icon(
-                Icons.error,
-                color: Theme.of(context).primaryColor,
-              ),
-              Separator.spacer(),
-              Expanded(
-                child: Text(
-                  message,
-                  softWrap: true,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-          duration: const Duration(seconds: 1),
-        ),
-      );
   }
 }

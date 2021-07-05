@@ -10,7 +10,7 @@ class ApiException implements Exception {
         message = "Connection timeout with API server";
         break;
       case DioErrorType.other:
-        message = "Connection to API server failed due to internet connection";
+        message = "Connection to API server failed";
         break;
       case DioErrorType.receiveTimeout:
         message = "Receive timeout in connection with API server";

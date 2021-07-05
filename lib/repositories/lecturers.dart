@@ -7,10 +7,7 @@ import 'index.dart';
 
 /// Repository that holds lecturers data.
 class LecturersRepository extends BaseRepository<LecturersService> {
-  LecturersRepository(LecturersService service) : super(service) {
-    startLoading();
-    loadData();
-  }
+  LecturersRepository(LecturersService service) : super(service);
 
   List<Lecturer> _lecturers;
 

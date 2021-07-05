@@ -5,8 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:row_collection/row_collection.dart';
 
-import '../../util/doc.dart';
-import '../../util/extensions.dart';
+import '../../../util/doc.dart';
+import '../../../util/extensions.dart';
 
 class RecordBookPage extends StatelessWidget {
   @override

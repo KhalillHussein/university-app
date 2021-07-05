@@ -1,4 +1,6 @@
-class Lecturer {
+import 'package:equatable/equatable.dart';
+
+class Lecturer extends Equatable {
   final int id;
   final String fullName;
   final String email;
@@ -16,7 +18,7 @@ class Lecturer {
   final List disciplinesTaught;
   final List scientificInterests;
 
-  Lecturer({
+  const Lecturer({
     this.id,
     this.fullName,
     this.email,
@@ -65,4 +67,24 @@ class Lecturer {
       ((DateTime.now().difference(totalLengthOfService).inDays) / 365)
           .floor()
           .toString();
+
+  @override
+  List<Object> get props => [
+        id,
+        fullName,
+        email,
+        rank,
+        kafedra,
+        academicDegree,
+        academicRank,
+        totalLengthOfService,
+        lengthWorkOfSpeciality,
+        photo,
+        education,
+        qualification,
+        specialty,
+        trainings,
+        disciplinesTaught,
+        scientificInterests,
+      ];
 }
